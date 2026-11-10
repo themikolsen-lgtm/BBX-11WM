@@ -1908,6 +1908,14 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .sr-acts button{ display:inline-flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap; font-size:12px; padding:0 4px; }
 .sr-acts button svg{ width:18px; height:18px; flex:none; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
 </style>
+<style>
+/* ===== RECHERCHE : bouton « Récurrent » ===== */
+.sr-acts{ flex-wrap:wrap; }
+.sr-acts .sr-rec{ flex:1 1 100%; height:auto; min-height:48px; flex-direction:row; flex-wrap:wrap; gap:2px 8px; padding:8px 12px; border-color:#BFE8A8; background:#F4FCEE; color:#143008; }
+.sr-acts .sr-rec span{ font-weight:800; font-size:13px; }
+.sr-acts .sr-rec small{ flex:1 1 auto; text-align:left; font-size:11px; font-weight:600; color:#5C7A4E; white-space:normal; }
+.sr-acts .sr-rec svg{ stroke:#3E9B2A; }
+</style>
 </head>
 <body>
 
@@ -3210,7 +3218,7 @@ document.addEventListener('click', function(e){
 <div id="mealSearch" class="mc-ov mc-search" aria-label="Rechercher un produit">
   <div class="mc-head"><b>Rechercher</b><button class="mc-x" onclick="BBXMeal.closeSearch()" aria-label="Fermer">✕</button></div>
   <div class="sr-bar"><input id="srQ" type="search" autocomplete="off" autocapitalize="off" placeholder="Ex : skyr, poulet, riz…" enterkeyhint="search"><button onclick="BBXMeal.doSearch()">Chercher</button></div>
-  <div class="sr-acts"><button onclick="BBXMeal.srScan()" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg><span>Scanner un code-barres</span></button><button onclick="BBXMeal.srManual()" aria-label="Ajouter à la main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Ajouter à la main</span></button></div>
+  <div class="sr-acts"><button onclick="BBXMeal.srScan()" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg><span>Scanner un code-barres</span></button><button onclick="BBXMeal.srManual()" aria-label="Ajouter à la main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Ajouter à la main</span></button><button class="sr-rec" onclick="BBXMeal.recurring()" aria-label="Récurrent : ajouter mes produits habituels"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><span>Récurrent</span><small>ajoute mes produits habituels de ce repas</small></button></div>
   <div class="sr-meal" id="srMeal"></div>
   <div id="srList"></div>
 </div>
@@ -4182,6 +4190,18 @@ document.addEventListener('click', function(e){
     const it=[f.name,label,uw,g/uw,f.kcal*g/100,f.prot*g/100,f.unit,f.emoji||'🍽️'];
     MEALS[m][2].push(it); S.d[MEALS[m][0]+'|'+f.name]=true; bumpHabit(MEALS[m][0],f.name,g); refresh(); renderHabits('✓ « '+f.name+' » ajouté et coché');
   }
+  function recurringAdd(){
+    const m=sr.target; if(m==null||!MEALS[m]) return;
+    const title=MEALS[m][0], list=habitsFor(m).filter(x=>x.h.n>=2).slice(0,10);
+    if(!list.length){ showToast('Pas encore de produit récurrent pour ce repas : un produit le devient après 2 jours d’ajout.'); return; }
+    const snap=JSON.stringify(HAB[title]||{}), names=[];
+    list.forEach(x=>{ const f=x.f, uw=f.serving>0?f.serving:100, g=x.h.g>0?x.h.g:uw, label=f.serving>0?(f.label||'portion'):'portion de 100 '+f.unit;
+      MEALS[m][2].push([f.name,label,uw,g/uw,f.kcal*g/100,f.prot*g/100,f.unit,f.emoji||'🍽️']); S.d[title+'|'+f.name]=true; bumpHabit(title,f.name,g); names.push(f.name); });
+    sr.fromForm=false; $('mealSearch').classList.remove('show'); $('mealForm').classList.remove('show'); refresh();
+    showToast(names.length+(names.length>1?' produits récurrents ajoutés et cochés':' produit récurrent ajouté et coché'), ()=>{
+      names.forEach(n=>{ const i=MEALS[m][2].findIndex(it=>it[0]===n); if(i>=0){ dropState(m,i); MEALS[m][2].splice(i,1); } });
+      HAB[title]=JSON.parse(snap); saveHab(); refresh(); });
+  }
   window.BBXMeal={
     openCfg:()=>{ renderCfg(); $('mealCfg').classList.add('show'); }, closeCfg:()=>$('mealCfg').classList.remove('show'),
     add:m=>openForm('add',m), edit:(m,i)=>openForm('edit',m,i), del:delItem, move:moveItem, resetDef:resetDef,
@@ -4192,7 +4212,7 @@ document.addEventListener('click', function(e){
     plTarget:d=>{ const v=num($('plTarget').value)||num($('plCur').value)||70; $('plTarget').value=fk(Math.max(20,Math.round((v+d)*10)/10)); renderPlan(); }, plDur:d=>{ const v=num($('plDur').value)||0; $('plDur').value=String(Math.max(1,Math.round(v+d))); renderPlan(); },
     plPick:i=>{ const o=pl.opts&&pl.opts[i]; if(!o) return; pl.unit='weeks'; $('plDur').value=String(o.weeks); renderPlan(); },
     coachApply:()=>{ const r=applyCoach(); if(r) showToast('Calories ajustées : '+r.from+' → '+r.to+' kcal',()=>undoCoach()); renderHist(); }, coachUndo:undoCoach, ccAuto:v=>{ WT.cal.auto=!!v; saveWT(); }, saveWeigh:saveWeigh, closeWeigh:closeWeigh, wstep:wstep, delWeigh:delWeigh,
-    habits:openHabits, closeHabits:()=>$('mealHabits').classList.remove('show'), quick:quickAdd, habitsSearch:()=>{ $('mealHabits').classList.remove('show'); srOpen(hb.m); },
+    habits:openHabits, closeHabits:()=>$('mealHabits').classList.remove('show'), quick:quickAdd, recurring:recurringAdd, habitsSearch:()=>{ $('mealHabits').classList.remove('show'); srOpen(hb.m); },
     srScan:()=>scanOpen(sr.target), srManual:()=>openForm('add',sr.target),
     openHist:openHist, closeHist:()=>$('mealHist').classList.remove('show'), histDay:histDay, clearHist:clearHist,
     addMeal:()=>openName('add'), renameMeal:m=>openName('edit',m), saveName:saveName, closeName:()=>$('mealName').classList.remove('show'), delMeal:delMeal,

@@ -1515,6 +1515,129 @@ body:has(#mealView.show) .nav-pill button.on{ color:#fff; background:linear-grad
 .cc-log button{ border:1px solid #F5C2CB; background:#fff; color:#C70F2E; border-radius:8px; font-family:inherit; font-weight:800; font-size:11px; padding:4px 8px; cursor:pointer; }
 .cc-note{ font-size:11.5px; font-weight:600; color:#9CA3AF; margin:8px 2px 0; }
 </style>
+<style>
+/* ===== MEAL — nouvelle apparence (maquette BBX Meal 11.0) ===== */
+#mealView{ --g:#7DD957; --g2:#5BBE48; --gi:#143008; --tx:#2E1F2A; --mu:#8C9199; --ln:#EEF0F3; --cd:#fff; --fl:#F2F4F6;
+  background:#F2F4F6; padding:calc(14px + env(safe-area-inset-top,0px)) 16px 130px; }
+
+/* en-tête */
+#mealView .my-head{ margin:4px 0 16px 2px; align-items:center; }
+#mealView .my-brand{ display:flex; align-items:flex-end; gap:6px; }
+#mealView .my-head .app-logo{ height:38px; width:auto; max-width:96px; object-fit:contain; object-position:left bottom; opacity:.92; }
+#mealView .my-ver{ display:flex; flex-direction:column; align-items:flex-start; line-height:1; padding-bottom:3px; }
+#mealView .my-ver sup{ font-size:9.5px; font-weight:700; color:var(--g2); letter-spacing:.02em; margin-left:1px; }
+#mealView .my-ver h1{ margin:0; font-size:27px; font-weight:800; font-style:italic; letter-spacing:-.02em; color:var(--g); }
+#mealView .my-pill{ display:flex; align-items:center; gap:2px; background:#fff; border-radius:999px; padding:6px 10px; box-shadow:0 10px 24px -12px rgba(30,20,40,.35); }
+#mealView .my-pill button{ width:40px; height:40px; padding:0; border:0; background:transparent; box-shadow:none; border-radius:50%; display:grid; place-items:center; cursor:pointer; color:var(--tx); }
+#mealView .my-pill button svg{ width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:2.8; stroke-linecap:round; stroke-linejoin:round; }
+#mealView .my-pill button.my-cfg svg{ fill:currentColor; stroke:none; }
+#mealView .my-sep{ width:1.5px; height:26px; background:#D9DCE1; margin:0 4px; }
+
+/* navigation de jour */
+#mealView .my-day{ display:flex; align-items:center; justify-content:space-between; background:#fff; border-radius:24px; padding:12px 14px; margin-bottom:18px; box-shadow:0 10px 26px -18px rgba(30,20,40,.3); }
+#mealView .my-dn{ width:40px; height:40px; border:0; background:transparent; border-radius:50%; display:grid; place-items:center; color:var(--tx); cursor:pointer; padding:0; }
+#mealView .my-dn svg{ width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:3.4; stroke-linecap:round; stroke-linejoin:round; }
+#mealView .my-dn:disabled{ opacity:.25; cursor:default; }
+#mealView .my-dt{ text-align:center; line-height:1.15; }
+#mealView .my-dt b{ display:block; font-size:21px; font-weight:800; color:var(--tx); letter-spacing:-.01em; }
+#mealView .my-dt span{ display:block; margin-top:2px; font-size:12px; font-weight:500; color:var(--mu); padding:0; }
+#mealView .my-dt span::first-letter{ text-transform:uppercase; }
+
+/* résumé du jour */
+#mealView .my-sum{ display:flex; align-items:stretch; padding:0; margin-bottom:16px; background:#fff; border:0; border-radius:24px; overflow:hidden; box-shadow:0 14px 30px -20px rgba(30,20,40,.35); min-height:132px; }
+#mealView .sm-left{ flex:0 0 37%; background:var(--g); clip-path:polygon(0 0,100% 0,calc(100% - 22px) 100%,0 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; padding:12px 12px 12px 6px; box-sizing:border-box; color:#fff; }
+#mealView .sm-cap{ font-size:11.5px; font-weight:800; font-style:italic; white-space:nowrap; color:#fff; }
+#mealView .sm-right{ flex:1; display:flex; align-items:center; justify-content:space-around; padding:12px 8px 12px 0; min-width:0; }
+#mealView .sm-mac{ display:flex; flex-direction:column; align-items:center; gap:6px; min-width:0; }
+#mealView .sm-ml{ font-size:13px; font-weight:700; color:var(--tx); }
+#mealView .sm-mv{ font-size:12px; font-weight:700; font-style:italic; color:var(--tx); white-space:nowrap; }
+#mealView .sm-in{ width:34px; background:transparent; border:0; border-bottom:1.5px dotted currentColor; border-radius:0; text-align:center; padding:0; outline:0; font:inherit; color:inherit; -moz-appearance:textfield; }
+#mealView .sm-in::-webkit-outer-spin-button, #mealView .sm-in::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+#mealView .my-plan{ display:none; }
+
+/* anneaux */
+#mealView .rg{ position:relative; flex:none; }
+#mealView .rg svg{ width:100%; height:100%; transform:rotate(-90deg); display:block; }
+#mealView .rg circle{ fill:none; stroke-linecap:round; }
+#mealView .rg .v{ transition:stroke-dashoffset .5s ease, opacity .2s; }
+#mealView .rg-big{ width:88px; height:88px; }
+#mealView .rg-big .t{ stroke:var(--g2); stroke-width:15; }
+#mealView .rg-big .v{ stroke:#fff; stroke-width:15; }
+#mealView .rg-big.over .v{ stroke:#FFB4A8; }
+#mealView .rg-s{ width:56px; height:56px; }
+#mealView .rg-s .t{ stroke:#F0F2F4; stroke-width:9; }
+#mealView .rg-s .v{ stroke-width:9; }
+#mealView .c-p .v{ stroke:#4FD8E3; }
+#mealView .c-l .v{ stroke:#FFB84D; }
+#mealView .rg-c{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; line-height:1; }
+#mealView .rg-c b{ font-weight:800; font-style:italic; color:var(--tx); font-size:17px; }
+#mealView .rg-c span{ margin-top:2px; font-size:7.5px; font-weight:500; color:#A9AEB6; }
+#mealView .rg-big .rg-c b{ color:#fff; font-size:23px; }
+#mealView .rg-big .rg-c span{ color:rgba(255,255,255,.92); font-size:11px; }
+
+#mealView .my-hint{ font-size:11.5px; font-weight:500; color:var(--mu); margin:0 8px 14px; line-height:1.4; }
+
+/* cartes repas */
+#mealView .my-card{ border:0; border-radius:26px; margin-bottom:16px; box-shadow:0 14px 30px -20px rgba(30,20,40,.35); }
+#mealView .my-mh{ padding:14px 16px; gap:14px; }
+#mealView .my-mi{ width:48px; height:48px; font-size:24px; box-shadow:0 8px 16px -8px var(--mc); }
+#mealView .my-mh > div:nth-child(2) > b{ font-size:21px; font-weight:800; letter-spacing:-.01em; color:var(--tx); }
+#mealView .my-mh > div:nth-child(2) > span{ font-size:12px; font-weight:600; color:#6F6A73; margin-top:3px; }
+#mealView .my-mk b{ font-size:27px; font-weight:800; font-style:italic; color:var(--mc); line-height:1; }
+#mealView .my-mk small{ font-size:11px; font-weight:700; letter-spacing:.02em; color:#5B5660; margin-top:3px; }
+#mealView .my-ck span{ width:34px; height:34px; border:2px solid #D3D7DD; font-size:17px; }
+#mealView .my-it{ border-top:1px solid var(--ln); }
+#mealView .my-row{ padding:12px 16px; gap:13px; }
+#mealView .my-th{ width:46px; height:46px; border-radius:14px; font-size:24px; }
+#mealView .my-nm b{ font-size:14.5px; font-weight:700; color:var(--tx); }
+#mealView .my-nm span{ display:block; margin-top:2px; font-size:12px; font-weight:500; color:#7A7580; }
+#mealView .my-kc b{ font-size:17px; font-weight:800; font-style:italic; color:var(--tx); }
+#mealView .my-kc small{ font-size:10.5px; font-weight:700; letter-spacing:.02em; color:#5B5660; }
+#mealView .my-edit{ padding:0 16px 12px 75px; }
+#mealView .my-add{ padding:12px 16px 16px; gap:10px; align-items:center; border-top:1px solid var(--ln); }
+#mealView .my-delmeal{ font-size:12.5px; font-weight:600; color:#A5A9B0; filter:grayscale(1) opacity(.75); }
+#mealView .my-addb{ flex:0 0 58px; width:58px; height:48px; border-radius:16px; border:2px solid var(--mc); background:var(--mt); }
+#mealView .my-addb.plus{ background:var(--mc); color:#fff; font-size:30px; font-weight:600; }
+#mealView .my-addmeal{ height:54px; border-radius:20px; border:2px dashed #B7E6A0; background:rgba(125,217,87,.12); color:#3E8F2A; font-weight:700; }
+
+/* pilule du bas (page Meal) : deux segments inclinés */
+body:has(#mealView.show) .nav-pill{ gap:0; padding:0; background:none; border:0; border-radius:0; backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:none; filter:drop-shadow(0 10px 14px rgba(30,20,40,.22)); }
+body:has(#mealView.show) .nav-pill button{ font-size:0; gap:0; width:86px; height:48px; padding:0; justify-content:center; letter-spacing:0; background:#F1F2F4; color:#A8ADB5; box-shadow:none; }
+body:has(#mealView.show) .nav-pill button svg{ width:24px; height:24px; }
+body:has(#mealView.show) .nav-pill #navSport{ border-radius:24px 0 0 24px; clip-path:polygon(0 0,100% 0,calc(100% - 11px) 100%,0 100%); padding-right:6px; }
+body:has(#mealView.show) .nav-pill #navMeal{ border-radius:0 24px 24px 0; clip-path:polygon(11px 0,100% 0,100% 100%,0 100%); margin-left:-6px; padding-left:6px; }
+body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; box-shadow:none; }
+
+/* écrans secondaires Meal : accent vert au lieu du rouge */
+.mc-head b{ color:#3E9B2A; }
+.mc-big.red, .sr-bar button, .sr-go, .ms-row button, .wg-btns button:first-child, .pl-best button{ background:#7DD957; border-color:#7DD957; color:#143008; box-shadow:none; }
+.ht-dh em{ background:#7DD957; color:#143008; }
+.mf-in:focus-within, .mf-name input:focus{ border-color:#7DD957; box-shadow:0 0 0 3px rgba(125,217,87,.22); }
+.mf-prev{ background:linear-gradient(160deg,#F1FBEA,#fff); border-color:#CDEFBB; }
+.mf-prev b, .pl-line.big b, .ht-lbls span.now{ color:#3E9B2A; }
+.wc-line{ stroke:#5BBE48; } .wc-dot{ stroke:#5BBE48; } .wc-dot.last{ fill:#5BBE48; }
+.pl-opt.on{ border-color:#7DD957; box-shadow:0 0 0 3px rgba(125,217,87,.22); }
+.pl-opt.star, .pl-best{ background:#F6FDF1; border-color:#CDEFBB; }
+.pl-chk input, .cc-auto input{ accent-color:#5BBE48; }
+.mf-units button:active, .hb-it:active{ background:#F1FBEA; border-color:#7DD957; }
+.sm-bar i{ background:linear-gradient(90deg,#7DD957,#5BBE48); }
+.sm-prot .sm-bar i{ background:linear-gradient(90deg,#4FD8E3,#38BEC9); }
+.m-toast button{ color:#9BE77A; }
+.ms-frame i{ background:#7DD957; box-shadow:0 0 10px #7DD957; }
+
+/* ajustements après essai */
+#mealView .rg-big .rg-c b{ font-size:21px; }
+#mealView .rg-s{ width:60px; height:60px; }
+#mealView .rg-c b{ font-size:15px; }
+#mealView .my-ck input:checked + span{ border-color:transparent; }
+#mealView .my-ck input:indeterminate + span{ border-color:var(--mc); }
+#mealView .my-it.done .my-nm b{ color:#9CA3AF; }
+#mealView .my-it.done .my-nm span{ color:#B4BAC4; }
+#mealView .my-add{ gap:8px; }
+#mealView .my-addb{ flex:0 0 52px; width:52px; }
+#mealView .my-delmeal{ font-size:12px; white-space:nowrap; }
+
+</style>
 </head>
 <body>
 
@@ -2813,18 +2936,27 @@ document.addEventListener('click', function(e){
 
 <!-- ===== MEAL : page nutrition (style Yazio) + pilule du bas ===== -->
 <div id="mealView" aria-label="Meal">
-  <div class="my-head"><img class="app-logo" id="mlLogo" alt="BBX"><div class="my-hr"><button class="my-suivi" onclick="BBXMeal.openHist()" aria-label="Suivi des jours"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>Suivi</button><button class="my-cfg" onclick="BBXMeal.openCfg()" aria-label="Réglages Meal"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l3.5-4 3 2.5L20 7"/></svg></button></div></div>
-  <div class="my-trow"><h1 class="my-title">Meal</h1><span class="my-date" id="mlDate"></span></div>
-  <div class="my-sum">
-    <div class="sm-blk">
-      <div class="sm-big"><b id="myEat">0</b><span>kcal</span></div>
-      <div class="sm-bar"><i id="myKbar"></i></div>
-      <div class="sm-sub"><span>Objectif <input id="mlKg" type="number" inputmode="numeric" min="0" aria-label="Objectif calories"></span><span><span id="myRemLab">Reste</span> <b id="myRem">0</b> kcal</span></div>
+  <div class="my-head">
+    <div class="my-brand"><img class="app-logo" id="mlLogo" alt="BBX"><div class="my-ver"><sup>11.0</sup><h1>Meal</h1></div></div>
+    <div class="my-hr my-pill">
+      <button class="my-suivi" onclick="BBXMeal.openHist()" aria-label="Suivi des jours"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V9M9.7 20V4M14.3 20V8M19 20V13"/></svg></button>
+      <i class="my-sep" aria-hidden="true"></i>
+      <button class="my-cfg" onclick="BBXMeal.openCfg()" aria-label="Réglages Meal"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></button>
     </div>
-    <div class="sm-blk sm-prot">
-      <div class="sm-big"><b id="myPt">0</b><span>g de protéines</span></div>
-      <div class="sm-bar"><i id="myPbar"></i></div>
-      <div class="sm-sub"><span>Objectif <input id="mlPg" type="number" inputmode="numeric" min="0" aria-label="Objectif protéines"> g</span><span><span id="myPremLab">Reste</span> <b id="myPrem">0</b> g</span></div>
+  </div>
+  <div class="my-day">
+    <button class="my-dn" onclick="BBXMeal.openHist()" aria-label="Jours précédents (Suivi)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="my-dt"><b>Aujourd’hui</b><span id="mlDate"></span></div>
+    <button class="my-dn" disabled aria-label="Jour suivant"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+  <div class="my-sum">
+    <div class="sm-left">
+      <div class="rg rg-big"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="t" cx="50" cy="50" r="41"/><circle class="v" id="rgK" cx="50" cy="50" r="41"/></svg><div class="rg-c"><b id="myRem">0</b><span id="myRemLab">Restants</span></div></div>
+      <div class="sm-cap"><span id="myEat">0</span> / <input class="sm-in" id="mlKg" type="number" inputmode="numeric" min="0" aria-label="Objectif calories"> kcal</div>
+    </div>
+    <div class="sm-right">
+      <div class="sm-mac"><div class="rg rg-s c-p"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="t" cx="50" cy="50" r="44.5"/><circle class="v" id="rgP" cx="50" cy="50" r="44.5"/></svg><div class="rg-c"><b id="myPrem">0</b><span id="myPremLab">Restants</span></div></div><div class="sm-ml">Protéines</div><div class="sm-mv"><span id="myPt">0</span> / <input class="sm-in" id="mlPg" type="number" inputmode="numeric" min="0" aria-label="Objectif protéines">g</div></div>
+      <div class="sm-mac"><div class="rg rg-s c-l"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="t" cx="50" cy="50" r="44.5"/><circle class="v" id="rgL" cx="50" cy="50" r="44.5"/></svg><div class="rg-c"><b id="myPlK">0</b><span>kcal</span></div></div><div class="sm-ml">Prévu</div><div class="sm-mv"><span id="myPlP">0</span> g prot.</div></div>
     </div>
     <div class="my-plan" id="myPlan"></div>
   </div>
@@ -3020,13 +3152,15 @@ document.addEventListener('click', function(e){
         $('mykc'+m+'-'+i).textContent=r(ik); $('mymt'+m+'-'+i).textContent=r2(W(m,i,it)/it[2])+' '+it[1]+' · '+r(W(m,i,it))+' '+it[6]+' · '+r1(ip)+' g prot.'; });
       $('mymk'+m).textContent=r(mk); $('mymp'+m).textContent=items.length+' aliments · '+r(mp)+' g prot.';
       const all=$('mlall'+m); all.checked=items.length>0&&nd===items.length; all.indeterminate=nd>0&&nd<items.length; });
+    const RG=(id,f)=>{ const e=$(id); if(!e) return; const c=2*Math.PI*(+e.getAttribute('r')); f=Math.max(0,Math.min(1,f||0)); e.style.strokeDasharray=c; e.style.strokeDashoffset=c*(1-f); e.style.opacity=f>0?1:0; };
     $('myEat').textContent=r(K);
-    const rem=S.kg-K; $('myRem').textContent=r(Math.abs(rem)); $('myRemLab').textContent=rem>=0?'Reste':'Dépassé de';
-    $('myKbar').style.width=Math.min(100,K/S.kg*100)+'%'; $('myKbar').classList.toggle('over',rem<0);
-    const prem=S.pg-P; $('myPt').textContent=r(P); $('myPrem').textContent=r(Math.abs(prem)); $('myPremLab').textContent=prem>=0?'Reste':'Dépassé de';
-    $('myPbar').style.width=Math.min(100,P/S.pg*100)+'%';
+    const rem=S.kg-K; $('myRem').textContent=r(Math.abs(rem)); $('myRemLab').textContent=rem>=0?'Restants':'Dépassé';
+    RG('rgK',K/S.kg); $('rgK').closest('.rg').classList.toggle('over',rem<0);
+    const prem=S.pg-P; $('myPt').textContent=r(P); $('myPrem').textContent=r(Math.abs(prem)); $('myPremLab').textContent=prem>=0?'Restants':'Dépassé';
+    RG('rgP',P/S.pg);
     recordToday(K,P,HM,HI);
     $('myPlan').textContent='Prévu aujourd’hui : '+r(TK)+' kcal · '+r(TP)+' g de protéines';
+    $('myPlK').textContent=r(TK); $('myPlP').textContent=r(TP); RG('rgL',TK/S.kg);
   }
   // ---- navigation Sport | Meal ----
   function setView(v){
@@ -3581,7 +3715,7 @@ document.addEventListener('click', function(e){
     const okK=have.filter(x=>x.h.k>=x.h.kg*0.95).length, okP=have.filter(x=>x.h.p>=x.h.pg*0.95).length;
     let h=weightHTML()+coachHTML()+`<div class="ht-tiles"><div><b>${r(avg('k'))}</b><span>kcal / jour</span></div><div><b>${r(avg('p'))}</b><span>g prot. / jour</span></div><div><b>${have.length}/${days.length}</b><span>jours suivis</span></div></div>`;
     h+=`<div class="ht-ok"><span>🔥 Calories atteintes <b>${okK}/${have.length}</b></span><span>💪 Protéines atteintes <b>${okP}/${have.length}</b></span></div>`;
-    h+=barsHTML(days,'k',S.kg,'Calories','#E5173A','kcal')+barsHTML(days,'p',S.pg,'Protéines','#F59E0B','g');
+    h+=barsHTML(days,'k',S.kg,'Calories','#7DD957','kcal')+barsHTML(days,'p',S.pg,'Protéines','#4FD8E3','g');
     h+='<div class="ht-sec">Jour par jour</div>';
     h+=have.slice().reverse().map(x=>{
       const H=x.h, open=!!htOpen[x.k], today0=x.k===today();

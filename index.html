@@ -1839,6 +1839,26 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .wk-ver, #mealView .my-ver{ transform:translateY(.5px); }
 
 </style>
+<style>
+
+/* ===== MEAL : résumé kcal / protéines en deux lignes avec barres ===== */
+#mealView .my-sum{ display:block !important; min-height:0 !important; padding:18px 20px 20px !important; background:#fff !important; border-radius:28px !important; overflow:visible !important;
+  box-shadow:0 18px 40px -18px rgba(30,40,70,.28) !important; margin-bottom:16px !important; }
+#mealView .mc-row{ display:grid; grid-template-columns:1fr auto; align-items:end; column-gap:12px; }
+#mealView .mc-row + .mc-row{ margin-top:14px; }
+#mealView .mc-l{ grid-column:1; grid-row:1; align-self:end; font-size:16px; font-weight:800; font-style:italic; color:#C4C9D2; white-space:nowrap; line-height:1.2; padding-bottom:3px; }
+#mealView .mc-r{ grid-column:2; grid-row:1; display:flex; flex-direction:column; align-items:flex-end; line-height:1; }
+#mealView .mc-r small{ font-size:9px; font-weight:500; color:#B9BFC9; margin-bottom:1px; }
+#mealView .mc-r b{ font-size:30px; font-weight:800; font-style:italic; letter-spacing:-.02em; line-height:1; }
+#mealView .mc-bar{ grid-column:1 / -1; grid-row:2; margin-top:8px; height:10px; border-radius:99px; background:#F4F5F8; overflow:hidden; }
+#mealView .mc-bar i{ display:block; height:100%; width:0; border-radius:99px; transition:width .5s ease; }
+#mealView .mc-k .mc-r b{ color:#7DD957; } #mealView .mc-k .mc-bar i{ background:#53BE4A; }
+#mealView .mc-p .mc-r b{ color:#FFB84D; } #mealView .mc-p .mc-bar i{ background:#FFBB55; }
+#mealView .mc-row.over .mc-r b{ color:#F0616D; } #mealView .mc-row.over .mc-bar i{ background:#F0616D; }
+#mealView .mc-row .sm-in{ width:46px; background:transparent; border:0; border-bottom:1.5px dotted #C4C9D2; border-radius:0; text-align:center; padding:0; outline:0; font:inherit; color:inherit; -moz-appearance:textfield; }
+#mealView .mc-row .sm-in:focus{ border-bottom-color:#7DD957; color:#8D93A0; }
+#mealView .mc-row .sm-in::-webkit-outer-spin-button, #mealView .mc-row .sm-in::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+</style>
 </head>
 <body>
 
@@ -3063,13 +3083,15 @@ document.addEventListener('click', function(e){
     <button class="my-dn" disabled aria-label="Jour suivant"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
   </div>
   <div class="my-sum">
-    <div class="sm-left">
-      <div class="rg rg-big"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="t" cx="50" cy="50" r="41"/><circle class="v" id="rgK" cx="50" cy="50" r="41"/></svg><div class="rg-c"><b id="myRem">0</b><span id="myRemLab">Restants</span></div></div>
-      <div class="sm-cap"><span id="myEat">0</span> / <input class="sm-in" id="mlKg" type="number" inputmode="numeric" min="0" aria-label="Objectif calories"> kcal</div>
+    <div class="mc-row mc-k">
+      <div class="mc-l"><span id="myEat">0</span> / <input class="sm-in" id="mlKg" type="number" inputmode="numeric" min="0" aria-label="Objectif calories"> kcal</div>
+      <div class="mc-r"><small id="myRemLab">Restants</small><b id="myRem">0</b></div>
+      <div class="mc-bar"><i id="barK"></i></div>
     </div>
-    <div class="sm-right">
-      <div class="sm-mac"><div class="rg rg-s c-p"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="t" cx="50" cy="50" r="44.5"/><circle class="v" id="rgP" cx="50" cy="50" r="44.5"/></svg><div class="rg-c"><b id="myPrem">0</b><span id="myPremLab">Restants</span></div></div><div class="sm-ml">Protéines</div><div class="sm-mv"><span id="myPt">0</span> / <input class="sm-in" id="mlPg" type="number" inputmode="numeric" min="0" aria-label="Objectif protéines">g</div></div>
-      <div class="sm-mac"><div class="rg rg-s c-l"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="t" cx="50" cy="50" r="44.5"/><circle class="v" id="rgL" cx="50" cy="50" r="44.5"/></svg><div class="rg-c"><b id="myPlK">0</b><span>kcal</span></div></div><div class="sm-ml">Prévu</div><div class="sm-mv"><span id="myPlP">0</span> g prot.</div></div>
+    <div class="mc-row mc-p">
+      <div class="mc-l"><span id="myPt">0</span> / <input class="sm-in" id="mlPg" type="number" inputmode="numeric" min="0" aria-label="Objectif protéines"> Protéine</div>
+      <div class="mc-r"><small id="myPremLab">Restants</small><b id="myPrem">0</b></div>
+      <div class="mc-bar"><i id="barP"></i></div>
     </div>
     <div class="my-plan" id="myPlan"></div>
   </div>
@@ -3265,15 +3287,14 @@ document.addEventListener('click', function(e){
         $('mykc'+m+'-'+i).textContent=r(ik); $('mymt'+m+'-'+i).textContent=r2(W(m,i,it)/it[2])+' '+it[1]+' · '+r(W(m,i,it))+' '+it[6]+' · '+r1(ip)+' g prot.'; });
       $('mymk'+m).textContent=r(mk); $('mymp'+m).textContent=items.length+' aliments · '+r(mp)+' g prot.';
       const all=$('mlall'+m); all.checked=items.length>0&&nd===items.length; all.indeterminate=nd>0&&nd<items.length; });
-    const RG=(id,f)=>{ const e=$(id); if(!e) return; const c=2*Math.PI*(+e.getAttribute('r')); f=Math.max(0,Math.min(1,f||0)); e.style.strokeDasharray=c; e.style.strokeDashoffset=c*(1-f); e.style.opacity=f>0?1:0; };
+    const BW=(id,f)=>{ const e=$(id); if(e) e.style.width=(Math.max(0,Math.min(1,f||0))*100)+'%'; };
     $('myEat').textContent=r(K);
     const rem=S.kg-K; $('myRem').textContent=r(Math.abs(rem)); $('myRemLab').textContent=rem>=0?'Restants':'Dépassé';
-    RG('rgK',K/S.kg); $('rgK').closest('.rg').classList.toggle('over',rem<0);
+    BW('barK',K/S.kg); $('barK').closest('.mc-row').classList.toggle('over',rem<0);
     const prem=S.pg-P; $('myPt').textContent=r(P); $('myPrem').textContent=r(Math.abs(prem)); $('myPremLab').textContent=prem>=0?'Restants':'Dépassé';
-    RG('rgP',P/S.pg);
+    BW('barP',P/S.pg); $('barP').closest('.mc-row').classList.toggle('over',prem<0);
     recordToday(K,P,HM,HI);
     $('myPlan').textContent='Prévu aujourd’hui : '+r(TK)+' kcal · '+r(TP)+' g de protéines';
-    $('myPlK').textContent=r(TK); $('myPlP').textContent=r(TP); RG('rgL',TK/S.kg);
   }
   // ---- navigation Sport | Meal ----
   function setView(v){

@@ -1774,6 +1774,71 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .section-label:first-of-type{ margin-top:var(--hd-after) !important; }
 
 </style>
+<style>
+/* ===== MEAL : dimensions d'origine des blocs « type de repas » ===== */
+#mealView .my-card{ margin-bottom:14px !important; border-top-width:1px !important; border-bottom-width:1px !important; border-left-width:1px !important; border-right-width:1px !important; }
+#mealView .my-mh{ padding-top:16px !important; padding-right:14px !important; padding-left:14px !important; }
+#mealView .my-mi{ font-size:27px !important; width:54px !important; height:54px !important; }
+#mealView .my-mh > div:nth-child(2) > b{ font-size:23px !important; line-height:25.3px !important; font-weight:900 !important; letter-spacing:-0.23px !important; }
+#mealView .my-mh > div:nth-child(2) > span{ font-size:12.5px !important; font-weight:700 !important; }
+#mealView .my-mk{ margin-left:0px !important; }
+#mealView .my-mk b{ font-size:25px !important; line-height:27.5px !important; font-weight:900 !important; letter-spacing:-0.25px !important; }
+#mealView .my-mk small{ margin-top:0px !important; font-size:10.5px !important; font-weight:800 !important; letter-spacing:0.63px !important; }
+#mealView .my-mh .my-ck span{ font-size:15px !important; width:28px !important; height:28px !important; }
+#mealView .my-row{ padding-top:9px !important; padding-right:14px !important; padding-bottom:9px !important; padding-left:14px !important; gap:11px !important; }
+#mealView .my-th{ font-size:20px !important; width:38px !important; height:38px !important; }
+#mealView .my-nm b{ font-size:13px !important; line-height:16.25px !important; }
+#mealView .my-nm span{ margin-top:0px !important; font-size:11.5px !important; font-weight:600 !important; display:inline !important; }
+#mealView .my-kc b{ font-size:14px !important; }
+#mealView .my-kc small{ font-size:10px !important; font-weight:800 !important; letter-spacing:0.6px !important; }
+#mealView .my-it .my-ck span{ font-size:15px !important; width:28px !important; height:28px !important; }
+#mealView .my-add{ padding-top:10px !important; padding-right:14px !important; padding-bottom:14px !important; padding-left:14px !important; }
+#mealView .my-addb{ font-size:26px !important; line-height:26px !important; font-weight:700 !important; flex-basis:54px !important; width:54px !important; height:46px !important; }
+#mealView .my-addb.plus{ font-size:26px !important; line-height:26px !important; font-weight:700 !important; flex-basis:54px !important; width:54px !important; height:46px !important; }
+#mealView .my-card{ border:1px solid #E9ECEF !important; margin-bottom:14px !important; }
+
+/* ===== WORKOUT : taille d'origine du bloc Exercice (366 × 134) ===== */
+:root{ --row-h:134px; }
+.ex-row, .ex-row.has-rest{ height:134px !important; margin-left:-4px !important; margin-right:-4px !important; }
+.ex-list{ gap:10px !important; }
+.ex-action{ flex:0 0 68px !important; }
+.ex-row .ex-info, .ex-row.has-rest .ex-info{ padding:10px 8px 8px 12px !important; gap:5px !important; }
+.ex-row .ex-name, .ex-row.has-rest .ex-name{ padding:5px 12px !important; }
+.ex-row .ex-sets b.ex-nb{ font-size:19px !important; line-height:22px !important; }
+.ex-row.has-rest .ex-rest, .ex-row:not(.resting) .ex-rest{ height:34px !important; bottom:8px !important; }
+.ex-rest .rt-step{ height:34px !important; }
+.ex-row.resting .rt-run{ bottom:8px !important; }
+.set-undo{ top:10px !important; }
+
+</style>
+<style>
+/* ===== EN-TÊTE : sans flou, cadre « Aujourd'hui » et logo plus petits, BBX / titre sur la même ligne ===== */
+:root{ --hd-logo:30px; --hd-day-h:50px; --hd-ver-pb:3px; }
+
+/* plus aucun flou / halo / fondu en haut de l'écran */
+.phone-shell{ backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+.top-sticky, .top-sticky *, #mealView .my-head, #mealView .my-head *{ text-shadow:none !important; }
+.top-sticky .app-logo, #mealView .my-head .app-logo{ box-shadow:none !important; }
+.top-duo, #mealView .my-pill{ box-shadow:none !important; filter:none !important; }
+.top-sticky .date-strip, #mealView .my-day{ box-shadow:none !important; filter:none !important; }
+
+/* cadre « Aujourd'hui » réduit (identique dans les deux applis) */
+.top-sticky .date-strip, #mealView .my-day{ height:var(--hd-day-h) !important; padding:0 10px !important; border-radius:25px !important; }
+.dn-btn, #mealView .my-dn{ width:38px !important; height:38px !important; }
+.dn-btn svg, #mealView .my-dn svg{ width:21px !important; height:21px !important; }
+.dn-lab, #mealView .my-dt b{ font-size:18px !important; }
+
+/* logo réduit */
+.top-sticky .page-header .app-logo, #mealView .my-head .app-logo{ height:var(--hd-logo) !important; }
+.wk-brand, #mealView .my-brand{ height:var(--hd-logo); align-items:flex-end; }
+.wk-ver h1, #mealView .my-ver h1{ font-size:22px; }
+.wk-ver sup, #mealView .my-ver sup{ font-size:8px; }
+.wk-ver, #mealView .my-ver{ padding-bottom:var(--hd-ver-pb) !important; }
+/* même ligne de base : bas du titre = bas de « BBX » */
+.wk-ver, #mealView .my-ver{ padding-bottom:0 !important; margin-bottom:-1px !important; }
+.wk-ver, #mealView .my-ver{ transform:translateY(.5px); }
+
+</style>
 </head>
 <body>
 

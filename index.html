@@ -1903,6 +1903,11 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #mealView .my-card .my-it:not(:last-child)::after{ left:58px; right:44px; }
 #mealView .my-card .my-edit{ padding-left:58px !important; padding-right:12px !important; }
 </style>
+<style>
+/* ===== RECHERCHE : icônes de scan et de crayon (SVG) ===== */
+.sr-acts button{ display:inline-flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap; font-size:12px; padding:0 4px; }
+.sr-acts button svg{ width:18px; height:18px; flex:none; fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+</style>
 </head>
 <body>
 
@@ -3205,7 +3210,7 @@ document.addEventListener('click', function(e){
 <div id="mealSearch" class="mc-ov mc-search" aria-label="Rechercher un produit">
   <div class="mc-head"><b>Rechercher</b><button class="mc-x" onclick="BBXMeal.closeSearch()" aria-label="Fermer">✕</button></div>
   <div class="sr-bar"><input id="srQ" type="search" autocomplete="off" autocapitalize="off" placeholder="Ex : skyr, poulet, riz…" enterkeyhint="search"><button onclick="BBXMeal.doSearch()">Chercher</button></div>
-  <div class="sr-acts"><button onclick="BBXMeal.srScan()">📷 Scanner un code-barres</button><button onclick="BBXMeal.srManual()">✎ Ajouter à la main</button></div>
+  <div class="sr-acts"><button onclick="BBXMeal.srScan()" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg><span>Scanner un code-barres</span></button><button onclick="BBXMeal.srManual()" aria-label="Ajouter à la main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Ajouter à la main</span></button></div>
   <div class="sr-meal" id="srMeal"></div>
   <div id="srList"></div>
 </div>

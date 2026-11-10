@@ -1859,6 +1859,38 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #mealView .mc-row .sm-in:focus{ border-bottom-color:#7DD957; color:#8D93A0; }
 #mealView .mc-row .sm-in::-webkit-outer-spin-button, #mealView .mc-row .sm-in::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
 </style>
+<style>
+/* ===== MEAL : carte repas façon maquette (boutons dans le bandeau, sans pied de carte) ===== */
+#mealView .my-card{ border:0 !important; border-radius:26px !important; background:#fff !important; overflow:hidden; margin-bottom:16px !important; padding-bottom:4px; box-shadow:0 18px 40px -18px rgba(30,40,70,.28) !important; }
+#mealView .my-card .my-mh{ display:flex !important; align-items:center !important; gap:10px !important; padding:12px 12px !important; min-height:0 !important; }
+#mealView .my-card .my-mi{ flex:none; width:42px !important; height:42px !important; font-size:21px !important; box-shadow:0 6px 12px -6px var(--mc) !important; }
+#mealView .my-card .my-mt{ flex:1 1 auto; min-width:0; }
+#mealView .my-card .my-mh > .my-mt > b{ display:block; font-size:16.5px !important; line-height:1.2 !important; font-weight:800 !important; letter-spacing:-.01em !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--tx); }
+#mealView .my-card .my-mh > .my-mt > span{ display:block; margin-top:2px !important; font-size:10.5px !important; font-weight:700 !important; color:#6F6A73; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#mealView .my-card .my-mk{ flex:none; text-align:center; }
+#mealView .my-card .my-mk b{ font-size:22px !important; line-height:1 !important; }
+#mealView .my-card .my-mk small{ font-size:9.5px !important; margin-top:2px !important; }
+#mealView .my-hb{ flex:none; display:flex; gap:7px; }
+#mealView .my-hbtn{ width:44px; height:36px; padding:0; border-radius:18px; display:grid; place-items:center; cursor:pointer; font-family:inherit; border:2px solid var(--mc); background:transparent; }
+#mealView .my-hbtn svg{ width:20px; height:20px; fill:none; stroke:var(--mc); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+#mealView .my-hbtn.plus{ background:var(--mc); }
+#mealView .my-hbtn.plus svg{ stroke:#fff; stroke-width:3; width:22px; height:22px; }
+#mealView .my-hbtn:active{ transform:scale(.96); }
+#mealView .my-card .my-mh > .my-ck.all{ display:none !important; }
+
+/* lignes d'aliments */
+#mealView .my-card .my-it{ position:relative; border-top:0 !important; }
+#mealView .my-card .my-it:not(:last-child)::after{ content:""; position:absolute; left:74px; right:56px; bottom:0; height:1px; background:#E4E7EC; z-index:3; pointer-events:none; }
+#mealView .my-card .my-row{ padding:10px 14px !important; gap:12px !important; }
+#mealView .my-card .my-th{ width:46px !important; height:46px !important; border-radius:14px !important; font-size:23px !important; }
+#mealView .my-card .my-nm b{ font-size:14.5px !important; font-weight:800 !important; }
+#mealView .my-card .my-nm span{ font-size:11.5px !important; font-weight:600 !important; color:#7A7580; }
+#mealView .my-card .my-kc b{ font-size:16px !important; font-weight:800 !important; }
+#mealView .my-card .my-kc small{ font-size:10px !important; }
+#mealView .my-card .my-row .my-ck span{ width:26px !important; height:26px !important; border:2px solid #D4D8DE; }
+#mealView .my-empty{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 16px 14px; font-size:12.5px; font-weight:600; color:#9AA0AA; }
+#mealView .my-empty button{ background:none; border:0; padding:4px 0; font:inherit; font-weight:700; color:#B0B5BD; text-decoration:underline; cursor:pointer; }
+</style>
 </head>
 <body>
 
@@ -3257,11 +3289,11 @@ document.addEventListener('click', function(e){
     S.v=5; save();
   }
   function build(){
-    $('mlMeals').innerHTML=MEALS.map(([t,ic,items],m)=>`<section class="my-card" data-m="${m}" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}"><div class="my-mh"><div class="my-mi">${ic}</div><div><b>${t}</b><span id="mymp${m}"></span></div><div class="my-mk"><b id="mymk${m}"></b><small>kcal</small></div><label class="my-ck all" title="Tout cocher"><input type="checkbox" id="mlall${m}" aria-label="Tout cocher : ${t}"><span></span></label></div>`+
+    $('mlMeals').innerHTML=MEALS.map(([t,ic,items],m)=>`<section class="my-card" data-m="${m}" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}"><div class="my-mh"><div class="my-mi">${ic}</div><div class="my-mt"><b>${t}</b><span id="mymp${m}"></span></div><div class="my-mk"><b id="mymk${m}"></b><small>kcal</small></div><div class="my-hb"><button class="my-hbtn scan" onclick="BBXMeal.scan(${m})" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></button><button class="my-hbtn plus" onclick="BBXMeal.search(${m})" aria-label="Ajouter un produit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><label class="my-ck all" title="Tout cocher" hidden><input type="checkbox" id="mlall${m}" aria-label="Tout cocher : ${t}"><span></span></label></div>`+
       items.map((it,i)=>`<div class="my-it" id="myit${m}-${i}"><div class="my-row" data-m="${m}" data-i="${i}"><div class="my-th">${it[7]}</div><div class="my-nm"><b>${it[0]}</b><span id="mymt${m}-${i}"></span></div><div class="my-kc"><b id="mykc${m}-${i}"></b><small>kcal</small></div><label class="my-ck"><input type="checkbox" id="mlk${m}-${i}" ${S.d[key(m,i)]?'checked':''}><span></span></label></div>
         <div class="my-edit"><div class="my-st"><button data-d="-1" aria-label="Moins">−</button><input type="number" inputmode="decimal" min="0" step="any" id="mlc${m}-${i}" value="${r2(W(m,i,it)/it[2])}"><button data-d="1" aria-label="Plus">+</button></div><span class="my-u">${it[1]}</span>
         <div class="my-wf"><input type="number" inputmode="decimal" min="0" step="any" id="mlw${m}-${i}" value="${r1(W(m,i,it))}"><span class="my-u">${it[6]}</span></div>
-        <div class="my-eact"><button onclick="BBXMeal.edit(${m},${i})">✎ Modifier</button><button class="del" onclick="BBXMeal.del(${m},${i})">🗑 Supprimer</button></div></div></div>`).join('')+`<div class="my-add"><button class="my-delmeal" onclick="BBXMeal.delMeal(${m})">🗑 Supprimer le repas</button><button class="my-addb plus" onclick="BBXMeal.habits(${m})" aria-label="Mes habitudes pour ${esc(t)}">＋</button><button class="my-addb" onclick="BBXMeal.scan(${m})" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></button><button class="my-addb" onclick="BBXMeal.search(${m})" aria-label="Rechercher un produit"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></button></div></section>`).join('');
+        <div class="my-eact"><button onclick="BBXMeal.edit(${m},${i})">✎ Modifier</button><button class="del" onclick="BBXMeal.del(${m},${i})">🗑 Supprimer</button></div></div></div>`).join('')+(items.length?'':`<div class="my-empty"><span>Aucun aliment</span><button onclick="BBXMeal.delMeal(${m})">Supprimer le repas</button></div>`)+`</section>`).join('');
     MEALS.forEach(([t,ic,items],m)=>{
       $('mlall'+m).onchange=e=>{ const on=e.target.checked; items.forEach((it,i)=>{ S.d[key(m,i)]=on; $('mlk'+m+'-'+i).checked=on; if(on) bumpHabit(MEALS[m][0],it[0],W(m,i,it)); }); calc(); save(); };
       items.forEach((it,i)=>{

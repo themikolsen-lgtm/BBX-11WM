@@ -1876,7 +1876,7 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #mealView .my-hbtn.plus{ background:var(--mc); }
 #mealView .my-hbtn.plus svg{ stroke:#fff; stroke-width:3; width:22px; height:22px; }
 #mealView .my-hbtn:active{ transform:scale(.96); }
-#mealView .my-card .my-mh > .my-ck.all{ display:none !important; }
+
 
 /* lignes d'aliments */
 #mealView .my-card .my-it{ position:relative; border-top:0 !important; }
@@ -1922,6 +1922,30 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .screens{ padding-bottom:120px !important; }
 #mealView{ padding-bottom:140px !important; }
 .m-toast{ bottom:calc(98px + env(safe-area-inset-bottom,0px)) !important; }
+</style>
+<style>
+/* ===== MEAL : case « tout cocher » + bandeau, revoir la veille, recherche sur une ligne ===== */
+#mealView .my-card .my-mh{ gap:6px !important; padding:12px 9px !important; }
+#mealView .my-card .my-mi{ width:38px !important; height:38px !important; font-size:19px !important; }
+#mealView .my-card .my-mh > .my-mt > b{ font-size:15px !important; }
+#mealView .my-card .my-mh > .my-mt > span{ font-size:9.5px !important; }
+#mealView .my-card .my-mk b{ font-size:20px !important; }
+#mealView .my-card .my-mk small{ font-size:9px !important; }
+#mealView .my-card .my-mh > .my-ck.all{ display:block !important; flex:none; }
+#mealView .my-card .my-mh > .my-ck.all span{ width:24px !important; height:24px !important; border:2px solid #D4D8DE; }
+#mealView .my-card.past .my-mh{ padding:12px 14px !important; gap:10px !important; }
+#mealView .my-card.past .my-mh > .my-mt > b{ font-size:16.5px !important; }
+#mealView .my-card.past .my-mk b{ font-size:22px !important; }
+#mealView .my-card.past .my-it:not(:last-child)::after{ right:16px; }
+#mealView.past .my-sum:not(.mp-sum), #mealView.past .my-hint, #mealView.past #mlMeals, #mealView.past .my-addmeal{ display:none !important; }
+#mealPast[hidden]{ display:none; }
+#mealView .mp-empty{ text-align:center; padding:48px 20px; font-size:15px; font-weight:700; color:#9AA0AA; }
+#mealView .mp-empty small{ display:block; margin-top:8px; font-size:12px; font-weight:500; }
+.sr-acts{ flex-wrap:nowrap; gap:8px; }
+.sr-acts > button{ flex:1 1 0; min-width:0; flex-direction:column; height:62px; gap:4px; padding:6px 4px; white-space:normal; font-size:11px; line-height:1.15; text-align:center; }
+.sr-acts > button svg{ width:20px; height:20px; }
+.sr-acts > .sr-rec{ flex:1 1 0; min-height:0; height:62px; padding:6px 4px; gap:4px; flex-direction:column; flex-wrap:nowrap; }
+.sr-acts > .sr-rec span{ font-size:11px; }
 </style>
 </head>
 <body>
@@ -3142,9 +3166,9 @@ document.addEventListener('click', function(e){
     </div>
   </div>
   <div class="my-day">
-    <button class="my-dn" onclick="BBXMeal.openHist()" aria-label="Jours précédents (Suivi)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <div class="my-dt"><b>Aujourd’hui</b><span id="mlDate"></span></div>
-    <button class="my-dn" disabled aria-label="Jour suivant"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    <button class="my-dn" id="mlPrev" onclick="BBXMeal.dayPrev()" aria-label="Jour précédent"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div class="my-dt"><b id="mlDay">Aujourd’hui</b><span id="mlDate"></span></div>
+    <button class="my-dn" id="mlNext" onclick="BBXMeal.dayNext()" aria-label="Jour suivant" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
   </div>
   <div class="my-sum">
     <div class="mc-row mc-k">
@@ -3161,6 +3185,7 @@ document.addEventListener('click', function(e){
   </div>
   <div class="my-hint">Touche un produit pour modifier sa quantité, balaie-le vers la droite pour le supprimer. Maintiens le titre d’un repas appuyé pour le déplacer.</div>
   <div id="mlMeals"></div>
+  <div id="mealPast" hidden></div>
   <button class="my-addmeal" onclick="BBXMeal.addMeal()">＋ Ajouter un repas</button>
 </div>
 <div id="mealToast" class="m-toast" role="status"><span id="toastTxt"></span><button id="toastUndo">Annuler</button></div>
@@ -3225,7 +3250,7 @@ document.addEventListener('click', function(e){
 <div id="mealSearch" class="mc-ov mc-search" aria-label="Rechercher un produit">
   <div class="mc-head"><b>Rechercher</b><button class="mc-x" onclick="BBXMeal.closeSearch()" aria-label="Fermer">✕</button></div>
   <div class="sr-bar"><input id="srQ" type="search" autocomplete="off" autocapitalize="off" placeholder="Ex : skyr, poulet, riz…" enterkeyhint="search"><button onclick="BBXMeal.doSearch()">Chercher</button></div>
-  <div class="sr-acts"><button onclick="BBXMeal.srScan()" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg><span>Scanner un code-barres</span></button><button onclick="BBXMeal.srManual()" aria-label="Ajouter à la main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Ajouter à la main</span></button><button class="sr-rec" onclick="BBXMeal.recurring()" aria-label="Récurrent : ajouter mes produits habituels"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><span>Récurrent</span><small>ajoute mes produits habituels de ce repas</small></button></div>
+  <div class="sr-acts"><button onclick="BBXMeal.srScan()" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg><span>Scanner un code-barres</span></button><button onclick="BBXMeal.srManual()" aria-label="Ajouter à la main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Ajouter à la main</span></button><button class="sr-rec" onclick="BBXMeal.recurring()" aria-label="Récurrent : ajouter mes produits habituels"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><span>Récurrent</span></button></div>
   <div class="sr-meal" id="srMeal"></div>
   <div id="srList"></div>
 </div>
@@ -3321,7 +3346,7 @@ document.addEventListener('click', function(e){
     S.v=5; save();
   }
   function build(){
-    $('mlMeals').innerHTML=MEALS.map(([t,ic,items],m)=>`<section class="my-card" data-m="${m}" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}"><div class="my-mh"><div class="my-mi">${ic}</div><div class="my-mt"><b>${t}</b><span id="mymp${m}"></span></div><div class="my-mk"><b id="mymk${m}"></b><small>kcal</small></div><div class="my-hb"><button class="my-hbtn scan" onclick="BBXMeal.scan(${m})" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></button><button class="my-hbtn plus" onclick="BBXMeal.search(${m})" aria-label="Ajouter un produit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><label class="my-ck all" title="Tout cocher" hidden><input type="checkbox" id="mlall${m}" aria-label="Tout cocher : ${t}"><span></span></label></div>`+
+    $('mlMeals').innerHTML=MEALS.map(([t,ic,items],m)=>`<section class="my-card" data-m="${m}" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}"><div class="my-mh"><div class="my-mi">${ic}</div><div class="my-mt"><b>${t}</b><span id="mymp${m}"></span></div><div class="my-mk"><b id="mymk${m}"></b><small>kcal</small></div><div class="my-hb"><button class="my-hbtn scan" onclick="BBXMeal.scan(${m})" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></button><button class="my-hbtn plus" onclick="BBXMeal.search(${m})" aria-label="Ajouter un produit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><label class="my-ck all" title="Tout cocher"><input type="checkbox" id="mlall${m}" aria-label="Tout cocher : ${t}"><span></span></label></div>`+
       items.map((it,i)=>`<div class="my-it" id="myit${m}-${i}"><div class="my-row" data-m="${m}" data-i="${i}"><div class="my-th">${it[7]}</div><div class="my-nm"><b>${it[0]}</b><span id="mymt${m}-${i}"></span></div><div class="my-kc"><b id="mykc${m}-${i}"></b><small>kcal</small></div><label class="my-ck"><input type="checkbox" id="mlk${m}-${i}" ${S.d[key(m,i)]?'checked':''}><span></span></label></div>
         <div class="my-edit"><div class="my-st"><button data-d="-1" aria-label="Moins">−</button><input type="number" inputmode="decimal" min="0" step="any" id="mlc${m}-${i}" value="${r2(W(m,i,it)/it[2])}"><button data-d="1" aria-label="Plus">+</button></div><span class="my-u">${it[1]}</span>
         <div class="my-wf"><input type="number" inputmode="decimal" min="0" step="any" id="mlw${m}-${i}" value="${r1(W(m,i,it))}"><span class="my-u">${it[6]}</span></div>
@@ -4197,6 +4222,35 @@ document.addEventListener('click', function(e){
     const it=[f.name,label,uw,g/uw,f.kcal*g/100,f.prot*g/100,f.unit,f.emoji||'🍽️'];
     MEALS[m][2].push(it); S.d[MEALS[m][0]+'|'+f.name]=true; bumpHabit(MEALS[m][0],f.name,g); refresh(); renderHabits('✓ « '+f.name+' » ajouté et coché');
   }
+  // ---------- revoir les jours précédents (flèches à côté d'« Aujourd'hui ») ----------
+  let viewOff=0;
+  const dayKeyOff=o=>{ const n=new Date(); return dkey(new Date(n.getFullYear(),n.getMonth(),n.getDate()+o)); };
+  function oldestOff(){ const ks=Object.keys(HIST).sort(); if(!ks.length) return 0; return Math.round((fd(ks[0])-fd(today()))/86400000); }
+  function dayLabel(o){ return o===0?'Aujourd’hui':(o===-1?'Hier':dlabel(dayKeyOff(o))); }
+  function renderPast(){
+    $('mealView').classList.toggle('past',viewOff<0);
+    $('mlDay').textContent=dayLabel(viewOff);
+    $('mlNext').disabled=viewOff>=0;
+    const box=$('mealPast');
+    if(viewOff>=0){ box.hidden=true; box.innerHTML=''; return; }
+    box.hidden=false;
+    const H=HIST[dayKeyOff(viewOff)];
+    if(!H){ box.innerHTML='<div class="mp-empty">Rien n’est enregistré pour ce jour.<small>Un jour est enregistré dès que tu coches ce que tu as mangé.</small></div>'; return; }
+    const gk=H.kg||S.kg, gp=H.pg||S.pg, rk=gk-H.k, rp=gp-H.p;
+    const bar=(cls,txt,rem,lab,f)=>`<div class="mc-row ${cls}${rem<0?' over':''}"><div class="mc-l">${txt}</div><div class="mc-r"><small>${rem>=0?'Restants':'Dépassé'}</small><b>${Math.abs(Math.round(rem*10)/10)}</b></div><div class="mc-bar"><i style="width:${Math.max(0,Math.min(1,f))*100}%"></i></div></div>`;
+    const emo={}; MEALS.forEach(mm=>mm[2].forEach(it=>{ emo[it[0]]=it[7]; }));
+    const cards=Object.keys(H.m||{}).map(t=>{
+      const its=(H.i||[]).filter(x=>x[0]===t), mm=MEALS.find(x=>x[0]===t), col=mcol(t);
+      return `<section class="my-card past" style="--mc:${col[0]};--mt:${col[1]}"><div class="my-mh"><div class="my-mi">${mm?mm[1]:'🍽️'}</div><div class="my-mt"><b>${esc(t)}</b><span>${its.length} aliment${its.length>1?'s':''} · ${H.m[t][1]} g prot.</span></div><div class="my-mk"><b>${H.m[t][0]}</b><small>kcal</small></div></div>`+
+        its.map(x=>`<div class="my-it"><div class="my-row"><div class="my-th">${emo[x[1]]||'🍽️'}</div><div class="my-nm"><b>${esc(x[1])}</b><span>${esc(x[2])}</span></div><div class="my-kc"><b>${x[3]}</b><small>kcal</small></div></div></div>`).join('')+'</section>';
+    }).join('');
+    box.innerHTML=`<div class="my-sum mp-sum">${bar('mc-k',H.k+' / '+gk+' kcal',rk,'',H.k/gk)}${bar('mc-p',H.p+' / '+gp+' Protéine',rp,'',H.p/gp)}</div>`+cards;
+  }
+  function dayPrev(){
+    if(!Object.keys(HIST).length || viewOff-1<oldestOff()){ showToast('Pas d’historique plus ancien : chaque jour est enregistré dès que tu coches ce que tu as mangé.'); return; }
+    viewOff--; renderPast(); $('mealView').scrollTo(0,0);
+  }
+  function dayNext(){ if(viewOff<0){ viewOff++; renderPast(); $('mealView').scrollTo(0,0); } }
   function recurringAdd(){
     const m=sr.target; if(m==null||!MEALS[m]) return;
     const title=MEALS[m][0], list=habitsFor(m).filter(x=>x.h.n>=2).slice(0,10);
@@ -4219,7 +4273,7 @@ document.addEventListener('click', function(e){
     plTarget:d=>{ const v=num($('plTarget').value)||num($('plCur').value)||70; $('plTarget').value=fk(Math.max(20,Math.round((v+d)*10)/10)); renderPlan(); }, plDur:d=>{ const v=num($('plDur').value)||0; $('plDur').value=String(Math.max(1,Math.round(v+d))); renderPlan(); },
     plPick:i=>{ const o=pl.opts&&pl.opts[i]; if(!o) return; pl.unit='weeks'; $('plDur').value=String(o.weeks); renderPlan(); },
     coachApply:()=>{ const r=applyCoach(); if(r) showToast('Calories ajustées : '+r.from+' → '+r.to+' kcal',()=>undoCoach()); renderHist(); }, coachUndo:undoCoach, ccAuto:v=>{ WT.cal.auto=!!v; saveWT(); }, saveWeigh:saveWeigh, closeWeigh:closeWeigh, wstep:wstep, delWeigh:delWeigh,
-    habits:openHabits, closeHabits:()=>$('mealHabits').classList.remove('show'), quick:quickAdd, recurring:recurringAdd, habitsSearch:()=>{ $('mealHabits').classList.remove('show'); srOpen(hb.m); },
+    habits:openHabits, closeHabits:()=>$('mealHabits').classList.remove('show'), quick:quickAdd, recurring:recurringAdd, dayPrev:dayPrev, dayNext:dayNext, habitsSearch:()=>{ $('mealHabits').classList.remove('show'); srOpen(hb.m); },
     srScan:()=>scanOpen(sr.target), srManual:()=>openForm('add',sr.target),
     openHist:openHist, closeHist:()=>$('mealHist').classList.remove('show'), histDay:histDay, clearHist:clearHist,
     addMeal:()=>openName('add'), renameMeal:m=>openName('edit',m), saveName:saveName, closeName:()=>$('mealName').classList.remove('show'), delMeal:delMeal,

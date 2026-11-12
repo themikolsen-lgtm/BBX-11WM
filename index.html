@@ -2277,6 +2277,13 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .mc-add .mc-big.ibt{ min-width:0; }
 .mc-add{ gap:4px; }
 </style>
+<style>
+.ms-tab{ display:flex; flex-direction:column; align-items:center; gap:6px; margin:0 auto 12px; background:none; border:0; color:#fff; font-family:inherit; cursor:pointer; padding:0; }
+.ms-tab span{ width:54px; height:54px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,.16); border:1.5px solid rgba(255,255,255,.55); }
+.ms-tab svg{ width:24px; height:24px; fill:none; stroke:#fff; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; }
+.ms-tab em{ font-style:normal; font-weight:800; font-size:12px; opacity:.92; }
+.ms-tab:active span{ transform:scale(.94); }
+</style>
 </head>
 <body>
 
@@ -3572,8 +3579,7 @@ document.addEventListener('click', function(e){
     <button class="mc-big ib ibt " onclick="BBXMeal.search(null)" aria-label="Rechercher un produit" title="Rechercher un produit"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span><em>Rechercher</em></button>
     <button class="mc-big ib ibt " onclick="BBXMeal.add(null)" aria-label="Ajouter à la main" title="Ajouter à la main"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4.2-1L18.3 8.9a2.1 2.1 0 0 0-3-3L5.2 16 4 20z"/><path d="M13.6 7.6l2.8 2.8"/></svg></span><em>Saisie</em></button>
   </div>
-  <div class="mc-seg"><span>Scanner un code-barres avec :</span><div class="mf-seg" id="mcSm"><button type="button" data-sm="live" onclick="BBXMeal.scanMode('live')">Caméra en direct</button><button type="button" data-sm="photo" onclick="BBXMeal.scanMode('photo')">Photo (sans autorisation)</button></div></div>
-  <div class="mc-hint">Change les produits de chaque repas : ▲▼ pour l’ordre, ✎ pour modifier ou changer de repas, 🗑 pour supprimer.</div>
+    <div class="mc-hint">Change les produits de chaque repas : ▲▼ pour l’ordre, ✎ pour modifier ou changer de repas, 🗑 pour supprimer.</div>
   <div id="mcList"></div>
   <div class="ib-row"><button class="mc-big ib ibt red" onclick="BBXMeal.addMeal()" aria-label="Ajouter un repas" title="Ajouter un repas"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><em>Repas</em></button></div>
   <button class="mc-reset" onclick="BBXMeal.resetDef()" aria-label="Remettre les repas d’origine" title="Remettre les repas d’origine"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1L3.5 8.5"/><path d="M3.5 3.5v5h5"/></svg></button>
@@ -3628,7 +3634,7 @@ document.addEventListener('click', function(e){
   <video id="msVideo" playsinline muted></video>
   <div class="ms-frame"><i></i></div>
   <div class="ms-top"><b>Scanner un code-barres</b><button onclick="BBXMeal.closeScan()" aria-label="Fermer">✕</button></div>
-  <div class="ms-bot"><div id="msStatus">Démarrage de la caméra…</div><button class="ms-photo" onclick="document.getElementById('msFile').click()" aria-label="Prendre une photo du code-barres" title="Prendre une photo du code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.5-2.5h7L17 8.5h3V19H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg></button><button class="ms-link" onclick="BBXMeal.photoMode()">Toujours utiliser la photo (plus d’autorisation)</button><input type="file" id="msFile" accept="image/*" capture="environment" hidden><div class="ms-row"><input id="msCode" type="text" inputmode="numeric" placeholder="Ou tape le code-barres"><button onclick="BBXMeal.manual()">OK</button></div></div>
+  <div class="ms-bot"><div id="msStatus">Démarrage de la caméra…</div><button class="ms-tab" onclick="BBXMeal.scanTable()" aria-label="Photographier le tableau nutritionnel" title="Photographier le tableau nutritionnel"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M4 9.5h16M4 14.5h16M12 9.5V20"/></svg></span><em>Tableau nutritionnel</em></button><input type="file" id="msFile" accept="image/*" capture="environment" hidden><div class="ms-row"><input id="msCode" type="text" inputmode="numeric" placeholder="Ou tape le code-barres"><button onclick="BBXMeal.manual()">OK</button></div></div>
 </div>
 <div class="nav-pill" role="tablist" aria-label="Navigation">
   <button id="navSport" class="on" onclick="BBXNav.set('sport')" role="tab" aria-label="Sport"><svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>Sport</button>
@@ -3975,7 +3981,7 @@ document.addEventListener('click', function(e){
   }
   function stopCam(){
     clearInterval(sc.timer); sc.timer=0; const v=$('msVideo'); try{ v.srcObject=null; }catch(e){}
-    if(cam.stream){ cam.stream.getVideoTracks().forEach(t=>{ t.enabled=false; }); clearTimeout(cam.idle); cam.idle=setTimeout(releaseCam,600000); }
+    if(cam.stream){ cam.stream.getVideoTracks().forEach(t=>{ t.enabled=false; }); clearTimeout(cam.idle); cam.idle=setTimeout(releaseCam,7200000); }
   }
   function closeScan(){ stopCam(); $('mealScan').classList.remove('show'); }
   function loadZX(){
@@ -4015,7 +4021,7 @@ document.addEventListener('click', function(e){
     if(code){ stopCam(); sc.done=false; onCode(code); } else{ $('mealScan').classList.add('show'); st('Code-barres non lu. Rapproche-toi, évite les reflets, ou tape le code ci-dessous.'); }
   });
   const SCANKEY='bb9-scanmode'; let scanMode='live';
-  try{ scanMode=localStorage.getItem(SCANKEY)==='photo'?'photo':'live'; }catch(e){}
+  try{ localStorage.removeItem(SCANKEY); }catch(e){}   // plus de mode « photo » : la caméra en direct est toujours utilisée
   function renderScanMode(){ document.querySelectorAll('#mcSm [data-sm]').forEach(b=>b.classList.toggle('on',b.dataset.sm===scanMode)); }
   function setScanMode(m){ scanMode=m==='photo'?'photo':'live'; try{ localStorage.setItem(SCANKEY,scanMode); }catch(e){} if(scanMode==='photo') releaseCam(); renderScanMode(); }
   function photoMode(){ setScanMode('photo'); stopCam(); $('msFile').click(); }
@@ -4889,7 +4895,7 @@ document.addEventListener('click', function(e){
     openCfg:()=>{ renderCfg(); $('mealCfg').classList.add('show'); }, closeCfg:()=>$('mealCfg').classList.remove('show'),
     add:m=>openForm('add',m), edit:(m,i)=>openForm('edit',m,i), del:delItem, move:moveItem, resetDef:resetDef,
     saveForm:saveForm, closeForm:()=>$('mealForm').classList.remove('show'),
-    ocr:()=>$('mfOcrFile').click(), scan:scanOpen, closeScan:closeScan, manual:manual, scanMode:setScanMode, photoMode:photoMode,
+    ocr:()=>$('mfOcrFile').click(), scanTable:()=>{ const t=sc.target; stopCam(); closeScan(); openForm('add',t,null,{info:'Photographie le tableau nutritionnel du produit.'}); $('mfOcrFile').click(); }, scan:scanOpen, closeScan:closeScan, manual:manual, scanMode:setScanMode, photoMode:photoMode,
     addWeigh:()=>openWeigh('add'), goalWeigh:openPlan, closePlan:()=>$('mealPlan').classList.remove('show'), savePlan:savePlan, plRender:renderPlan, plProg:plProg,
     plLevel:v=>{ pl.level=v; renderPlan(); }, plSex:v=>{ pl.sex=v; renderPlan(); }, plUnit:u=>{ const w=durWeeks(); pl.unit=u; $('plDur').value=String(Math.max(1,Math.round(u==='days'?w*7:u==='months'?w*12/52:w))); renderPlan(); },
     plTarget:d=>{ const v=num($('plTarget').value)||num($('plCur').value)||70; $('plTarget').value=fk(Math.max(20,Math.round((v+d)*10)/10)); renderPlan(); }, plDur:d=>{ const v=num($('plDur').value)||0; $('plDur').value=String(Math.max(1,Math.round(v+d))); renderPlan(); },

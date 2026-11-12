@@ -3898,8 +3898,7 @@ window.BBXBk=(function(){
     saveHist();
   }
   try{ const x=JSON.parse(localStorage.getItem(SK)||'null'); if(x) S=Object.assign(S,x); }catch(e){}
-  let ROLLED=false;
-  if(S.day!==today()){ S.d={}; S.day=today(); ROLLED=true; }   // les coches repartent à zéro chaque jour
+  if(S.day!==today()){ S.d={}; S.day=today(); }   // les coches repartent à zéro chaque jour
   const save=()=>{ try{ localStorage.setItem(SK,JSON.stringify(S)); }catch(e){} };
   // mode de comptage : 'chk' = avec cases à cocher (historique) · 'auto' = sans case, tout produit présent est compté
   let AUTO=false; try{ AUTO=localStorage.getItem('bb9-cmode')==='auto'; }catch(e){}
@@ -4018,7 +4017,7 @@ window.BBXBk=(function(){
   const num=v=>parseFloat(String(v).replace(',','.'));
   function refresh(){ saveDef(); save(); build(); calc(); renderCfg(); }
   function renderCfg(){
-    applyMode(); if(window.BBXBk) BBXBk.refresh(); { const d=$('cmDesc'); if(d) d.textContent=AUTO?'Sans case : chaque produit présent dans un repas est compté tout de suite (kcal et macros). Supprime-le pour le retirer du total. Chaque nouveau jour, les repas repartent vides (l’historique est gardé) : le bouton Récurrent remet tes produits habituels en un geste.':'Avec cases : tu coches un produit pour le compter dans ta journée.'; }
+    applyMode(); if(window.BBXBk) BBXBk.refresh(); { const d=$('cmDesc'); if(d) d.textContent=AUTO?'Sans case : chaque produit présent dans un repas est compté tout de suite (kcal et macros). Supprime-le pour le retirer du total.':'Avec cases : tu coches un produit pour le compter dans ta journée.'; }
     $('mcList').innerHTML=MEALS.map(([t,ic,items],m)=>`<section class="mc-meal" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}"><div class="mc-mh"><span class="mc-mi">${esc(ic)}</span><b>${esc(t)}</b><button class="mc-sm" onclick="BBXMeal.renameMeal(${m})" aria-label="Renommer ${esc(t)}">✎</button><button class="mc-sm del" onclick="BBXMeal.delMeal(${m})" aria-label="Supprimer le repas ${esc(t)}">🗑</button><button class="mc-plus" onclick="BBXMeal.add(${m})" aria-label="Ajouter à ${esc(t)}">＋</button></div>`+
       (items.length?items.map((it,i)=>{ const q=per100(it); return `<div class="mc-it"><span class="mc-th">${esc(it[7])}</span><div class="mc-nm"><b>${esc(it[0])}</b><span>${r(q.k)} kcal · ${r1(q.p)} g prot.${q.f!=null&&q.c!=null?' · '+r1(q.f)+' g lip. · '+r1(q.c)+' g gluc.':''} / 100 ${it[6]}</span></div><div class="mc-acts"><button onclick="BBXMeal.move(${m},${i},-1)" ${i===0?'disabled':''} aria-label="Monter">▲</button><button onclick="BBXMeal.move(${m},${i},1)" ${i===items.length-1?'disabled':''} aria-label="Descendre">▼</button><button onclick="BBXMeal.edit(${m},${i})" aria-label="Modifier">✎</button><button class="del" onclick="BBXMeal.del(${m},${i})" aria-label="Supprimer">🗑</button></div></div>`; }).join(''):'<div class="mc-empty">Aucun produit dans ce repas</div>')+`</section>`).join('');
   }
@@ -5264,12 +5263,11 @@ window.BBXBk=(function(){
   };
   window.BBXNav={ set:setView, auto:autoView };
   const lg=document.querySelector('.page-header .app-logo'); if(lg) $('mlLogo').src=lg.src;
-  if(ROLLED&&AUTO){ MEALS.forEach(mm=>{ mm[2]=[]; }); S.w={}; saveDef(); save(); }   // mode automatique : chaque nouveau jour repart avec des repas vides (l'historique est gardé)
   migrateMac(); build(); applyMode(); calc(); autoView();
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){ hiddenAt=Date.now(); releaseCam(); return; }
     if(hiddenAt && Date.now()-hiddenAt>120000 && viewOff===0){ setTimeout(focusMeal,80); }
-    if(S.day!==today()){ S.d={}; S.day=today(); if(AUTO){ MEALS.forEach(mm=>{ mm[2]=[]; }); S.w={}; saveDef(); } save(); build(); calc(); renderCfg(); }
+    if(S.day!==today()){ S.d={}; S.day=today(); save(); build(); calc(); }
     autoView();
   });
 })();

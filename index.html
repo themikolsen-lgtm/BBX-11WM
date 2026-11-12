@@ -2295,6 +2295,13 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .m-pick.show .m-pick-card{ transform:none; }
 .m-pick-card > b{ display:block; text-align:center; font-size:16px; font-weight:900; color:#15171C; margin-bottom:14px; }
 .m-pick-row{ display:flex; justify-content:center; gap:34px; }
+<style>
+/* en-tête de repas : icône · calories · titre · boutons · case */
+#mealView .my-mh > .my-mi{ order:0; }
+#mealView .my-mh > .my-mk{ order:1; text-align:center; margin:0 2px 0 0 !important; }
+#mealView .my-mh > .my-mt{ order:2; }
+#mealView .my-mh > .my-hb{ order:3; }
+#mealView .my-mh > .my-ck{ order:4; }
 </style>
 </head>
 <body>

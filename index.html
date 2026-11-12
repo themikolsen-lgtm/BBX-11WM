@@ -2344,6 +2344,14 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 @media (max-width:405px){ #mealView .my-hbtn{ width:33px; height:36px; border-radius:18px; } #mealView .my-hb{ gap:4px; } #mealView .my-hbtn svg{ width:19px; height:19px; } #mealView .my-hbtn.plus svg{ width:22px; height:22px; } #mealView.cm-auto .my-hbtn{ width:42px; height:40px; } }
 @media (min-width:406px){ #mealView:not(.cm-auto) .my-hbtn{ width:40px; } }
 .sr-go{ cursor:pointer; } .sr-go:active{ transform:scale(.9); }
+
+/* boutons d'en-tête : plus larges */
+@media (max-width:405px){ #mealView .my-hbtn{ width:40px; height:36px; border-radius:18px; } #mealView .my-hbtn svg{ width:21px; height:21px; } #mealView .my-hbtn.plus svg{ width:23px; height:23px; } #mealView .my-card .my-mh > .my-mt > b{ font-size:12.5px !important; } #mealView .my-card .my-mh > .my-mt > span{ font-size:8.5px !important; } }
+@media (max-width:350px){ #mealView:not(.cm-auto) .my-hbtn{ width:34px; } }
+@media (min-width:406px){ #mealView .my-hbtn{ width:48px; height:36px; border-radius:18px; } #mealView.cm-auto .my-hbtn{ width:50px; } }
+#mealView .my-hbtn{ height:36px !important; border-radius:18px !important; }
+@media (max-width:380px){ #mealView:not(.cm-auto) .my-hbtn{ width:36px; } }
+@media (max-width:350px){ #mealView:not(.cm-auto) .my-hbtn{ width:33px; } }
 </style>
 </head>
 <body>

@@ -2217,6 +2217,30 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .sr-bar button{ display:inline-grid; place-items:center; }
 .sr-bar button svg{ width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2.8; stroke-linecap:round; stroke-linejoin:round; }
 </style>
+<style>
+/* ===== fiche produit : impact santé (Nutri-Score + NOVA) ===== */
+.mf-health{ margin:0 0 14px; padding:14px; border-radius:20px; background:#fff; border:1px solid #E9ECEF; box-shadow:0 10px 24px -18px rgba(30,40,70,.35); }
+.mf-health[hidden]{ display:none; }
+.mh-v{ display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:16px; margin-bottom:12px; }
+.mh-v b{ display:block; font-size:15px; font-weight:900; line-height:1.2; } .mh-v small{ display:block; font-size:12px; font-weight:600; opacity:.8; margin-top:2px; }
+.mh-i{ width:36px; height:36px; border-radius:50%; display:grid; place-items:center; flex:none; color:#fff; }
+.mh-i svg{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:3.2; stroke-linecap:round; stroke-linejoin:round; }
+.mh-v.good{ background:#E8F6E0; color:#14531A; } .mh-v.good .mh-i{ background:#2FA84F; }
+.mh-v.mid{ background:#FFF1DA; color:#7A4A06; } .mh-v.mid .mh-i{ background:#EE8100; }
+.mh-v.bad{ background:#FDE5E2; color:#8E1B10; } .mh-v.bad .mh-i{ background:#E63E11; }
+.mh-v.none{ background:#F1F3F6; color:#4B5563; } .mh-v.none .mh-i{ background:#9AA1AD; }
+.mh-row{ display:grid; grid-template-columns:104px 1fr; align-items:center; gap:4px 10px; padding:8px 0; border-top:1px solid #F0F2F5; }
+.mh-t{ font-size:11.5px; white-space:nowrap; font-weight:900; letter-spacing:.04em; text-transform:uppercase; color:#4B5563; }
+.mh-ns, .mh-nv{ display:flex; gap:4px; align-items:center; }
+.mh-ns span, .mh-nv span{ display:grid; place-items:center; width:30px; height:30px; border-radius:9px; background:#F1F3F6; color:#9AA1AD; font-weight:900; font-size:14px; transition:transform .15s; }
+.mh-ns span.on, .mh-nv span.on{ background:var(--c); color:#fff; transform:scale(1.28); box-shadow:0 6px 12px -6px var(--c); position:relative; z-index:1; margin:0 4px; }
+.mh-ns span.on[style*="FECB02"]{ color:#5A4500; }
+.mh-d{ grid-column:2; font-size:12px; font-weight:700; color:#6B7280; }
+.mh-f{ display:flex; flex-wrap:wrap; gap:6px; padding-top:10px; border-top:1px solid #F0F2F5; }
+.mh-f span{ font-size:11.5px; font-weight:800; padding:5px 10px; border-radius:99px; }
+.mh-f .good{ background:#E8F6E0; color:#14531A; } .mh-f .bad{ background:#FDE5E2; color:#8E1B10; }
+.mh-src{ margin-top:10px; font-size:10.5px; font-weight:600; color:#9AA1AD; }
+</style>
 </head>
 <body>
 
@@ -3543,6 +3567,7 @@ document.addEventListener('click', function(e){
   <div class="mc-head"><b id="mfTitle">Ajouter un produit</b><button class="mc-x" onclick="BBXMeal.closeForm()" aria-label="Fermer">✕</button></div>
   <div class="mf-quick" id="mfQuick"><button class="mc-big ib ibt red" onclick="BBXMeal.scan('form')" aria-label="Scanner un code-barres" title="Scanner un code-barres"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></span><em>Scanner</em></button><button class="mc-big ib ibt " onclick="BBXMeal.search('form')" aria-label="Rechercher un produit" title="Rechercher un produit"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span><em>Rechercher</em></button></div>
   <div class="mf-info" id="mfInfo"></div>
+  <div class="mf-health" id="mfHealth" hidden></div>
   <div class="mf-sec">Repas</div>
   <div class="mf-chips" id="mfChips"></div><input type="hidden" id="mfMeal" value="0">
   <div class="mf-sec">Produit</div>
@@ -3761,8 +3786,34 @@ document.addEventListener('click', function(e){
     const q=num($('mfQty').value)||0, step=q>=100?10:5;
     $('mfQty').value=r1(Math.max(1,q+dir*step)); fmPrev();
   }
+  // ---------- impact santé : Nutri-Score + NOVA (données Open Food Facts) ----------
+  const NSC={a:'#038141',b:'#85BB2F',c:'#FECB02',d:'#EE8100',e:'#E63E11'}, NVC={1:'#038141',2:'#85BB2F',3:'#EE8100',4:'#E63E11'};
+  const NVL={1:'Aliment brut ou peu transformé',2:'Ingrédient culinaire',3:'Aliment transformé',4:'Produit ultra-transformé'};
+  const NSL={a:'très bonne qualité nutritionnelle',b:'bonne qualité nutritionnelle',c:'qualité nutritionnelle moyenne',d:'qualité nutritionnelle médiocre',e:'mauvaise qualité nutritionnelle'};
+  function healthVerdict(h){
+    const sp={a:2,b:1,c:0,d:-1,e:-2}, np={1:1,2:1,3:0,4:-1.5}; let t=0,c=0;
+    if(h.ns){ t+=sp[h.ns]; c++; } if(h.nova){ t+=np[h.nova]; c++; }
+    if(!c) return null; if(c===1&&h.nova&&!h.ns) t*=1.3;
+    return t>=1.5?'good':(t>-0.5?'mid':'bad');
+  }
+  function renderHealth(h){
+    const box=$('mfHealth'); if(!box) return;
+    if(!h){ box.hidden=true; box.innerHTML=''; return; }
+    const v=healthVerdict(h);
+    const VT={good:['Plutôt bon pour la santé','Un bon choix à consommer régulièrement.'],mid:['À consommer avec modération','Correct, sans en faire la base de l’alimentation.'],bad:['Plutôt mauvais pour la santé','À limiter : à garder pour les occasions.']};
+    let html='';
+    if(v) html+='<div class="mh-v '+v+'"><span class="mh-i">'+(v==='good'?'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':v==='mid'?'<svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg>':'<svg viewBox="0 0 24 24"><path d="M12 6v7M12 17.5v.5"/></svg>')+'</span><div><b>'+VT[v][0]+'</b><small>'+VT[v][1]+'</small></div></div>';
+    else html+='<div class="mh-v none"><span class="mh-i"><svg viewBox="0 0 24 24"><path d="M9.5 9a2.6 2.6 0 1 1 3.6 2.4c-.8.4-1.1 1-1.1 1.8M12 17.5v.5"/></svg></span><div><b>Évaluation indisponible</b><small>Nutri-Score et NOVA non renseignés pour ce produit.</small></div></div>';
+    html+='<div class="mh-row"><div class="mh-t">Nutri-Score</div><div class="mh-ns">'+['a','b','c','d','e'].map(l=>'<span class="'+(h.ns===l?'on':'')+'" style="--c:'+NSC[l]+'">'+l.toUpperCase()+'</span>').join('')+'</div>'+(h.ns?'<div class="mh-d">'+NSL[h.ns]+'</div>':'<div class="mh-d">non calculé</div>')+'</div>';
+    html+='<div class="mh-row"><div class="mh-t">NOVA</div><div class="mh-nv">'+[1,2,3,4].map(k=>'<span class="'+(h.nova===k?'on':'')+'" style="--c:'+NVC[k]+'">'+k+'</span>').join('')+'</div>'+(h.nova?'<div class="mh-d">'+NVL[h.nova]+'</div>':'<div class="mh-d">non classé</div>')+'</div>';
+    const f=[]; if(h.sug!=null&&h.sug>15) f.push(['bad','Riche en sucres']); if(h.sat!=null&&h.sat>5) f.push(['bad','Graisses saturées élevées']); if(h.salt!=null&&h.salt>1.5) f.push(['bad','Riche en sel']);
+    if(h.fib!=null&&h.fib>=3) f.push(['good','Source de fibres']); if(h.prot!=null&&h.prot>=10) f.push(['good','Riche en protéines']);
+    if(f.length) html+='<div class="mh-f">'+f.map(x=>'<span class="'+x[0]+'">'+x[1]+'</span>').join('')+'</div>';
+    html+='<div class="mh-src">Données Open Food Facts · pour 100 g · à titre indicatif</div>';
+    box.innerHTML=html; box.hidden=false;
+  }
   function openForm(mode,m,i,pref){
-    pref=pref||{};
+    pref=pref||{}; renderHealth(mode==='edit'?null:pref.h);
     $('mfChips').innerHTML=MEALS.map(([t,ic],x)=>`<button type="button" class="mf-chip" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}" onclick="BBXMeal.setMeal(${x})">${esc(ic)} ${esc(t)}</button>`).join('');
     fm.mode=mode; fm.serving=pref.serving||0;
     $('mfInfo').className='mf-info';
@@ -3885,12 +3936,12 @@ document.addEventListener('click', function(e){
     }
   }
   async function lookup(code){
-    const urls=['https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_fr,brands,nutriments,serving_quantity,serving_size,product_quantity','https://fr.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_fr,brands,nutriments,serving_quantity,serving_size,product_quantity'];
+    const urls=['https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_fr,brands,nutriments,serving_quantity,serving_size,product_quantity,nutriscore_grade,nova_group','https://fr.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_fr,brands,nutriments,serving_quantity,serving_size,product_quantity,nutriscore_grade,nova_group'];
     const errs=[]; let answered=false;
     for(const u of urls){
       try{
         const j=await getJSON(u,8000); answered=true;
-        if(j&&j.status===1&&j.product){ const it=offItem(j.product); return {found:true,name:it.name,kcal:it.kcal,prot:it.prot,fat:it.fat,carb:it.carb,serving:it.serving,label:it.label,portions:it.portions}; }
+        if(j&&j.status===1&&j.product){ const it=offItem(j.product); return {found:true,h:it.h,name:it.name,kcal:it.kcal,prot:it.prot,fat:it.fat,carb:it.carb,serving:it.serving,label:it.label,portions:it.portions}; }
       }catch(e){ if(e&&e.http===404){ answered=true; continue; } errs.push(errText(e)); }
     }
     return answered?{found:false,reason:'nf'}:{found:false,reason:'net',detail:errs.join(' · ')};
@@ -3903,7 +3954,7 @@ document.addEventListener('click', function(e){
     const target=sc.target;
     closeScan();
     if(res.found){
-      openForm('add',target,null,{name:res.name,kcal:res.kcal,prot:res.prot,fat:res.fat,carb:res.carb,serving:res.serving,label:res.label,portions:res.portions,emoji:'🛒',
+      openForm('add',target,null,{h:res.h,name:res.name,kcal:res.kcal,prot:res.prot,fat:res.fat,carb:res.carb,serving:res.serving,label:res.label,portions:res.portions,emoji:'🛒',
         info:'Produit trouvé (code '+code+'). Vérifie les valeurs, indique la quantité puis valide.'+(res.kcal==null?' Les calories ne sont pas renseignées : complète-les.':'')});
     }else{
       openForm('add',target,null,{name:'',info:(res.reason==='net'?'Open Food Facts n’a pas répondu'+(res.detail?' ('+res.detail+')':''):'Produit introuvable')+' (code '+code+') : renseigne-le à la main.'});
@@ -4059,7 +4110,7 @@ document.addEventListener('click', function(e){
     sr.n++; sr.list=localResults(q); srRender();
     if(q.length>=3) srTimer=setTimeout(doSearch,900);
   }
-  const OFF_FIELDS='code,product_name,product_name_fr,brands,nutriments,serving_quantity,serving_size,product_quantity';
+  const OFF_FIELDS='code,product_name,product_name_fr,brands,nutriments,serving_quantity,serving_size,product_quantity,nutriscore_grade,nova_group';
   const enc=encodeURIComponent;
   const txt=v=>typeof v==='string'?v:(Array.isArray(v)?String(v[0]||''):(v&&typeof v==='object'?String(v.fr||v.main||v.en||Object.values(v)[0]||''):''));
   async function getJSON(url,ms){
@@ -4068,11 +4119,17 @@ document.addEventListener('click', function(e){
     finally{ clearTimeout(to); }
   }
   const errText=e=>e&&e.http?'erreur '+e.http:(e&&e.name==='AbortError'?'délai dépassé':(e&&e.message)||'inaccessible');
+  function offHealth(pr,n){
+    let ns=String(pr.nutriscore_grade||'').toLowerCase(); if(!/^[a-e]$/.test(ns)) ns=null;
+    let nv=+pr.nova_group; if(!(nv>=1&&nv<=4)) nv=null;
+    const g=k=>n[k]==null||isNaN(+n[k])?null:+n[k];
+    return {ns:ns,nova:nv,sug:g('sugars_100g'),sat:g('saturated-fat_100g'),salt:g('salt_100g'),fib:g('fiber_100g'),prot:g('proteins_100g')};
+  }
   function offItem(pr){
     const n=pr.nutriments||{}; let kcal=n['energy-kcal_100g']; if(kcal==null&&n['energy_100g']!=null) kcal=n['energy_100g']/4.184;
     const nm=(txt(pr.product_name_fr)||txt(pr.product_name)).trim(), br=txt(pr.brands).split(',')[0].trim(), full=nm+(br&&nm.toLowerCase().indexOf(br.toLowerCase())<0?' ('+br+')':'');
     const P=offPortions({serving_quantity:pr.serving_quantity,serving_size:txt(pr.serving_size),product_quantity:pr.product_quantity},full);
-    return {name:full,kcal:kcal==null?null:+kcal,prot:n.proteins_100g==null?null:+n.proteins_100g,fat:n.fat_100g==null?null:+n.fat_100g,carb:n.carbohydrates_100g==null?null:+n.carbohydrates_100g,serving:P[0]?P[0].g:0,label:P[0]?P[0].label:'',portions:P,unit:'g',emoji:'🛒',off:true,_nm:nm};
+    return {name:full,kcal:kcal==null?null:+kcal,prot:n.proteins_100g==null?null:+n.proteins_100g,fat:n.fat_100g==null?null:+n.fat_100g,carb:n.carbohydrates_100g==null?null:+n.carbohydrates_100g,serving:P[0]?P[0].g:0,label:P[0]?P[0].label:'',portions:P,unit:'g',emoji:'🛒',off:true,_nm:nm,h:offHealth(pr,n)};
   }
   async function fetchOFF(q){
     const nq=normS(q), qs=[q]; if(nq!==q.toLowerCase()) qs.push(nq);
@@ -4114,7 +4171,7 @@ document.addEventListener('click', function(e){
     const x=sr.list[i]; if(!x) return; sr.fromForm=false;
     const src=x.fav?'Dans tes produits.':(x.db?'Valeurs moyennes pour 100 '+(x.unit||'g')+'.':'Produit Open Food Facts.');
     const w=(x.serving>0&&x.label&&!/^portion de /.test(x.label))?' Poids moyen : 1 '+x.label+' ≈ '+r(x.serving)+' '+(x.unit||'g')+' (modifiable).':'';
-    openForm('add',sr.target,null,{name:x.name,kcal:x.kcal,prot:x.prot,fat:x.fat,carb:x.carb,serving:x.serving,label:x.label,portions:x.portions,unit:x.unit,emoji:x.emoji,
+    openForm('add',sr.target,null,{h:x.h,name:x.name,kcal:x.kcal,prot:x.prot,fat:x.fat,carb:x.carb,serving:x.serving,label:x.label,portions:x.portions,unit:x.unit,emoji:x.emoji,
       info:src+w+' Indique la quantité puis valide.'+(x.kcal==null?' Les calories ne sont pas renseignées : complète-les.':'')});
   }
   $('srQ').addEventListener('input',liveSearch);

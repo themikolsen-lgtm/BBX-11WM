@@ -2244,6 +2244,31 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 <style>
 .hl-b{ display:inline-grid; place-items:center; width:17px; height:17px; margin-left:6px; vertical-align:2px; border-radius:5px; background:var(--c); color:#fff; font-style:normal; font-weight:900; font-size:10.5px; line-height:1; }
 .hl-b[style*="FECB02"]{ color:#5A4500; }
+<style>
+/* ===== Ajustement mobile : réduire le trop gros, agrandir le trop petit (cibles tactiles >= 40 px) ===== */
+/* — trop gros — */
+.mc-head b{ font-size:20px; } .mc-head{ margin:2px 0 10px; }
+.mf-sec{ font-size:14px; margin:14px 2px 6px; }
+.mf-name input{ height:50px; font-size:17px; } .mf-name input:first-child{ width:56px; font-size:22px; }
+.mf-in input{ font-size:18px; }
+.sr-bar input{ height:48px; font-size:16px; } .sr-bar button{ height:48px; }
+.sr-it{ padding:9px 12px; margin-bottom:6px; gap:10px; } .sr-th{ width:38px; height:38px; font-size:20px; } .sr-nm b{ font-size:14px; line-height:1.22; } .sr-nm span{ font-size:12px; line-height:1.3; }
+.mc-mh b{ font-size:16.5px; }
+.mc-big.ib{ width:54px; height:54px; } .mf-btns .mc-big.ib{ width:56px; height:56px; } .mf-btns{ gap:16px; }
+.mc-big.ibt .ibc{ width:52px; height:52px; } .mc-big.ibt{ min-width:68px; }
+#mealView .my-addmeal{ width:52px; height:52px; margin:2px auto 22px; }
+.m-delpill{ height:50px; font-size:14px; }
+.ib svg{ width:22px; height:22px; }
+/* — trop petit — */
+.mc-x{ width:44px; height:44px; font-size:17px; }
+.mc-sm{ width:40px; height:40px; } .mc-plus{ width:42px !important; height:42px !important; }
+.mc-it{ gap:6px; padding:8px 10px; } .mc-it button{ min-width:40px; min-height:40px; width:40px; height:40px; }
+.sr-del{ flex:0 0 42px; width:42px; height:42px; } .sr-go{ width:38px; height:38px; }
+.mf-seg button, .mc-seg button, #mealPlan [data-v], #mealPlan [data-u], #mealPlan [data-s], #mealHist [data-n]{ height:42px; min-height:42px; }
+.mc-ov select{ min-height:46px; font-size:16px; }
+#mealView .my-dn{ min-width:42px; min-height:42px; }
+#toastUndo{ width:44px; height:44px; }
+.mc-reset{ width:46px; height:46px; }
 </style>
 </head>
 <body>
@@ -3556,7 +3581,7 @@ document.addEventListener('click', function(e){
 <div id="mealSearch" class="mc-ov mc-search" aria-label="Rechercher un produit">
   <div class="mc-head"><b>Rechercher</b><button class="mc-x" onclick="BBXMeal.closeSearch()" aria-label="Fermer">✕</button></div>
   <div class="sr-bar"><input id="srQ" type="search" autocomplete="off" autocapitalize="off" placeholder="Ex : skyr, poulet, riz…" enterkeyhint="search"><button onclick="BBXMeal.doSearch()" aria-label="Chercher" title="Chercher"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button></div>
-  <div class="sr-acts"><button onclick="BBXMeal.srScan()" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg><span>Scanner un code-barres</span></button><button onclick="BBXMeal.srManual()" aria-label="Ajouter à la main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Ajouter à la main</span></button><button class="sr-rec" onclick="BBXMeal.recurring()" aria-label="Récurrent : ajouter mes produits habituels"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><span>Récurrent</span></button></div>
+  <div class="sr-acts"><button onclick="BBXMeal.srScan()" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg><span>Scanner</span></button><button onclick="BBXMeal.srManual()" aria-label="Ajouter à la main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Saisie</span></button><button class="sr-rec" onclick="BBXMeal.recurring()" aria-label="Récurrent : ajouter mes produits habituels"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><span>Récurrent</span></button></div>
   <div class="sr-meal" id="srMeal"></div>
   <div id="srList"></div>
 </div>

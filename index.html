@@ -2138,6 +2138,19 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #mealView .sx-c.k .sm-in{ width:31px; }
 #mealView .sx-c .sm-in{ font-size:inherit; }
 </style>
+<style>
+/* ===== Carte unique : jour (blanc) + progression (bande crème) ===== */
+#mealView .my-dsum{ background:#fff; border-radius:30px; overflow:hidden; box-shadow:0 14px 30px -18px rgba(30,40,70,.28); }
+#mealView .my-fixed .my-dsum .my-day{ background:transparent !important; border-radius:0 !important; margin:0 !important; box-shadow:none !important; }
+#mealView .my-fixed .my-dsum .my-sum, #mealView .my-fixed.ready .my-dsum .my-sum{ background:#FCEFD7 !important; border-radius:0 !important; box-shadow:none !important; margin:0 !important; }
+#mealView .my-dsum .sx-c{ border-left-color:#E7D8BF; }
+#mealView .my-dsum .sx-c:first-child{ border-left:0; }
+#mealView .my-dsum .sx-bar, #mealView .my-dsum .sm-b{ background:rgba(255,255,255,.8); }
+#mealView .sx-c.k .sx-h .sx-t{ font-size:12px; color:#3A2530; }
+#mealView .sx-c.k .sx-l{ color:#3A2530; }
+@media (max-width:405px){ #mealView .sx-c.k .sx-h .sx-t{ font-size:10.5px; } }
+#mealView .my-dsum .mc-note{ color:#B9741B; }
+</style>
 </head>
 <body>
 
@@ -3357,6 +3370,7 @@ document.addEventListener('click', function(e){
       <button class="my-cfg" onclick="BBXMeal.openCfg()" aria-label="Réglages Meal"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg></button>
     </div>
   </div>
+  <div class="my-dsum">
   <div class="my-day">
     <button class="my-dn" id="mlPrev" onclick="BBXMeal.dayPrev()" aria-label="Jour précédent"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="my-dt"><b id="mlDay">Aujourd’hui</b><span id="mlDate"></span></div>
@@ -3364,7 +3378,7 @@ document.addEventListener('click', function(e){
   </div>
   <div class="my-sum">
     <div class="sum-full">
-    <div class="sx-c k"><div class="sx-h"><span class="sx-t">kcal</span><b id="myRem">0</b><small id="myRemLab" hidden>Restants</small></div><div class="sx-bar"><i id="barK"></i></div><div class="sx-l"><span id="myEat">0</span> / <input class="sm-in" id="mlKg" type="number" inputmode="numeric" min="0" aria-label="Objectif calories"> kcal</div></div>
+    <div class="sx-c k"><div class="sx-h"><span class="sx-t">Kcal</span><b id="myRem">0</b><small id="myRemLab" hidden>Restants</small></div><div class="sx-bar"><i id="barK"></i></div><div class="sx-l"><span id="myEat">0</span> / <input class="sm-in" id="mlKg" type="number" inputmode="numeric" min="0" aria-label="Objectif calories"> kcal</div></div>
     <div class="sx-c p"><div class="sx-h"><span class="sx-t">Protéines</span><b id="myPrem">0</b><small id="myPremLab" hidden>Restants</small></div><div class="sx-bar"><i id="barP"></i></div><div class="sx-l"><span id="myPt">0</span> / <input class="sm-in" id="mlPg" type="number" inputmode="numeric" min="0" aria-label="Objectif protéines">g</div></div>
     <div class="sx-c f"><div class="sx-h"><span class="sx-t">Lipides</span><b id="myFrem">0</b><small id="myFremLab" hidden>Restants</small></div><div class="sx-bar"><i id="barF"></i></div><div class="sx-l"><span id="myFt">0</span> / <input class="sm-in" id="mlFg" type="number" inputmode="numeric" min="0" aria-label="Objectif lipides">g</div></div>
     <div class="sx-c c"><div class="sx-h"><span class="sx-t">Glucides</span><b id="myCrem">0</b><small id="myCremLab" hidden>Restants</small></div><div class="sx-bar"><i id="barC"></i></div><div class="sx-l"><span id="myCt">0</span> / <input class="sm-in" id="mlCg" type="number" inputmode="numeric" min="0" aria-label="Objectif glucides">g</div></div>
@@ -3374,6 +3388,7 @@ document.addEventListener('click', function(e){
     <div class="sum-mini" id="sumMini" aria-hidden="true"></div>
   </div>
   <div id="pastSum" hidden></div>
+  </div>
   </div>
   <div class="my-hint">Touche un produit pour modifier sa quantité, balaie-le vers la droite pour le supprimer. Maintiens le titre d’un repas appuyé pour le déplacer.</div>
   <div id="mlMeals"></div>
@@ -3599,9 +3614,26 @@ document.addEventListener('click', function(e){
   function setView(v){
     const meal=v==='meal';
     $('mealView').classList.toggle('show',meal);
+    if(meal && !mealFocused){ mealFocused=true; setTimeout(focusMeal,60); setTimeout(()=>{ if(document.getElementById('mealView').scrollTop<1+0) focusMeal(); },500); }
     $('navSport').classList.toggle('on',!meal); $('navMeal').classList.toggle('on',meal);
     $('navSport').setAttribute('aria-selected',String(!meal)); $('navMeal').setAttribute('aria-selected',String(meal));
     try{ localStorage.setItem('bb9-view',v); }catch(e){}
+  }
+  // ---------- repas courant : affiché juste sous « Progression » à l'ouverture ----------
+  let mealFocused=false, hiddenAt=0;
+  function curMealIdx(){
+    const h=new Date().getHours(), key=h>=18?'din':h>=15?'snk':h>=11?'dej':'pdj';
+    const re={pdj:/petit/i,dej:/^d[ée]jeuner/i,snk:/snack|collation|go[uû]ter/i,din:/d[iî]ner|souper/i}[key];
+    let i=MEALS.findIndex(m=>re.test(m[0]));
+    if(i<0) i=Math.min({pdj:0,dej:1,snk:2,din:3}[key],MEALS.length-1);
+    return i;
+  }
+  function focusMeal(){
+    const mvv=document.getElementById('mealView'), fxx=mvv&&mvv.querySelector('.my-fixed'); if(!mvv||!fxx||!mvv.classList.contains('show')) return;
+    const card=mvv.querySelector('.my-card[data-m="'+curMealIdx()+'"]'); if(!card) return;
+    const go=()=>{ const t=mvv.scrollTop+card.getBoundingClientRect().top-fxx.getBoundingClientRect().bottom-10; mvv.scrollTop=Math.max(0,t); };
+    mvv.style.scrollBehavior='auto';
+    go(); requestAnimationFrame(()=>{ go(); requestAnimationFrame(go); });
   }
   // à partir de 17 h, chaque jour : la page Sport s'affiche en premier (avant 17 h : Meal)
   function autoView(){
@@ -4522,7 +4554,7 @@ document.addEventListener('click', function(e){
     if(!H){ $('pastSum').hidden=true; $('pastSum').innerHTML=''; sumMeasure(); box.innerHTML='<div class="mp-empty">Rien n’est enregistré pour ce jour.<small>Un jour est enregistré dès que tu coches ce que tu as mangé.</small></div>'; return; }
     const gk=H.kg||S.kg, gp=H.pg||S.pg, rk=gk-H.k, rp=gp-H.p;
     const colH=(cls,t,eaten,goal,unit,rem,f)=>`<div class="sx-c ${cls}${rem<0?' over':''}"><div class="sx-h"><span class="sx-t">${t}</span><b>${Math.abs(Math.round(rem*10)/10)}</b></div><div class="sx-bar"><i style="width:${Math.max(0,Math.min(1,f||0))*100}%"></i></div><div class="sx-l">${eaten} / ${goal}${unit}</div></div>`;
-    const cols=colH('k','kcal',H.k,gk,' kcal',rk,H.k/gk)+colH('p','Protéines',H.p,gp,'g',rp,H.p/gp)+(H.f!=null?colH('f','Lipides',H.f,H.fg||S.fg,'g',(H.fg||S.fg)-H.f,H.f/(H.fg||S.fg))+colH('c','Glucides',H.c,H.cg||S.cg,'g',(H.cg||S.cg)-H.c,H.c/(H.cg||S.cg)):'');
+    const cols=colH('k','Kcal',H.k,gk,' kcal',rk,H.k/gk)+colH('p','Protéines',H.p,gp,'g',rp,H.p/gp)+(H.f!=null?colH('f','Lipides',H.f,H.fg||S.fg,'g',(H.fg||S.fg)-H.f,H.f/(H.fg||S.fg))+colH('c','Glucides',H.c,H.cg||S.cg,'g',(H.cg||S.cg)-H.c,H.c/(H.cg||S.cg)):'');
     const mini=(cls,t,v,g)=>`<div class="mc-mini ${cls}${v>g?' over':''}"><div class="mm-h"><span>${t}</span><div class="mm-r"><small>${v<=g?'Restants':'Dépassé'}</small><b>${Math.abs(Math.round((g-v)*10)/10)}</b></div></div><div class="mm-l">${v} / ${g} g</div><div class="mc-bar"><i style="width:${Math.max(0,Math.min(1,g>0?v/g:0))*100}%"></i></div></div>`;
     const bar=(cls,txt,rem,lab,f)=>`<div class="mc-row ${cls}${rem<0?' over':''}"><div class="mc-l">${txt}</div><div class="mc-r"><small>${rem>=0?'Restants':'Dépassé'}</small><b>${Math.abs(Math.round(rem*10)/10)}</b></div><div class="mc-bar"><i style="width:${Math.max(0,Math.min(1,f))*100}%"></i></div></div>`;
     const emo={}; MEALS.forEach(mm=>mm[2].forEach(it=>{ emo[it[0]]=it[7]; }));
@@ -4570,7 +4602,8 @@ document.addEventListener('click', function(e){
   const lg=document.querySelector('.page-header .app-logo'); if(lg) $('mlLogo').src=lg.src;
   migrateMac(); build(); calc(); autoView();
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){ releaseCam(); return; }
+    if(document.hidden){ hiddenAt=Date.now(); releaseCam(); return; }
+    if(hiddenAt && Date.now()-hiddenAt>600000 && viewOff===0){ setTimeout(focusMeal,80); }
     if(S.day!==today()){ S.d={}; S.day=today(); save(); build(); calc(); }
     autoView();
   });

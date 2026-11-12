@@ -3019,7 +3019,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     const n = Math.min(total, setsDone(id, ex) + 1);
     doneState.sets[id] = n;
     delete readyState[id];
-    if(n >= total){ doneState.items[id] = 1; delete restTimers[id]; startOverlay(id, 'pause', 60); }   // dernier set : pause de 1 min sur l'exo
+    if(n >= total){ doneState.items[id] = 1; delete restTimers[id]; /* plus de pause 1 min après un exo terminé */ }
     else {
       const dur = restOf(id, ex);
       restTimers[id] = { endAt: Date.now() + dur*1000, total: dur };
@@ -3094,7 +3094,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     else readyState[id] = true;
     refreshRow(id);
     restAlert();
-    if(abdo) startOverlay(id, 'pause', 60);
+    /* plus de pause 1 min après les abdos */
   }
   function tickRest(){
     for(const id in restTimers){
@@ -3112,8 +3112,10 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
   }
   function ensureTick(){ if(!restTick) restTick = setInterval(tickRest, 250); requestWake(); }
   async function requestWake(){ try{ if('wakeLock' in navigator && !wakeLock){ wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', ()=>{ wakeLock = null; }); } }catch(e){} }
-  function releaseWake(){ try{ if(wakeLock){ wakeLock.release(); wakeLock = null; } }catch(e){} }
-  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && restTick){ tickRest(); requestWake(); } });
+  function releaseWake(){ if(window.__keepAwake!==false) return; try{ if(wakeLock){ wakeLock.release(); wakeLock = null; } }catch(e){} }
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden){ if(restTick) tickRest(); if(window.__keepAwake!==false||restTick) requestWake(); } });
+  // écran toujours allumé sur Workout (rétabli au premier toucher si le navigateur l'exige)
+  requestWake(); ['pointerdown','touchstart'].forEach(ev=>document.addEventListener(ev,()=>{ if(window.__keepAwake!==false&&!wakeLock) requestWake(); },{passive:true}));
 
   function shortName(n){
     return n.replace(/\s*\bMPC\b/g,'').replace(/\s+halt[eè]res?\b/gi,'').replace(/\s{2,}/g,' ').trim();
@@ -4043,6 +4045,7 @@ window.BBXBk=(function(){
     $('navSport').classList.toggle('on',!meal); $('navMeal').classList.toggle('on',meal);
     $('navSport').setAttribute('aria-selected',String(!meal)); $('navMeal').setAttribute('aria-selected',String(meal));
     try{ localStorage.setItem('bb9-view',v); }catch(e){}
+    window.__keepAwake=!meal; if(meal){ try{ releaseWake(); }catch(e){} } else { try{ requestWake(); }catch(e){} }
   }
   // ---------- repas courant : affiché juste sous « Progression » à l'ouverture ----------
   let mealFocused=false, hiddenAt=0, focusT=0, focusUser=false;

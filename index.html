@@ -2270,6 +2270,13 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #toastUndo{ width:44px; height:44px; }
 .mc-reset{ width:46px; height:46px; }
 </style>
+<style>
+.mc-big.ibt.pulse .ibc{ border-color:#7DD957; animation:ibPulse 1.4s ease-in-out infinite; }
+@keyframes ibPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(125,217,87,.55); } 50%{ box-shadow:0 0 0 9px rgba(125,217,87,0); } }
+.mc-big.ibt.busy{ opacity:.5; pointer-events:none; }
+.mc-add .mc-big.ibt{ min-width:0; }
+.mc-add{ gap:4px; }
+</style>
 </head>
 <body>
 
@@ -3559,8 +3566,8 @@ document.addEventListener('click', function(e){
 </div>
 <div id="mealCfg" class="mc-ov" aria-label="Réglages Meal">
   <div class="mc-head"><b>Réglages Meal</b><button class="mc-x" onclick="BBXMeal.closeCfg()" aria-label="Fermer">✕</button></div>
-  <div class="ib-row"><button class="mc-big ib ibt red" onclick="BBXMeal.goalWeigh()" aria-label="Mon programme et mes objectifs" title="Mon programme et mes objectifs"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></span><em>Objectifs</em></button></div>
-  <div class="mc-add">
+    <div class="mc-add">
+    <button class="mc-big ib ibt red" onclick="BBXMeal.goalWeigh()" aria-label="Mon programme et mes objectifs" title="Mon programme et mes objectifs"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></span><em>Objectifs</em></button>
     <button class="mc-big ib ibt red" onclick="BBXMeal.scan(null)" aria-label="Scanner un code-barres" title="Scanner un code-barres"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></span><em>Scanner</em></button>
     <button class="mc-big ib ibt " onclick="BBXMeal.search(null)" aria-label="Rechercher un produit" title="Rechercher un produit"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span><em>Rechercher</em></button>
     <button class="mc-big ib ibt " onclick="BBXMeal.add(null)" aria-label="Ajouter à la main" title="Ajouter à la main"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4.2-1L18.3 8.9a2.1 2.1 0 0 0-3-3L5.2 16 4 20z"/><path d="M13.6 7.6l2.8 2.8"/></svg></span><em>Saisie</em></button>
@@ -3594,7 +3601,7 @@ document.addEventListener('click', function(e){
 </div>
 <div id="mealForm" class="mc-ov mc-sheet" aria-label="Produit">
   <div class="mc-head"><b id="mfTitle">Ajouter un produit</b><button class="mc-x" onclick="BBXMeal.closeForm()" aria-label="Fermer">✕</button></div>
-  <div class="mf-quick" id="mfQuick"><button class="mc-big ib ibt red" onclick="BBXMeal.scan('form')" aria-label="Scanner un code-barres" title="Scanner un code-barres"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></span><em>Scanner</em></button><button class="mc-big ib ibt " onclick="BBXMeal.search('form')" aria-label="Rechercher un produit" title="Rechercher un produit"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span><em>Rechercher</em></button></div>
+  <div class="mf-quick" id="mfQuick"><button class="mc-big ib ibt red" onclick="BBXMeal.scan('form')" aria-label="Scanner un code-barres" title="Scanner un code-barres"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></span><em>Scanner</em></button><button class="mc-big ib ibt " onclick="BBXMeal.search('form')" aria-label="Rechercher un produit" title="Rechercher un produit"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span><em>Rechercher</em></button><button class="mc-big ib ibt" id="mfOcrBtn" onclick="BBXMeal.ocr()" aria-label="Photographier le tableau nutritionnel" title="Photographier le tableau nutritionnel"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M4 9.5h16M4 14.5h16M12 9.5V20"/></svg></span><em>Tableau</em></button><input type="file" id="mfOcrFile" accept="image/*" capture="environment" hidden></div>
   <div class="mf-info" id="mfInfo"></div>
   <div class="mf-health" id="mfHealth" hidden></div>
   <div class="mf-sec">Repas</div>
@@ -3815,6 +3822,67 @@ document.addEventListener('click', function(e){
     const q=num($('mfQty').value)||0, step=q>=100?10:5;
     $('mfQty').value=r1(Math.max(1,q+dir*step)); fmPrev();
   }
+  // ---------- produit inconnu : lecture du tableau nutritionnel par photo (OCR) + codes-barres mémorisés ----------
+  const CODEKEY='bb9-codes'; let CODES={}; try{ CODES=JSON.parse(localStorage.getItem(CODEKEY)||'{}')||{}; }catch(e){ CODES={}; }
+  const saveCodes=()=>{ try{ localStorage.setItem(CODEKEY,JSON.stringify(CODES)); }catch(e){} };
+  function parseNutri(raw){
+    const T=String(raw||'').replace(/\r/g,'');
+    const lines=T.split('\n').map(l=>l.replace(/[|¦_]/g,' ').replace(/\s+/g,' ').trim()).filter(Boolean);
+    const num=x=>{ const v=parseFloat(String(x).replace(',','.')); return isNaN(v)?null:v; };
+    const fixO=l=>l.replace(/(?<=\d)[Oo](?=\d|\s*g\b)|(?<=\b)[Oo](?=[.,]\d)/g,'0').replace(/(?<=\d)[lI](?=\s*g\b)/g,'1');
+    const p100=T.search(/(?:pour|per|\/)?\s*100\s*(?:g|ml)/i), pp=T.search(/par\s+portion|per\s+serving|par\s+\d+\s*(?:g|ml)\b|portion/i);
+    const second=(p100>=0&&pp>=0&&pp<p100);
+    const vals=(l,unitRe)=>{ const out=[]; let m; const L=fixO(l); const re=new RegExp('(\\d{1,4}(?:[.,]\\d{1,2})?)\\s*('+unitRe+')\\b','gi'); while((m=re.exec(L))) out.push(num(m[1])); return out; };
+    const pick=a=>a.length?(second&&a.length>1?a[1]:a[0]):null;
+    let kcal=null;
+    for(const l of lines){ const a=vals(l,'kcal'); if(a.length){ kcal=pick(a); break; } }
+    if(kcal==null){ const e=T.match(/(\d{3,5})\s*k[jJ]/); if(e) kcal=Math.round(num(e[1])/4.184); }
+    const find=(incl,excl)=>{ for(const l of lines){ const n=l.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); if(!incl.test(n)) continue; if(excl&&excl.test(n)) continue; const a=vals(l,'g|9|q'); if(a.length) return pick(a); } return null; };
+    const out={kcal:kcal,prot:find(/proteine|protein|eiweiss/),fat:find(/matieres? grasses|lipides?|graisses|\bfat\b|total fat/,/satur|dont|of which/),carb:find(/glucides?|carbohydrate|hydrates? de carbone|\bcarbs?\b/,/dont|sucres|of which/),warn:[]};
+    if(out.kcal!=null&&!(out.kcal>=0&&out.kcal<=950)) out.kcal=null;
+    ['prot','fat','carb'].forEach(k=>{ if(out[k]!=null&&!(out[k]>=0&&out[k]<=100)) out[k]=null; });
+    if(out.kcal!=null&&out.prot!=null&&out.fat!=null&&out.carb!=null){   // virgule décimale perdue par la lecture (65 au lieu de 6,5) : on teste les corrections qui rendent les calories cohérentes
+      const dev=(p,f,c)=>Math.abs(4*p+9*f+4*c-out.kcal), tol=Math.max(40,out.kcal*0.35);
+      if(dev(out.prot,out.fat,out.carb)>tol){ let best=null,bd=1e9; for(const kp of [1,10]) for(const kf of [1,10]) for(const kc of [1,10]){ if(kp*kf*kc===1) continue; const p=out.prot/kp,f=out.fat/kf,c=out.carb/kc; if((kp>1&&out.prot<10)||(kf>1&&out.fat<10)||(kc>1&&out.carb<10)) continue; const d=dev(p,f,c); if(d<bd){ bd=d; best=[p,f,c]; } }
+        if(best&&bd<=tol){ out.prot=best[0]; out.fat=best[1]; out.carb=best[2]; out.fixed=true; } }
+    }
+    if(out.kcal!=null&&out.prot!=null&&out.fat!=null&&out.carb!=null){ const est=4*out.prot+9*out.fat+4*out.carb; if(Math.abs(est-out.kcal)>Math.max(40,out.kcal*0.35)) out.warn.push('les valeurs ne collent pas entre elles'); }
+    return out;
+  }
+  let tessP=null;
+  function loadTess(){
+    if(window.Tesseract) return Promise.resolve(window.Tesseract);
+    if(!tessP) tessP=new Promise((ok,ko)=>{ const sc=document.createElement('script'); sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js'; sc.onload=()=>window.Tesseract?ok(window.Tesseract):ko(new Error('lecteur indisponible')); sc.onerror=()=>{ tessP=null; ko(new Error('hors ligne')); }; document.head.appendChild(sc); });
+    return tessP;
+  }
+  function prepImage(file){   // réduit, passe en niveaux de gris et renforce le contraste pour une meilleure lecture
+    return new Promise((ok,ko)=>{ const url=URL.createObjectURL(file), im=new Image();
+      im.onload=()=>{ try{ const k=Math.min(1,2000/Math.max(im.width,im.height)), up=Math.max(1,Math.min(2,1200/Math.max(im.width,im.height))), sc=k<1?k:up, w=Math.round(im.width*sc), h=Math.round(im.height*sc), c=document.createElement('canvas'); c.width=w; c.height=h; const x=c.getContext('2d'); x.drawImage(im,0,0,w,h);
+        const d=x.getImageData(0,0,w,h), a=d.data; let lo=255,hi=0; for(let i=0;i<a.length;i+=4){ const g=0.299*a[i]+0.587*a[i+1]+0.114*a[i+2]; a[i]=a[i+1]=a[i+2]=g; if(g<lo) lo=g; if(g>hi) hi=g; }
+        const sp=Math.max(1,hi-lo); for(let i=0;i<a.length;i+=4){ const v=Math.max(0,Math.min(255,(a[i]-lo)*255/sp)); a[i]=a[i+1]=a[i+2]=v; } x.putImageData(d,0,0); URL.revokeObjectURL(url); c.toBlob(b=>ok(b||file),'image/png'); }catch(e){ URL.revokeObjectURL(url); ok(file); } };
+      im.onerror=()=>{ URL.revokeObjectURL(url); ko(new Error('image illisible')); }; im.src=url; });
+  }
+  async function ocrRun(file){
+    const info=t=>{ $('mfInfo').textContent=t; $('mfInfo').className='mf-info ok'; };
+    const err=t=>{ $('mfInfo').textContent=t; $('mfInfo').className='mf-info err'; };
+    $('mealForm').scrollTop=0; $('mfOcrBtn').classList.remove('pulse'); $('mfOcrBtn').classList.add('busy'); info('Préparation de la photo…');
+    try{
+      const img=await prepImage(file); info('Chargement du lecteur de texte (la première fois, ça peut prendre un moment)…');
+      const T=await loadTess();
+      const w=await T.createWorker('fra+eng',1,{logger:m=>{ if(m.status==='recognizing text') info('Lecture du tableau… '+Math.round((m.progress||0)*100)+' %'); else if(/loading|initializ/.test(m.status||'')) info('Chargement du lecteur de texte…'); }});
+      let text=''; try{ text=(await w.recognize(img)).data.text; } finally{ try{ await w.terminate(); }catch(e){} }
+      const r=parseNutri(text), got=[r.kcal,r.prot,r.fat,r.carb].filter(v=>v!=null).length;
+      if(!got){ err('Je n’ai pas réussi à lire le tableau. Reprends la photo bien à plat, de près et bien éclairée, ou saisis les valeurs à la main.'); return; }
+      if(r.kcal!=null) $('mfKcal').value=r1(r.kcal); if(r.prot!=null) $('mfProt').value=r1(r.prot); if(r.fat!=null) $('mfFat').value=r1(r.fat); if(r.carb!=null) $('mfCarb').value=r1(r.carb);
+      setUnit('g'); autoQty(); fmPrev();
+      const miss=[['kcal',r.kcal],['protéines',r.prot],['lipides',r.fat],['glucides',r.carb]].filter(x=>x[1]==null).map(x=>x[0]);
+      let msg='Tableau lu (valeurs pour 100 g). Vérifie-les'+(miss.length?' et complète : '+miss.join(', '):'')+', indique la quantité puis valide.'; if(r.warn.length) msg+=' Attention : '+r.warn.join(', ')+'.';
+      if(miss.length||r.warn.length) err(msg); else info(msg);
+      if(!$('mfName').value.trim()) $('mfName').focus();
+    }catch(e){ err('Lecture impossible ('+((e&&e.message)||'erreur')+'). Vérifie ta connexion internet ou saisis les valeurs à la main.'); }
+    finally{ $('mfOcrBtn').classList.remove('busy'); }
+  }
+  $('mfOcrFile').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; e.target.value=''; if(f) ocrRun(f); });
   // ---------- impact santé : Nutri-Score + NOVA (données Open Food Facts) ----------
   const NSC={a:'#038141',b:'#85BB2F',c:'#FECB02',d:'#EE8100',e:'#E63E11'}, NVC={1:'#038141',2:'#85BB2F',3:'#EE8100',4:'#E63E11'};
   const NVL={1:'Aliment brut ou peu transformé',2:'Ingrédient culinaire',3:'Aliment transformé',4:'Produit ultra-transformé'};
@@ -3842,7 +3910,7 @@ document.addEventListener('click', function(e){
     box.innerHTML=html; box.hidden=false;
   }
   function openForm(mode,m,i,pref){
-    pref=pref||{}; fm.h=mode==='edit'?null:pref.h; renderHealth(mode==='edit'?hlGet(MEALS[m][2][i][0]):(pref.h||hlGet(pref.name||'')));
+    pref=pref||{}; fm.code=pref.code||null; $('mfOcrBtn').classList.remove('pulse','busy'); fm.h=mode==='edit'?null:pref.h; renderHealth(mode==='edit'?hlGet(MEALS[m][2][i][0]):(pref.h||hlGet(pref.name||'')));
     $('mfChips').innerHTML=MEALS.map(([t,ic],x)=>`<button type="button" class="mf-chip" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}" onclick="BBXMeal.setMeal(${x})">${esc(ic)} ${esc(t)}</button>`).join('');
     fm.mode=mode; fm.serving=pref.serving||0;
     $('mfInfo').className='mf-info';
@@ -3884,6 +3952,7 @@ document.addEventListener('click', function(e){
     const it=[nm,label,unitW,q/unitW,k*q/100,p*q/100,unit,emoji,isNaN(fa)?null:fa*q/100,isNaN(ca)?null:ca*q/100];
     upsertFav(it,fm.portions); bumpHabit(MEALS[mt][0],nm,q);
     QTY[hlKey(nm)]={g:Math.round(q*10)/10,u:unit}; saveQty();
+    if(fm.code&&!edit){ CODES[fm.code]={name:nm,kcal:k,prot:p,fat:isNaN(fa)?null:fa,carb:isNaN(ca)?null:ca,serving:fm.serving||0,label:fm.newLabel||'',portions:fm.portions||[]}; saveCodes(); }
     if(fm.h&&(fm.h.ns||fm.h.nova)){ HL[hlKey(nm)]=Object.assign({t:Date.now()},fm.h); saveHL(); }
     if(edit){
       const wasDone=!!S.d[key(fm.m,fm.i)]; dropState(fm.m,fm.i);
@@ -3968,6 +4037,7 @@ document.addEventListener('click', function(e){
     }
   }
   async function lookup(code){
+    { const c=CODES[code]; if(c) return {found:true,h:hlGet(c.name),name:c.name,kcal:c.kcal,prot:c.prot,fat:c.fat,carb:c.carb,serving:c.serving||0,label:c.label||'',portions:c.portions||[],mine:true}; }
     const urls=['https://world.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_fr,brands,nutriments,serving_quantity,serving_size,product_quantity,nutriscore_grade,nova_group','https://fr.openfoodfacts.org/api/v2/product/'+encodeURIComponent(code)+'.json?fields=product_name,product_name_fr,brands,nutriments,serving_quantity,serving_size,product_quantity,nutriscore_grade,nova_group'];
     const errs=[]; let answered=false;
     for(const u of urls){
@@ -3986,10 +4056,11 @@ document.addEventListener('click', function(e){
     const target=sc.target;
     closeScan();
     if(res.found){
-      openForm('add',target,null,{h:res.h,name:res.name,kcal:res.kcal,prot:res.prot,fat:res.fat,carb:res.carb,serving:res.serving,label:res.label,portions:res.portions,emoji:'🛒',
+      openForm('add',target,null,{code:code,h:res.h,name:res.name,kcal:res.kcal,prot:res.prot,fat:res.fat,carb:res.carb,serving:res.serving,label:res.label,portions:res.portions,emoji:'🛒',
         info:'Produit trouvé (code '+code+'). Vérifie les valeurs, indique la quantité puis valide.'+(res.kcal==null?' Les calories ne sont pas renseignées : complète-les.':'')});
     }else{
-      openForm('add',target,null,{name:'',info:(res.reason==='net'?'Open Food Facts n’a pas répondu'+(res.detail?' ('+res.detail+')':''):'Produit introuvable')+' (code '+code+') : renseigne-le à la main.'});
+      openForm('add',target,null,{name:'',code:code,info:(res.reason==='net'?'Open Food Facts n’a pas répondu'+(res.detail?' ('+res.detail+')':''):'Produit introuvable')+' (code '+code+') : photographie son tableau nutritionnel avec l’icône « Tableau », ou renseigne-le à la main.'});
+      if(res.reason!=='net'){ $('mfOcrBtn').classList.add('pulse'); }
     }
   }
   function scanOpen(t){
@@ -4818,7 +4889,7 @@ document.addEventListener('click', function(e){
     openCfg:()=>{ renderCfg(); $('mealCfg').classList.add('show'); }, closeCfg:()=>$('mealCfg').classList.remove('show'),
     add:m=>openForm('add',m), edit:(m,i)=>openForm('edit',m,i), del:delItem, move:moveItem, resetDef:resetDef,
     saveForm:saveForm, closeForm:()=>$('mealForm').classList.remove('show'),
-    scan:scanOpen, closeScan:closeScan, manual:manual, scanMode:setScanMode, photoMode:photoMode,
+    ocr:()=>$('mfOcrFile').click(), scan:scanOpen, closeScan:closeScan, manual:manual, scanMode:setScanMode, photoMode:photoMode,
     addWeigh:()=>openWeigh('add'), goalWeigh:openPlan, closePlan:()=>$('mealPlan').classList.remove('show'), savePlan:savePlan, plRender:renderPlan, plProg:plProg,
     plLevel:v=>{ pl.level=v; renderPlan(); }, plSex:v=>{ pl.sex=v; renderPlan(); }, plUnit:u=>{ const w=durWeeks(); pl.unit=u; $('plDur').value=String(Math.max(1,Math.round(u==='days'?w*7:u==='months'?w*12/52:w))); renderPlan(); },
     plTarget:d=>{ const v=num($('plTarget').value)||num($('plCur').value)||70; $('plTarget').value=fk(Math.max(20,Math.round((v+d)*10)/10)); renderPlan(); }, plDur:d=>{ const v=num($('plDur').value)||0; $('plDur').value=String(Math.max(1,Math.round(v+d))); renderPlan(); },

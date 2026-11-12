@@ -2177,6 +2177,46 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #mealView .my-dsum .sx-c{ border-left:1.5px solid #E7D8BF; }
 @media (max-width:405px){ #mealView .my-dsum .sx-h .sx-t{ font-size:11px; } #mealView .my-dsum .sx-h b{ font-size:14.5px; } #mealView .my-dsum .sx-l{ font-size:9.3px; } }
 </style>
+<style>
+/* ===== Harmonisation : boutons-icônes (même langage que l'accueil : pastilles rondes, pictogrammes épais) ===== */
+:root{ --ib-g:#7DD957; --ib-gd:#143008; --ib-ln:#E1E4EA; }
+.ib svg, .my-addmeal svg, .mc-reset svg, .ms-photo svg, #toastUndo svg, .my-eact svg, .m-icobtn svg, .sr-go svg{ width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+/* pastille ronde */
+.mc-big.ib{ width:58px; height:58px; padding:0; border-radius:50%; border:2px solid var(--ib-ln); background:#fff; color:#15171C; display:inline-grid; place-items:center; font-size:0; box-shadow:0 8px 18px -12px rgba(30,40,70,.35); transition:transform .12s; }
+.mc-big.ib:active{ transform:scale(.94); }
+.mc-big.ib.red{ background:var(--ib-g); border-color:var(--ib-g); color:var(--ib-gd); box-shadow:0 10px 20px -10px rgba(91,190,72,.75); }
+.mc-big.ib.red svg{ stroke-width:3.2; }
+.mf-btns{ display:flex; justify-content:center; gap:18px; }
+.mf-btns .mc-big.ib{ width:62px; height:62px; flex:none; }
+.mf-btns:has(> .ib.red:first-child){ flex-direction:row-reverse; }
+/* tuiles : pastille + légende discrète */
+.mc-add, .mf-quick, .ib-row{ display:flex; gap:10px; justify-content:center; align-items:flex-start; }
+.mc-add .mc-big.ibt, .mf-quick .mc-big.ibt{ flex:1 1 0; }
+.ib-row{ margin:0 0 14px; }
+.mc-big.ibt{ width:auto; min-width:72px; height:auto; padding:0; border:0; background:none; box-shadow:none; border-radius:0; display:flex; flex-direction:column; align-items:center; gap:6px; font-size:12px; color:#4B5563; }
+.mc-big.ibt .ibc{ width:58px; height:58px; border-radius:50%; display:grid; place-items:center; border:2px solid var(--ib-ln); background:#fff; color:#15171C; box-shadow:0 8px 18px -12px rgba(30,40,70,.35); }
+.mc-big.ibt.red .ibc{ background:var(--ib-g); border-color:var(--ib-g); color:var(--ib-gd); box-shadow:0 10px 20px -10px rgba(91,190,72,.75); }
+.mc-big.ibt em{ font-style:normal; font-weight:800; font-size:11.5px; letter-spacing:.01em; color:#4B5563; }
+.mc-add .mc-big.ibt, .mf-quick .mc-big.ibt{ height:auto; }
+.mc-add, .mf-quick{ flex-direction:row !important; flex-wrap:nowrap; }
+.mc-big.ibt, .mc-big.ibt.red{ background:none !important; border:0 !important; box-shadow:none !important; color:#4B5563 !important; height:auto !important; }
+.mc-big.ibt .ibc svg{ stroke:currentColor; }
+/* ajouter un repas : pastille pointillée au centre */
+#mealView .my-addmeal{ width:58px; height:58px; margin:4px auto 26px; display:grid; place-items:center; padding:0; border-radius:50%; border:2px dashed #9ED884; background:rgba(125,217,87,.14); color:#3E8F2A; }
+#mealView .my-addmeal svg{ stroke-width:3; }
+/* petits boutons secondaires */
+.mc-reset{ width:44px; height:44px; margin:18px auto 0; display:grid; place-items:center; padding:0; border-radius:50%; border:2px solid var(--ib-ln); background:#fff; color:#6B7280; text-decoration:none; }
+.mc-reset svg{ width:20px; height:20px; stroke-width:2.4; }
+.ms-photo{ width:54px; height:54px; display:grid; place-items:center; padding:0; border-radius:50%; margin:0 auto 12px; }
+#toastUndo{ width:40px; height:40px; display:grid; place-items:center; padding:0 !important; border-radius:50%; background:rgba(255,255,255,.14) !important; color:#9BE77A !important; }
+#toastUndo svg{ width:20px; height:20px; }
+.my-eact button, .my-empty button{ display:inline-grid; place-items:center; }
+.my-eact button{ height:42px; }
+.my-empty button{ width:40px; height:40px; padding:0; border-radius:50%; border:2px solid #F5C2CB; background:#fff; color:#C70F2E; }
+.my-eact svg, .my-empty svg{ width:20px; height:20px; stroke-width:2.4; }
+.sr-bar button{ display:inline-grid; place-items:center; }
+.sr-bar button svg{ width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2.8; stroke-linecap:round; stroke-linejoin:round; }
+</style>
 </head>
 <body>
 
@@ -3419,10 +3459,10 @@ document.addEventListener('click', function(e){
   <div class="my-hint">Touche un produit pour modifier sa quantité, balaie-le vers la droite pour le supprimer. Maintiens le titre d’un repas appuyé pour le déplacer ou le supprimer.</div>
   <div id="mlMeals"></div>
   <div id="mealPast" hidden></div>
-  <button class="my-addmeal" onclick="BBXMeal.addMeal()">＋ Ajouter un repas</button>
+  <button class="my-addmeal" onclick="BBXMeal.addMeal()" aria-label="Ajouter un repas" title="Ajouter un repas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
 </div>
 <button id="mealDelPill" class="m-delpill" type="button" aria-label="Supprimer le repas"><span>🗑</span><b id="mealDelTxt">Supprimer</b></button>
-<div id="mealToast" class="m-toast" role="status"><span id="toastTxt"></span><button id="toastUndo">Annuler</button></div>
+<div id="mealToast" class="m-toast" role="status"><span id="toastTxt"></span><button id="toastUndo" aria-label="Annuler" title="Annuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h9a6 6 0 0 1 0 12h-3"/></svg></button></div>
 <div id="mealPlan" class="mc-ov mc-sheet" style="z-index:9400" aria-label="Objectif de poids">
   <div class="mc-head"><b>🎯 Objectif</b><button class="mc-x" onclick="BBXMeal.closePlan()" aria-label="Fermer">✕</button></div>
   <div class="mf-sec" style="margin-top:2px">Mon programme</div>
@@ -3447,7 +3487,7 @@ document.addEventListener('click', function(e){
   <label class="mf-f" style="display:block;margin-top:10px"><span>Activité au quotidien</span><div class="mf-in"><select id="plAct" onchange="BBXMeal.plRender()" style="width:100%;border:0;background:transparent;font:700 15px inherit;font-family:inherit;color:#15171C;outline:0"><option value="1.2">Sédentaire (peu de sport)</option><option value="1.375">Légère (1–3 séances / sem.)</option><option value="1.55" selected>Modérée (3–5 séances / sem.)</option><option value="1.725">Élevée (6–7 séances / sem.)</option></select></div></label>
   <label class="pl-chk"><input type="checkbox" id="plApply" checked><span>Mettre à jour mes objectifs de calories et de protéines</span></label>
   <div class="mf-info err" id="plInfo"></div>
-  <div class="mf-btns" style="margin-top:12px"><button class="mc-big red" onclick="BBXMeal.savePlan()">Enregistrer l’objectif</button><button class="mc-big" onclick="BBXMeal.closePlan()">Annuler</button></div>
+  <div class="mf-btns" style="margin-top:12px"><button class="mc-big ib red" onclick="BBXMeal.savePlan()" aria-label="Enregistrer l’objectif" title="Enregistrer l’objectif"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><button class="mc-big ib " onclick="BBXMeal.closePlan()" aria-label="Annuler" title="Annuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
 </div>
 <div id="mealWeigh" class="mc-ov mc-sheet" style="z-index:9400" aria-label="Poids">
   <div class="mc-head"><b id="mwTitle">Pesée du lundi</b><button class="mc-x" onclick="BBXMeal.closeWeigh(true)" aria-label="Fermer">✕</button></div>
@@ -3456,38 +3496,38 @@ document.addEventListener('click', function(e){
   <label class="mf-l" id="mwDateRow" style="margin-top:14px"><span style="font-size:13px;font-weight:700;color:#4B5563;text-transform:none;letter-spacing:0">Date de la pesée</span><input type="date" id="mwDate"></label>
   <label class="mf-l" id="mwWaistRow" style="margin-top:14px"><span style="font-size:13px;font-weight:700;color:#4B5563;text-transform:none;letter-spacing:0">Tour de taille en cm (facultatif — aide à repérer le gras)</span><input type="text" inputmode="decimal" id="mwWaist" placeholder="ex : 84"></label>
   <div class="mf-info err" id="mwInfo"></div>
-  <div class="mf-btns" style="margin-top:14px"><button class="mc-big red" id="mwOk" onclick="BBXMeal.saveWeigh()">Enregistrer</button><button class="mc-big" id="mwLater" onclick="BBXMeal.closeWeigh(true)">Plus tard</button></div>
+  <div class="mf-btns" style="margin-top:14px"><button class="mc-big ib red" id="mwOk" onclick="BBXMeal.saveWeigh()" aria-label="Enregistrer" title="Enregistrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><button class="mc-big ib " id="mwLater" onclick="BBXMeal.closeWeigh(true)" aria-label="Plus tard" title="Plus tard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
 </div>
 <div id="mealHist" class="mc-ov" aria-label="Suivi">
   <div class="mc-head"><b>Suivi</b><button class="mc-x" onclick="BBXMeal.closeHist()" aria-label="Fermer">✕</button></div>
   <div class="ht-seg" id="htSeg"><button type="button" data-n="7" class="on">7 jours</button><button type="button" data-n="30">30 jours</button></div>
   <div id="htBody"></div>
-  <button class="mc-reset" onclick="BBXMeal.clearHist()">Effacer l’historique</button>
+  <button class="mc-reset" onclick="BBXMeal.clearHist()" aria-label="Effacer l’historique" title="Effacer l’historique"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V4.5h4V7M7 7l1 12.5h8L17 7M10 11v5.5M14 11v5.5"/></svg></button>
 </div>
 <div id="mealCfg" class="mc-ov" aria-label="Réglages Meal">
   <div class="mc-head"><b>Réglages Meal</b><button class="mc-x" onclick="BBXMeal.closeCfg()" aria-label="Fermer">✕</button></div>
-  <button class="mc-big red" style="margin-bottom:12px" onclick="BBXMeal.goalWeigh()">🎯 Mon programme et mes objectifs</button>
+  <div class="ib-row"><button class="mc-big ib ibt red" onclick="BBXMeal.goalWeigh()" aria-label="Mon programme et mes objectifs" title="Mon programme et mes objectifs"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></span><em>Objectifs</em></button></div>
   <div class="mc-add">
-    <button class="mc-big red" onclick="BBXMeal.scan(null)">📷 Scanner un code-barres</button>
-    <button class="mc-big" onclick="BBXMeal.search(null)">🔍 Rechercher un produit</button>
-    <button class="mc-big" onclick="BBXMeal.add(null)">＋ Ajouter à la main</button>
+    <button class="mc-big ib ibt red" onclick="BBXMeal.scan(null)" aria-label="Scanner un code-barres" title="Scanner un code-barres"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></span><em>Scanner</em></button>
+    <button class="mc-big ib ibt " onclick="BBXMeal.search(null)" aria-label="Rechercher un produit" title="Rechercher un produit"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span><em>Rechercher</em></button>
+    <button class="mc-big ib ibt " onclick="BBXMeal.add(null)" aria-label="Ajouter à la main" title="Ajouter à la main"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4.2-1L18.3 8.9a2.1 2.1 0 0 0-3-3L5.2 16 4 20z"/><path d="M13.6 7.6l2.8 2.8"/></svg></span><em>Saisie</em></button>
   </div>
   <div class="mc-seg"><span>Scanner un code-barres avec :</span><div class="mf-seg" id="mcSm"><button type="button" data-sm="live" onclick="BBXMeal.scanMode('live')">Caméra en direct</button><button type="button" data-sm="photo" onclick="BBXMeal.scanMode('photo')">Photo (sans autorisation)</button></div></div>
   <div class="mc-hint">Change les produits de chaque repas : ▲▼ pour l’ordre, ✎ pour modifier ou changer de repas, 🗑 pour supprimer.</div>
   <div id="mcList"></div>
-  <button class="mc-big" style="margin-top:6px" onclick="BBXMeal.addMeal()">＋ Ajouter un repas</button>
-  <button class="mc-reset" onclick="BBXMeal.resetDef()">Remettre les repas d’origine</button>
+  <div class="ib-row"><button class="mc-big ib ibt red" onclick="BBXMeal.addMeal()" aria-label="Ajouter un repas" title="Ajouter un repas"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><em>Repas</em></button></div>
+  <button class="mc-reset" onclick="BBXMeal.resetDef()" aria-label="Remettre les repas d’origine" title="Remettre les repas d’origine"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1L3.5 8.5"/><path d="M3.5 3.5v5h5"/></svg></button>
 </div>
 <div id="mealHabits" class="mc-ov mc-sheet" style="z-index:9160" aria-label="Habitudes">
   <div class="mc-head"><b id="hbTitle">Habitudes</b><button class="mc-x" onclick="BBXMeal.closeHabits()" aria-label="Fermer">✕</button></div>
   <div class="hb-sub" id="hbSub"></div>
   <div class="hb-ok" id="hbOk"></div>
   <div id="hbList"></div>
-  <div class="mf-btns" style="margin-top:14px"><button class="mc-big" onclick="BBXMeal.habitsSearch()">🔍 Chercher un autre produit</button><button class="mc-big red" onclick="BBXMeal.closeHabits()">Terminé</button></div>
+  <div class="mf-btns" style="margin-top:14px"><button class="mc-big ib " onclick="BBXMeal.habitsSearch()" aria-label="Chercher un autre produit" title="Chercher un autre produit"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button><button class="mc-big ib red" onclick="BBXMeal.closeHabits()" aria-label="Terminé" title="Terminé"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button></div>
 </div>
 <div id="mealSearch" class="mc-ov mc-search" aria-label="Rechercher un produit">
   <div class="mc-head"><b>Rechercher</b><button class="mc-x" onclick="BBXMeal.closeSearch()" aria-label="Fermer">✕</button></div>
-  <div class="sr-bar"><input id="srQ" type="search" autocomplete="off" autocapitalize="off" placeholder="Ex : skyr, poulet, riz…" enterkeyhint="search"><button onclick="BBXMeal.doSearch()">Chercher</button></div>
+  <div class="sr-bar"><input id="srQ" type="search" autocomplete="off" autocapitalize="off" placeholder="Ex : skyr, poulet, riz…" enterkeyhint="search"><button onclick="BBXMeal.doSearch()" aria-label="Chercher" title="Chercher"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button></div>
   <div class="sr-acts"><button onclick="BBXMeal.srScan()" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg><span>Scanner un code-barres</span></button><button onclick="BBXMeal.srManual()" aria-label="Ajouter à la main"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg><span>Ajouter à la main</span></button><button class="sr-rec" onclick="BBXMeal.recurring()" aria-label="Récurrent : ajouter mes produits habituels"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><span>Récurrent</span></button></div>
   <div class="sr-meal" id="srMeal"></div>
   <div id="srList"></div>
@@ -3497,11 +3537,11 @@ document.addEventListener('click', function(e){
   <div class="mf-sec">Nom du repas</div>
   <div class="mf-name"><input id="mnEmoji" type="text" maxlength="4" placeholder="🍽️" aria-label="Emoji"><input id="mnName" type="text" autocomplete="off" placeholder="Ex : Collation, Brunch…" aria-label="Nom du repas"></div>
   <div class="mf-info err" id="mnInfo"></div>
-  <div class="mf-btns" style="margin-top:20px"><button class="mc-big red" onclick="BBXMeal.saveName()" id="mnOk">Créer le repas</button><button class="mc-big" onclick="BBXMeal.closeName()">Annuler</button></div>
+  <div class="mf-btns" style="margin-top:20px"><button class="mc-big ib red" id="mnOk" onclick="BBXMeal.saveName()" aria-label="Créer le repas" title="Créer le repas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><button class="mc-big ib " onclick="BBXMeal.closeName()" aria-label="Annuler" title="Annuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
 </div>
 <div id="mealForm" class="mc-ov mc-sheet" aria-label="Produit">
   <div class="mc-head"><b id="mfTitle">Ajouter un produit</b><button class="mc-x" onclick="BBXMeal.closeForm()" aria-label="Fermer">✕</button></div>
-  <div class="mf-quick" id="mfQuick"><button class="mc-big red" onclick="BBXMeal.scan('form')">📷 Scanner</button><button class="mc-big" onclick="BBXMeal.search('form')">🔍 Rechercher</button></div>
+  <div class="mf-quick" id="mfQuick"><button class="mc-big ib ibt red" onclick="BBXMeal.scan('form')" aria-label="Scanner un code-barres" title="Scanner un code-barres"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></span><em>Scanner</em></button><button class="mc-big ib ibt " onclick="BBXMeal.search('form')" aria-label="Rechercher un produit" title="Rechercher un produit"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span><em>Rechercher</em></button></div>
   <div class="mf-info" id="mfInfo"></div>
   <div class="mf-sec">Repas</div>
   <div class="mf-chips" id="mfChips"></div><input type="hidden" id="mfMeal" value="0">
@@ -3521,13 +3561,13 @@ document.addEventListener('click', function(e){
   <div class="mf-units" id="mfUnits" style="display:none"></div>
   <div class="mf-seg" id="mfSeg"><button type="button" class="on" onclick="BBXMeal.unit('g')">grammes</button><button type="button" onclick="BBXMeal.unit('ml')">millilitres</button></div><input type="hidden" id="mfUnit" value="g">
   <div class="mf-prev" id="mfPrev"></div>
-  <div class="mf-btns"><button class="mc-big red" onclick="BBXMeal.saveForm()" id="mfOk">Valider</button><button class="mc-big" onclick="BBXMeal.closeForm()">Annuler</button></div>
+  <div class="mf-btns"><button class="mc-big ib red" id="mfOk" onclick="BBXMeal.saveForm()" aria-label="Valider" title="Valider"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><button class="mc-big ib " onclick="BBXMeal.closeForm()" aria-label="Annuler" title="Annuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
 </div>
 <div id="mealScan" class="mc-scan" aria-label="Scanner">
   <video id="msVideo" playsinline muted></video>
   <div class="ms-frame"><i></i></div>
   <div class="ms-top"><b>Scanner un code-barres</b><button onclick="BBXMeal.closeScan()" aria-label="Fermer">✕</button></div>
-  <div class="ms-bot"><div id="msStatus">Démarrage de la caméra…</div><button class="ms-photo" onclick="document.getElementById('msFile').click()">📷 Prendre une photo du code-barres</button><button class="ms-link" onclick="BBXMeal.photoMode()">Toujours utiliser la photo (plus d’autorisation)</button><input type="file" id="msFile" accept="image/*" capture="environment" hidden><div class="ms-row"><input id="msCode" type="text" inputmode="numeric" placeholder="Ou tape le code-barres"><button onclick="BBXMeal.manual()">OK</button></div></div>
+  <div class="ms-bot"><div id="msStatus">Démarrage de la caméra…</div><button class="ms-photo" onclick="document.getElementById('msFile').click()" aria-label="Prendre une photo du code-barres" title="Prendre une photo du code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.5-2.5h7L17 8.5h3V19H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg></button><button class="ms-link" onclick="BBXMeal.photoMode()">Toujours utiliser la photo (plus d’autorisation)</button><input type="file" id="msFile" accept="image/*" capture="environment" hidden><div class="ms-row"><input id="msCode" type="text" inputmode="numeric" placeholder="Ou tape le code-barres"><button onclick="BBXMeal.manual()">OK</button></div></div>
 </div>
 <div class="nav-pill" role="tablist" aria-label="Navigation">
   <button id="navSport" class="on" onclick="BBXNav.set('sport')" role="tab" aria-label="Sport"><svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>Sport</button>
@@ -3595,7 +3635,7 @@ document.addEventListener('click', function(e){
       items.map((it,i)=>`<div class="my-it" id="myit${m}-${i}"><div class="my-row" data-m="${m}" data-i="${i}"><div class="my-th">${it[7]}</div><div class="my-nm"><b>${it[0]}</b><span id="mymt${m}-${i}"></span></div><div class="my-kc"><b id="mykc${m}-${i}"></b><small>kcal</small></div><label class="my-ck"><input type="checkbox" id="mlk${m}-${i}" ${S.d[key(m,i)]?'checked':''}><span></span></label></div>
         <div class="my-edit"><div class="my-st"><button data-d="-1" aria-label="Moins">−</button><input type="number" inputmode="decimal" min="0" step="any" id="mlc${m}-${i}" value="${r2(W(m,i,it)/it[2])}"><button data-d="1" aria-label="Plus">+</button></div><span class="my-u">${it[1]}</span>
         <div class="my-wf"><input type="number" inputmode="decimal" min="0" step="any" id="mlw${m}-${i}" value="${r1(W(m,i,it))}"><span class="my-u">${it[6]}</span></div>
-        <div class="my-eact"><button onclick="BBXMeal.edit(${m},${i})">✎ Modifier</button><button class="del" onclick="BBXMeal.del(${m},${i})">🗑 Supprimer</button></div></div></div>`).join('')+(items.length?'':`<div class="my-empty"><span>Aucun aliment</span><button onclick="BBXMeal.delMeal(${m})">Supprimer le repas</button></div>`)+`</section>`).join('');
+        <div class="my-eact"><button onclick="BBXMeal.edit(${m},${i})" aria-label="Modifier" title="Modifier"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4.2-1L18.3 8.9a2.1 2.1 0 0 0-3-3L5.2 16 4 20z"/><path d="M13.6 7.6l2.8 2.8"/></svg></button><button class="del" onclick="BBXMeal.del(${m},${i})" aria-label="Supprimer" title="Supprimer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V4.5h4V7M7 7l1 12.5h8L17 7M10 11v5.5M14 11v5.5"/></svg></button></div></div></div>`).join('')+(items.length?'':`<div class="my-empty"><span>Aucun aliment</span><button onclick="BBXMeal.delMeal(${m})" aria-label="Supprimer le repas" title="Supprimer le repas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V4.5h4V7M7 7l1 12.5h8L17 7M10 11v5.5M14 11v5.5"/></svg></button></div>`)+`</section>`).join('');
     MEALS.forEach(([t,ic,items],m)=>{
       $('mlall'+m).onchange=e=>{ const on=e.target.checked; items.forEach((it,i)=>{ S.d[key(m,i)]=on; $('mlk'+m+'-'+i).checked=on; if(on) bumpHabit(MEALS[m][0],it[0],W(m,i,it)); }); calc(); save(); };
       items.forEach((it,i)=>{
@@ -3729,12 +3769,12 @@ document.addEventListener('click', function(e){
     if(mode==='edit'){
       const it=MEALS[m][2][i], q=per100(it);
       fm.m=m; fm.i=i; fm.unitW=it[2]; fm.label=it[1]; fm.fixed=true; fm.portions=mergePortions(it[2]>0?{label:it[1],g:it[2]}:null,(FAV.find(f=>normS(f.name)===normS(it[0]))||{}).portions,it[0]); syncPortions();
-      $('mfTitle').textContent='Modifier le produit'; $('mfOk').textContent='Enregistrer'; $('mfQuick').style.display='none';
+      $('mfTitle').textContent='Modifier le produit'; $('mfOk').setAttribute('aria-label','Enregistrer'); $('mfQuick').style.display='none';
       setMeal(m); $('mfName').value=it[0]; $('mfEmoji').value=it[7];
       $('mfKcal').value=r1(q.k); $('mfProt').value=r1(q.p); $('mfFat').value=q.f!=null?r1(q.f):''; $('mfCarb').value=q.c!=null?r1(q.c):''; $('mfQty').value=r1(W(m,i,it)); setUnit(it[6]);
       $('mfInfo').textContent='';
     }else{
-      $('mfTitle').textContent='Ajouter un produit'; $('mfOk').textContent='Valider'; $('mfQuick').style.display='';
+      $('mfTitle').textContent='Ajouter un produit'; $('mfOk').setAttribute('aria-label','Valider'); $('mfQuick').style.display='';
       setMeal((m!=null&&m>=0)?m:(+$('mfMeal').value||0));
       $('mfName').value=pref.name||''; $('mfEmoji').value=pref.emoji||'';
       $('mfKcal').value=pref.kcal!=null?r1(pref.kcal):''; $('mfProt').value=pref.prot!=null?r1(pref.prot):''; $('mfFat').value=pref.fat!=null?r1(pref.fat):''; $('mfCarb').value=pref.carb!=null?r1(pref.carb):'';
@@ -4084,8 +4124,8 @@ document.addEventListener('click', function(e){
   const mn={mode:'add',m:0};
   function openName(mode,m){
     mn.mode=mode; mn.m=m; $('mnInfo').textContent='';
-    if(mode==='edit'){ $('mnTitle').textContent='Renommer le repas'; $('mnOk').textContent='Enregistrer'; $('mnName').value=MEALS[m][0]; $('mnEmoji').value=MEALS[m][1]; }
-    else{ $('mnTitle').textContent='Nouveau repas'; $('mnOk').textContent='Créer le repas'; $('mnName').value=''; $('mnEmoji').value=''; }
+    if(mode==='edit'){ $('mnTitle').textContent='Renommer le repas'; $('mnOk').setAttribute('aria-label','Enregistrer'); $('mnName').value=MEALS[m][0]; $('mnEmoji').value=MEALS[m][1]; }
+    else{ $('mnTitle').textContent='Nouveau repas'; $('mnOk').setAttribute('aria-label','Créer le repas'); $('mnName').value=''; $('mnEmoji').value=''; }
     $('mealName').classList.add('show'); setTimeout(()=>{ try{ $('mnName').focus(); }catch(e){} },200);
   }
   function saveName(){
@@ -4322,7 +4362,7 @@ document.addEventListener('click', function(e){
   // --- carte « Poids » ---
   function weightHTML(){
     const L=Object.keys(WT.log).sort().map(k=>({k:k,kg:WT.log[k]}));
-    const btns='<div class="wg-btns"><button onclick="BBXMeal.addWeigh()">＋ Ajouter une pesée</button><button onclick="BBXMeal.goalWeigh()">🎯 '+(WT.plan?'Modifier l’objectif':'Définir un objectif')+'</button></div>';
+    const btns='<div class="wg-btns"><button onclick="BBXMeal.addWeigh()" aria-label="Ajouter une pesée" title="Ajouter une pesée"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><button onclick="BBXMeal.goalWeigh()">🎯 '+(WT.plan?'Modifier l’objectif':'Définir un objectif')+'</button></div>';
     if(!L.length) return '<div class="ht-card wg"><div class="ht-title" style="margin-bottom:10px">⚖️ Poids<small>'+(WT.goal?'objectif '+fk(WT.goal)+' kg':'')+'</small></div><div class="wg-empty">Pas encore de pesée. Chaque lundi, l’appli te demande ton poids : l’évolution s’affichera ici semaine après semaine. Tu peux aussi en ajouter une maintenant.</div>'+btns+'</div>';
     const last=L[L.length-1], prev=L.length>1?L[L.length-2]:null, first=L[0];
     const wk={}; L.forEach(x=>{ const i=weekIdx(fd(x.k)); wk[i]={wk:i,kg:x.kg,k:x.k}; });
@@ -4354,10 +4394,10 @@ document.addEventListener('click', function(e){
   const mw={mode:'monday'}; let weighSkip=0;
   function openWeigh(mode){
     mw.mode=mode; const L=Object.keys(WT.log).sort(), last=L.length?WT.log[L[L.length-1]]:null;
-    $('mwInfo').textContent=''; $('mwDateRow').style.display=mode==='add'?'block':'none'; $('mwLater').textContent=mode==='monday'?'Plus tard':'Annuler';
+    $('mwInfo').textContent=''; $('mwDateRow').style.display=mode==='add'?'block':'none'; $('mwLater').setAttribute('aria-label',mode==='monday'?'Plus tard':'Annuler');
     $('mwTitle').textContent=mode==='monday'?'⚖️ Pesée du lundi':'Ajouter une pesée';
     $('mwText').textContent=(mode==='monday'?'C’est lundi : quel est ton poids ce matin ?':'Quel poids veux-tu enregistrer ?')+(last!=null?' Dernière pesée : '+fk(last)+' kg ('+shortDate(L[L.length-1])+').':'');
-    $('mwInput').value=last!=null?fk(last):''; $('mwDate').value=dkey(new Date()); $('mwDate').max=dkey(new Date()); $('mwWaist').value=''; $('mwOk').textContent='Enregistrer';
+    $('mwInput').value=last!=null?fk(last):''; $('mwDate').value=dkey(new Date()); $('mwDate').max=dkey(new Date()); $('mwWaist').value=''; $('mwOk').setAttribute('aria-label','Enregistrer');
     $('mealWeigh').classList.add('show'); setTimeout(()=>{ try{ $('mwInput').focus(); $('mwInput').select(); }catch(e){} },250);
   }
   function closeWeigh(skip){ $('mealWeigh').classList.remove('show'); if(skip&&mw.mode==='monday') weighSkip=Date.now(); }
@@ -4521,7 +4561,7 @@ document.addEventListener('click', function(e){
   }
   function coachHTML(){
     const p=WT.plan; let h='<div class="ht-card cc"><div class="ht-title" style="margin-bottom:10px">🧠 Coach<small>s’adapte à tes résultats</small></div>';
-    if(!p){ return h+'<div class="wg-empty">Définis un objectif de poids : l’appli comparera ton rythme réel au plan et ajustera tes calories si ton poids n’évolue pas comme prévu.</div><div class="wg-btns"><button onclick="BBXMeal.goalWeigh()" style="background:#E5173A;border-color:#E5173A;color:#fff">🎯 Définir un objectif</button></div></div>'; }
+    if(!p){ return h+'<div class="wg-empty">Définis un objectif de poids : l’appli comparera ton rythme réel au plan et ajustera tes calories si ton poids n’évolue pas comme prévu.</div><div class="wg-btns"><button onclick="BBXMeal.goalWeigh()" aria-label="Définir un objectif"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg> Objectif</button></div></div>'; }
     const a=analyse();
     if(a.state==='wait'){
       h+='<div class="cc-msg wait">Pas encore assez de données pour juger ton évolution. Il faut :</div><ul class="cc-need">'+a.need.map(x=>'<li>'+x+'</li>').join('')+'</ul><div class="cc-note">Le coach compare le poids de tes pesées et ta moyenne de calories sur 3 semaines, puis corrige.</div>';
@@ -4529,11 +4569,11 @@ document.addEventListener('click', function(e){
       const cls=a.state==='ok'?'good':(a.state==='high'?'bad':'warn');
       h+='<div class="cc-tiles"><div><b>'+(a.rObs>=0?'+':'−')+f2(Math.abs(a.rObs))+'</b><span>kg/sem. réel</span></div><div><b>'+(a.rT>=0?'+':'−')+f2(Math.abs(a.rT))+'</b><span>kg/sem. visé</span></div><div><b>'+Math.round(a.I)+'</b><span>kcal/jour mangés</span></div></div>';
       h+='<div class="cc-msg '+cls+'">'+coachMsg(a)+'</div>';
-      if(a.state!=='ok') h+='<div class="cc-calc">Ton entretien réel est estimé à <b>≈ '+Math.round(a.tdee)+' kcal</b> (ce que tu manges, corrigé de ton évolution). Nouvel objectif : <b>'+a.newK+' kcal</b>.</div><div class="wg-btns"><button onclick="BBXMeal.coachApply()" style="background:#E5173A;border-color:#E5173A;color:#fff">Appliquer '+a.newK+' kcal</button></div>';
+      if(a.state!=='ok') h+='<div class="cc-calc">Ton entretien réel est estimé à <b>≈ '+Math.round(a.tdee)+' kcal</b> (ce que tu manges, corrigé de ton évolution). Nouvel objectif : <b>'+a.newK+' kcal</b>.</div><div class="wg-btns"><button onclick="BBXMeal.coachApply()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Appliquer '+a.newK+' kcal</button></div>';
       if(a.waist){ const r=a.waist.ratio; h+='<div class="cc-waist '+(r>1.2?'bad':r<=0.5?'good':'warn')+'">📏 Tour de taille : '+(a.waist.dw>=0?'+':'−')+fk(Math.abs(a.waist.dw))+' cm pour '+(a.waist.dk>=0?'+':'−')+fk(Math.abs(a.waist.dk))+' kg. '+(r>1.2?'La taille grossit vite : la prise est plutôt du gras. Réduis un peu les calories.':r<=0.5?'Bon signe : la prise semble surtout du muscle.':'Prise mixte : continue de surveiller.')+'</div>'; }
     }
     h+='<label class="cc-auto"><input type="checkbox" id="ccAuto" '+(WT.cal.auto!==false?'checked':'')+' onchange="BBXMeal.ccAuto(this.checked)"><span>Ajuster mes calories automatiquement (au plus toutes les 2 semaines)</span></label>';
-    if(WT.cal.log.length) h+='<div class="ht-sub">Derniers réglages</div>'+WT.cal.log.slice(0,4).map((l,i)=>`<div class="cc-log"><span>${shortDate(l.d)} · ${esc(l.why).slice(0,90)}</span><b>${l.from} → ${l.to}</b>${i===0&&l.to===S.kg?'<button onclick="BBXMeal.coachUndo()">Annuler</button>':''}</div>`).join('');
+    if(WT.cal.log.length) h+='<div class="ht-sub">Derniers réglages</div>'+WT.cal.log.slice(0,4).map((l,i)=>`<div class="cc-log"><span>${shortDate(l.d)} · ${esc(l.why).slice(0,90)}</span><b>${l.from} → ${l.to}</b>${i===0&&l.to===S.kg?'<button onclick="BBXMeal.coachUndo()" aria-label="Annuler" title="Annuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h9a6 6 0 0 1 0 12h-3"/></svg></button>':''}</div>`).join('');
     return h+'<div class="cc-note">Repères généraux (≈ 7 700 kcal par kg), pas un avis médical.</div></div>';
   }
   // ---------- habitudes : produits que je mange d'habitude, repas par repas ----------

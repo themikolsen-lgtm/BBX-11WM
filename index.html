@@ -1956,7 +1956,7 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .pg-cards button.on{ border-color:#7DD957; background:#F4FCEE; }
 .pg-hint{ font-size:12px; color:#6B7280; line-height:1.4; margin-bottom:6px; }
 .pg-box{ border-radius:16px; padding:12px 14px; background:#F7F8FA; border:1px solid #E6E8EC; margin-bottom:6px; }
-.pg-box.cut{ border-left:4px solid #4FB8E8; } .pg-box.bulk{ border-left:4px solid #7DD957; }
+.pg-box.cut{ border-left:4px solid #4FB8E8; } .pg-box.loss{ border-left:4px solid #F5A524; } .pg-box.bulk{ border-left:4px solid #7DD957; }
 .pg-h{ font-weight:800; font-size:14px; }
 .pg-sub{ font-size:12px; color:#5B6470; margin:2px 0 10px; line-height:1.4; }
 .pg-tiles{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px; }
@@ -2321,6 +2321,11 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .id-it .id-c span{ font-size:10.5px; font-weight:800; padding:3px 8px; border-radius:99px; }
 .id-it .id-c .p{ background:#DDF7F9; color:#0C6F78; } .id-it .id-c .c{ background:#FFE2E3; color:#A5121F; } .id-it .id-c .f{ background:#FFF0D3; color:#8A5200; }
 .id-it .sr-nm b .hl-b, .id-it .sr-nm b .hl-n{ vertical-align:1px; }
+</style>
+<style>
+.pg-cards{ gap:8px; }
+.pg-cards button{ padding:11px 8px; min-width:0; }
+.pg-cards button b{ font-size:13px; } .pg-cards button small{ font-size:10.5px; }
 </style>
 </head>
 <body>
@@ -3579,7 +3584,7 @@ document.addEventListener('click', function(e){
 <div id="mealPlan" class="mc-ov mc-sheet" style="z-index:9400" aria-label="Objectif de poids">
   <div class="mc-head"><b>🎯 Objectif</b><button class="mc-x" onclick="BBXMeal.closePlan()" aria-label="Fermer">✕</button></div>
   <div class="mf-sec" style="margin-top:2px">Mon programme</div>
-  <div class="pg-cards" id="plProg"><button type="button" data-p="cut" onclick="BBXMeal.plProg('cut')"><b>📉 Perte de poids</b><small>Perdre du gras en gardant le muscle</small></button><button type="button" data-p="bulk" onclick="BBXMeal.plProg('bulk')"><b>💪 Prise de masse</b><small>Prendre du muscle avec un minimum de gras</small></button></div>
+  <div class="pg-cards" id="plProg"><button type="button" data-p="loss" onclick="BBXMeal.plProg('loss')"><b>📉 Perte de poids</b><small>Maigrir durablement, protéines modérées</small></button><button type="button" data-p="cut" onclick="BBXMeal.plProg('cut')"><b>🔥 Sèche</b><small>Perdre du gras en gardant le muscle</small></button><button type="button" data-p="bulk" onclick="BBXMeal.plProg('bulk')"><b>💪 Prise de masse</b><small>Prendre du muscle avec un minimum de gras</small></button></div>
   <div id="plProgInfo"></div>
   <div class="mf-sec">Poids actuel</div>
   <div class="mf-in"><input id="plCur" type="text" inputmode="decimal" placeholder="0,0" oninput="BBXMeal.plRender()" aria-label="Poids actuel"><i>kg</i></div>
@@ -4738,12 +4743,15 @@ document.addEventListener('click', function(e){
   const pl={level:'deb',unit:'weeks',sex:'H',prog:null};
   // ---------- programmes : perte de poids / prise de masse ----------
   const PROG={
-    cut:{n:'Perte de poids',ico:'📉',why:'Un déficit modéré fait perdre du gras sans sacrifier le muscle, à condition de manger assez de protéines et de continuer à t’entraîner.',
+    loss:{n:'Perte de poids',ico:'📉',why:'Un déficit modéré et régulier pour perdre du poids durablement, avec un apport en protéines raisonnable (moins élevé qu’en sèche) et plus de glucides pour tenir sur la durée.',
+      tips:['Rythme conseillé : 0,5 à 1 % du poids par semaine, au-delà c’est difficile à tenir.','Déficit plafonné à 25 % de ton entretien (jamais sous 1 500 kcal pour un homme, 1 200 pour une femme).','Protéines modérées (≈ 1,6 g/kg), réparties sur 3 repas : de quoi rassasier et limiter la perte de muscle.','Privilégie les aliments peu transformés, riches en fibres et en eau (légumes, fruits, légumineuses).','Bouge tous les jours : marche 8 000 à 10 000 pas, et 2 à 3 séances de renforcement par semaine.','Dors 7 à 9 h et pèse-toi chaque semaine : c’est la moyenne qui compte, pas un jour isolé.']},
+    cut:{n:'Sèche',ico:'🔥',why:'Un déficit modéré fait perdre du gras sans sacrifier le muscle, à condition de manger assez de protéines et de continuer à t’entraîner.',
       tips:['Rythme conseillé : 0,3 à 0,75 % du poids par semaine. Plus vite, tu perds aussi du muscle.','Déficit plafonné à 25 % de ton entretien (jamais sous 1 500 kcal pour un homme, 1 200 pour une femme).','Protéines élevées (≈ 2,2 g/kg), réparties sur 3 à 4 repas : elles protègent le muscle et rassasient.','Garde la musculation (3 séances/sem., charges lourdes) et marche 8 000 à 10 000 pas par jour.','Dors 7 à 9 h et pèse-toi chaque semaine : c’est la moyenne qui compte, pas un jour isolé.','Fais une pause à l’entretien de 1 à 2 semaines toutes les 8 à 12 semaines.']},
     bulk:{n:'Prise de masse',ico:'💪',why:'Un petit surplus calorique avec assez de protéines permet de construire du muscle en limitant le gras. Plus tu es avancé, plus le rythme doit être doux.',
       tips:['Rythme selon ton niveau : débutant 0,25–0,5 %, intermédiaire 0,15–0,3 %, avancé 0,07–0,15 % du poids par semaine.','Surplus plafonné à 20 % de ton entretien : au-delà, ce sont surtout des graisses.','Protéines 1,6 à 2,2 g/kg (≈ 1,8–2 g/kg ici), glucides 4 à 7 g/kg pour alimenter tes séances.','Progresse chaque semaine (charge ou répétitions) et vise 10 à 20 séries par groupe musculaire et par semaine.','Si ton tour de taille augmente plus vite que ton poids, retire 100 à 200 kcal.','Prévois au moins 8 à 16 semaines, puis une phase de maintien ou de sèche.']}
   };
-  const protPerKg=(prog,level)=>prog==='cut'?2.2:(level==='deb'?1.8:2.0);
+  const protPerKg=(prog,level)=>prog==='cut'?2.2:(prog==='loss'?1.6:(level==='deb'?1.8:2.0));
+  const isLoss=p=>p==='cut'||p==='loss';
   const protFor=kg=>Math.round(protPerKg(WT.plan&&WT.plan.prog,WT.plan&&WT.plan.level)*kg);
   const kcalFloor=sex=>sex==='F'?1200:1500;
   function maintenanceWith(kg,p){ if(!(p&&p.h>0&&p.age>0&&p.act>0&&kg>0)) return null; return Math.round((10*kg+6.25*p.h-5*p.age+(p.sex==='F'?-161:5))*p.act); }
@@ -4752,14 +4760,14 @@ document.addEventListener('click', function(e){
     const prot=Math.round(protPerKg(prog,level)*cur), M=maintenanceWith(cur,prof);
     if(!M) return {M:null,prot:prot};
     let k=M+rate*KCAL_KG, note='';
-    if(prog==='cut'){ const lo=Math.max(M*0.75,kcalFloor(prof.sex)); if(k<lo){ k=lo; note='Déficit limité à 25 % de ton entretien (et à un minimum de santé) pour préserver ton muscle. Allonge la durée pour atteindre ton poids visé.'; } if(k>M) k=M; }
+    if(isLoss(prog)){ const lo=Math.max(M*0.75,kcalFloor(prof.sex)); if(k<lo){ k=lo; note='Déficit limité à 25 % de ton entretien (et à un minimum de santé)'+(prog==='cut'?' pour préserver ton muscle':'')+'. Allonge la durée pour atteindre ton poids visé.'; } if(k>M) k=M; }
     else{ const hi=M*1.2; if(k>hi){ k=hi; note='Surplus limité à 20 % de ton entretien pour limiter le gras. Allonge la durée pour atteindre ton poids visé.'; } if(k<M) k=M; }
     k=round25(k);
-    const fat=Math.round(Math.max((prog==='cut'?0.8:0.9)*cur,0.25*k/9)), carb=Math.max(0,Math.round((k-prot*4-fat*9)/4));
+    const fat=Math.round(Math.max((isLoss(prog)?0.8:0.9)*cur,0.25*k/9)), carb=Math.max(0,Math.round((k-prot*4-fat*9)/4));
     return {M:M,kcal:k,delta:k-M,prot:prot,fat:fat,carb:carb,note:note};
   }
   function renderProgInfo(cur,target,rate){
-    const box=$('plProgInfo'), p=pl.prog; setSeg('plProg','p',p||''); $('mealPlan').classList.toggle('pg-cut',p==='cut');
+    const box=$('plProgInfo'), p=pl.prog; setSeg('plProg','p',p||''); $('mealPlan').classList.toggle('pg-cut',isLoss(p));
     if(!p){ box.innerHTML='<div class="pg-hint">Choisis ton programme : l’appli règle pour toi le poids visé, le rythme, les calories et les protéines.</div>'; return; }
     const P=PROG[p]; let h=`<div class="pg-box ${p}"><div class="pg-h">${P.ico} ${P.n}</div><div class="pg-sub">${P.why}</div>`;
     const T=cur>0?progTargets(cur,rate,p,pl.level,profNow()):null;
@@ -4770,8 +4778,8 @@ document.addEventListener('click', function(e){
   }
   function plProg(p){
     pl.prog=p; const cur=num($('plCur').value)||0, t=num($('plTarget').value)||0;
-    const bad=(p==='cut'&&!(t<cur-0.05))||(p==='bulk'&&!(t>cur+0.05));
-    if(cur>0&&(bad||!t)) $('plTarget').value=fk(p==='cut'?Math.round(cur*0.92*2)/2:Math.round(cur*1.05*2)/2);
+    const bad=(isLoss(p)&&!(t<cur-0.05))||(p==='bulk'&&!(t>cur+0.05));
+    if(cur>0&&(bad||!t)) $('plTarget').value=fk(isLoss(p)?Math.round(cur*(p==='loss'?0.9:0.92)*2)/2:Math.round(cur*1.05*2)/2);
     pl.unit='weeks'; const o=planOptions(cur,num($('plTarget').value)||0); if(o[1]) $('plDur').value=String(o[1].weeks);
     renderPlan();
   }
@@ -4795,8 +4803,8 @@ document.addEventListener('click', function(e){
     h+=`<div class="pl-line"><span>Durée</span><b>${fk(weeks)} sem. · ${f2(weeks*7/30.4)} mois · ${Math.round(weeks*7)} jours</b></div><div class="pl-line"><span>Rythme (% du poids / sem.)</span><b>${f2(e.pct)} %</b></div></div>`;
     h+=`<div class="pl-verd ${V[3]}"><b>${V[0]} ${V[1]}</b><span>${V[2]}</span></div>`;
     h+=`<div class="pl-gauge"><span>Risque de prendre du gras</span><div class="g${e.fat}"><i></i><i></i><i></i><i></i></div><b>${FATL[e.fat]}</b></div><div class="pl-fine">Estimation d’après le rythme, pas une mesure de ta composition corporelle.</div>`;
-    const cp=pl.prog||(target<cur?'cut':'bulk'), T=progTargets(cur,e.rate,cp,pl.level,profNow());
-    if(pl.prog&&((pl.prog==='cut'&&target>=cur-0.05)||(pl.prog==='bulk'&&target<=cur+0.05))) h=`<div class="pl-verd bad"><b>⚠️ Objectif incompatible</b><span>${pl.prog==='cut'?'Pour une perte de poids, vise un poids inférieur à ton poids actuel.':'Pour une prise de masse, vise un poids supérieur à ton poids actuel.'}</span></div>`+h;
+    const cp=pl.prog||(target<cur?'loss':'bulk'), T=progTargets(cur,e.rate,cp,pl.level,profNow());
+    if(pl.prog&&((isLoss(pl.prog)&&target>=cur-0.05)||(pl.prog==='bulk'&&target<=cur+0.05))) h=`<div class="pl-verd bad"><b>⚠️ Objectif incompatible</b><span>${isLoss(pl.prog)?'Pour une perte de poids, vise un poids inférieur à ton poids actuel.':'Pour une prise de masse, vise un poids supérieur à ton poids actuel.'}</span></div>`+h;
     if(T.M) h+=`<div class="pl-card"><div class="pl-line"><span>Calories d’entretien estimées</span><b>≈ ${T.M} kcal</b></div><div class="pl-line"><span>${T.delta>=0?'Surplus':'Déficit'} conseillé</span><b>${T.delta>=0?'+':'−'}${Math.abs(T.delta)} kcal/jour</b></div><div class="pl-line big"><span>Calories conseillées</span><b>≈ ${T.kcal} kcal/jour</b></div><div class="pl-line"><span>Protéines conseillées (${f2(protPerKg(cp,pl.level))} g/kg)</span><b>≈ ${T.prot} g/jour</b></div><div class="pl-line"><span>Lipides conseillés (≈ 25 % des calories)</span><b>≈ ${T.fat} g/jour</b></div><div class="pl-line"><span>Glucides (le reste)</span><b>≈ ${T.carb} g/jour</b></div></div>`+(T.note?`<div class="pl-fine">${T.note}</div>`:'');
     else h+='<div class="pl-note">Renseigne ton profil (âge, taille, activité) pour estimer tes calories.</div>';
     const best=opts[1]; if(best&&e.v!=='ideal'&&e.v!=='loss'&&e.v!=='same') h+=`<div class="pl-best">★ Meilleur choix pour toi : <b>${best.rate>=0?'+':'−'}${f2(Math.abs(best.rate))} kg/semaine</b>, soit <b>${best.weeks} semaines</b>. <button onclick="BBXMeal.plPick(1)">Utiliser</button></div>`;
@@ -4804,7 +4812,7 @@ document.addEventListener('click', function(e){
   }
   function openPlan(){
     const lw=lastWeight(), p=WT.plan, pr=WT.prof||{};
-    $('plInfo').textContent=''; pl.level=(p&&p.level)||pr.level||'deb'; pl.sex=pr.sex||'H'; pl.prog=(p&&p.prog)||pr.prog||(p?(p.rate<0?'cut':'bulk'):null);
+    $('plInfo').textContent=''; pl.level=(p&&p.level)||pr.level||'deb'; pl.sex=pr.sex||'H'; pl.prog=(p&&p.prog)||pr.prog||(p?(p.rate<0?'loss':'bulk'):null);
     $('plCur').value=lw?fk(lw.kg):(p?fk(p.startKg):''); $('plAge').value=pr.age||''; $('plH').value=pr.h||''; $('plAct').value=String(pr.act||1.55);
     if(p){ pl.unit=p.unit||'weeks'; $('plTarget').value=fk(p.target); $('plDur').value=String(p.dur||Math.round(p.weeks)); }
     else{ pl.unit='weeks'; const c=lw?lw.kg:0; $('plTarget').value=WT.goal?fk(WT.goal):(c?fk(Math.round((c+3)*2)/2):''); const o=planOptions(c,num($('plTarget').value)||0); $('plDur').value=o[1]?String(o[1].weeks):'12'; }
@@ -4816,8 +4824,8 @@ document.addEventListener('click', function(e){
     if(!(cur>=20&&cur<=400)) return err('Indique ton poids actuel, en kg.');
     if(!(target>=20&&target<=400)) return err('Indique le poids que tu vises, en kg.');
     if(!(weeks>=1)) return err('La durée doit être d’au moins une semaine.');
-    if(!pl.prog) pl.prog=target<cur?'cut':'bulk';
-    if(pl.prog==='cut'&&!(target<cur-0.05)) return err('Pour une perte de poids, vise un poids inférieur à ton poids actuel.');
+    if(!pl.prog) pl.prog=target<cur?'loss':'bulk';
+    if(isLoss(pl.prog)&&!(target<cur-0.05)) return err('Pour une perte de poids, vise un poids inférieur à ton poids actuel.');
     if(pl.prog==='bulk'&&!(target>cur+0.05)) return err('Pour une prise de masse, vise un poids supérieur à ton poids actuel.');
     const today0=dkey(new Date()), lw=lastWeight();
     if(!lw||Math.abs(lw.kg-cur)>=0.05) WT.log[today0]=Math.round(cur*10)/10;

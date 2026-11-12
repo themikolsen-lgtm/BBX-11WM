@@ -3773,7 +3773,7 @@ document.addEventListener('click', function(e){
     box.innerHTML=h;
   }
   function setPortion(i){ const q=fm.portions&&fm.portions[i]; if(!q) return; $('mfQty').value=r1(q.g); fmPrev(); }
-  function autoQty(){ const d=fm.portions&&fm.portions[0], cur=$('mfQty').value.trim(); if(d&&(cur===''||cur===String(fm.lastAuto))){ fm.lastAuto=r1(d.g); $('mfQty').value=fm.lastAuto; fmPrev(); } }
+  function autoQty(){ const d=fm.portions&&fm.portions[0], cur=$('mfQty').value.trim(), mq=memQty($('mfName').value,$('mfUnit').value), want=mq||(d?d.g:($('mfName').value.trim()?100:0)); if(want>0&&(cur===''||cur===String(fm.lastAuto))){ fm.lastAuto=r1(want); $('mfQty').value=fm.lastAuto; fmPrev(); } }
   function setQtyUnits(n){ $('mfQty').value=r1(n*fm.serving); fmPrev(); }
   function setUnit(u){
     $('mfUnit').value=u; $('mfU').textContent=u; $('mfQu').textContent=u;
@@ -3837,6 +3837,7 @@ document.addEventListener('click', function(e){
       fm.fixed=!!(pref.portions&&pref.portions.length); fm.portions=mergePortions(P[0],P.slice(1),pref.name||''); syncPortions();
       fm.lastAuto=fm.serving>0?r1(fm.serving):''; }
     $('mfQty').value=fm.serving>0?r1(fm.serving):(pref.name?100:''); setUnit(pref.unit||'g');
+      { const mq=memQty(pref.name,pref.unit||'g'); if(mq>0){ $('mfQty').value=r1(mq); fm.lastAuto=r1(mq); } }
       $('mfInfo').textContent=pref.info||'';
       if(pref.info) $('mfInfo').className='mf-info ok';
     }
@@ -3857,6 +3858,7 @@ document.addEventListener('click', function(e){
     const label=edit?fm.label:(fm.serving>0?(fm.newLabel||'portion'):'portion de 100 '+unit);
     const it=[nm,label,unitW,q/unitW,k*q/100,p*q/100,unit,emoji,isNaN(fa)?null:fa*q/100,isNaN(ca)?null:ca*q/100];
     upsertFav(it,fm.portions); bumpHabit(MEALS[mt][0],nm,q);
+    QTY[hlKey(nm)]={g:Math.round(q*10)/10,u:unit}; saveQty();
     if(fm.h&&(fm.h.ns||fm.h.nova)){ HL[hlKey(nm)]=Object.assign({t:Date.now()},fm.h); saveHL(); }
     if(edit){
       const wasDone=!!S.d[key(fm.m,fm.i)]; dropState(fm.m,fm.i);
@@ -4016,6 +4018,19 @@ document.addEventListener('click', function(e){
   }
   // ---------- portions courantes (la 1re = portion par défaut) ----------
   const PORTION_GUESS=[
+    [/galette de riz|cake de riz|galette de mais/,[['galette',9]]],
+    [/^(?!.*(jus|compote|chips|gateau|biscuit|barre|yaourt|boisson)).*banane/,[['banane',120]]],
+    [/^(?!.*(jus|compote|chips|gateau|biscuit|barre|yaourt|boisson|de terre)).*pomme/,[['pomme',150]]],
+    [/^(?!.*(jus|compote|gateau|biscuit|barre|yaourt|boisson)).*(clementine|mandarine)/,[['clémentine',70]]],
+    [/^(?!.*(jus|compote|gateau|biscuit|barre|yaourt|boisson|sirop)).*orange/,[['orange',130]]],
+    [/^(?!.*(jus|compote|gateau|biscuit|barre|yaourt|boisson)).*(poire|peche|nectarine|abricot)/,[['fruit',130]]],
+    [/^(?!.*(jus|compote|gateau|biscuit|barre|yaourt|boisson)).*kiwi/,[['kiwi',75]]],
+    [/avocat/,[['avocat',150]]],
+    [/^(?!.*(sauce|concentre|coulis|jus|soupe|veloute|ketchup)).*tomate/,[['tomate',120]]],
+    [/^(?!.*(jus|soupe|veloute|gateau)).*carotte/,[['carotte',80]]],
+    [/whey|proteine en poudre|protein powder|isolat/,[['dose',30]]],
+    [/wrap|tortilla|galette de ble|crepe/,[['pièce',60]]],
+    [/datte/,[['datte',7]]],
     [/chocolat|choco|cacao/,[['carré',10],['tablette',100]]],
     [/skyr|yaourt|fromage blanc|petit.?suisse|creme dessert|dessert lacte/,[['pot',125]]],
     [/sable|biscuit|cookie|petit.?beurre|gaufrette|galette bretonne/,[['biscuit',10]]],
@@ -4124,6 +4139,10 @@ document.addEventListener('click', function(e){
     finally{ clearTimeout(to); }
   }
   const errText=e=>e&&e.http?'erreur '+e.http:(e&&e.name==='AbortError'?'délai dépassé':(e&&e.message)||'inaccessible');
+  // ---------- quantité habituelle mémorisée par aliment (bb9-qty) ----------
+  const QTYKEY='bb9-qty'; let QTY={}; try{ QTY=JSON.parse(localStorage.getItem(QTYKEY)||'{}')||{}; }catch(e){ QTY={}; }
+  const saveQty=()=>{ try{ localStorage.setItem(QTYKEY,JSON.stringify(QTY)); }catch(e){} };
+  const memQty=(name,unit)=>{ const m=QTY[hlKey(name||'')]; return m&&m.g>0&&m.u===unit?m.g:0; };
   // ---------- évaluation santé mémorisée pour mes produits (bb9-health) + mise à jour automatique ----------
   const HLKEY='bb9-health'; let HL={}; try{ HL=JSON.parse(localStorage.getItem(HLKEY)||'{}')||{}; }catch(e){ HL={}; }
   const saveHL=()=>{ try{ localStorage.setItem(HLKEY,JSON.stringify(HL)); }catch(e){} };

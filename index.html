@@ -2244,6 +2244,7 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 <style>
 .hl-b{ display:inline-grid; place-items:center; width:17px; height:17px; margin-left:6px; vertical-align:2px; border-radius:5px; background:var(--c); color:#fff; font-style:normal; font-weight:900; font-size:10.5px; line-height:1; }
 .hl-b[style*="FECB02"]{ color:#5A4500; }
+.hl-n{ display:inline-grid; place-items:center; width:17px; height:17px; margin-left:3px; vertical-align:2px; border-radius:50%; background:var(--c); color:#fff; font-style:normal; font-weight:900; font-size:10.5px; line-height:1; }
 <style>
 /* ===== Ajustement mobile : réduire le trop gros, agrandir le trop petit (cibles tactiles >= 40 px) ===== */
 /* — trop gros — */
@@ -4266,8 +4267,9 @@ document.addEventListener('click', function(e){
   function decorateHealth(){
     document.querySelectorAll('#mlMeals .my-row').forEach(row=>{
       const it=MEALS[+row.dataset.m]&&MEALS[+row.dataset.m][2][+row.dataset.i]; if(!it) return;
-      const b=row.querySelector('.my-nm b'); if(!b||b.querySelector('.hl-b')) return; const h=hlGet(it[0]); if(!h||!h.ns) return;
-      const e=document.createElement('i'); e.className='hl-b'; e.style.setProperty('--c',NSC[h.ns]); e.textContent=h.ns.toUpperCase(); e.title='Nutri-Score '+h.ns.toUpperCase()+(h.nova?' · NOVA '+h.nova:''); b.appendChild(e);
+      const b=row.querySelector('.my-nm b'); if(!b||b.querySelector('.hl-b,.hl-n')) return; const h=hlGet(it[0]); if(!h||!(h.ns||h.nova)) return;
+      if(h.ns){ const e=document.createElement('i'); e.className='hl-b'; e.style.setProperty('--c',NSC[h.ns]); e.textContent=h.ns.toUpperCase(); e.title='Nutri-Score '+h.ns.toUpperCase(); b.appendChild(e); }
+      if(h.nova){ const n=document.createElement('i'); n.className='hl-n'; n.style.setProperty('--c',NVC[h.nova]); n.textContent=h.nova; n.title='NOVA '+h.nova+' : '+NVL[h.nova]; b.appendChild(n); }
     });
   }
   new MutationObserver(decorateHealth).observe($('mlMeals'),{childList:true});

@@ -2151,6 +2151,15 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 @media (max-width:405px){ #mealView .sx-c.k .sx-h .sx-t{ font-size:10.5px; } }
 #mealView .my-dsum .mc-note{ color:#B9741B; }
 </style>
+<style>
+/* ===== appui long sur un repas : bouton « Supprimer » affiché directement ===== */
+.m-delpill{ position:fixed; left:50%; bottom:calc(118px + env(safe-area-inset-bottom,0px)); z-index:9600; transform:translate(-50%,24px) scale(.92); opacity:0; pointer-events:none;
+  display:flex; align-items:center; gap:10px; height:54px; padding:0 22px; max-width:calc(100vw - 32px); border:0; border-radius:999px; background:#E3213B; color:#fff; font-family:inherit; font-weight:900; font-size:15px;
+  box-shadow:0 16px 32px -10px rgba(227,33,59,.65); transition:transform .22s cubic-bezier(.2,.9,.3,1.2), opacity .18s, background .15s; cursor:pointer; }
+.m-delpill span{ font-size:19px; } .m-delpill b{ font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.m-delpill.show{ transform:translate(-50%,0) scale(1); opacity:1; pointer-events:auto; }
+.m-delpill.hot{ background:#B80F28; transform:translate(-50%,0) scale(1.07); }
+</style>
 </head>
 <body>
 
@@ -3390,11 +3399,12 @@ document.addEventListener('click', function(e){
   <div id="pastSum" hidden></div>
   </div>
   </div>
-  <div class="my-hint">Touche un produit pour modifier sa quantité, balaie-le vers la droite pour le supprimer. Maintiens le titre d’un repas appuyé pour le déplacer.</div>
+  <div class="my-hint">Touche un produit pour modifier sa quantité, balaie-le vers la droite pour le supprimer. Maintiens le titre d’un repas appuyé pour le déplacer ou le supprimer.</div>
   <div id="mlMeals"></div>
   <div id="mealPast" hidden></div>
   <button class="my-addmeal" onclick="BBXMeal.addMeal()">＋ Ajouter un repas</button>
 </div>
+<button id="mealDelPill" class="m-delpill" type="button" aria-label="Supprimer le repas"><span>🗑</span><b id="mealDelTxt">Supprimer</b></button>
 <div id="mealToast" class="m-toast" role="status"><span id="toastTxt"></span><button id="toastUndo">Annuler</button></div>
 <div id="mealPlan" class="mc-ov mc-sheet" style="z-index:9400" aria-label="Objectif de poids">
   <div class="mc-head"><b>🎯 Objectif</b><button class="mc-x" onclick="BBXMeal.closePlan()" aria-label="Fermer">✕</button></div>
@@ -4086,14 +4096,31 @@ document.addEventListener('click', function(e){
   // déplacer un repas : rester appuyé sur son titre, puis glisser
   (function(){
     const box=$('mlMeals'), view=$('mealView'); let d=null;
+    const pill=$('mealDelPill'); let tgt=null, pillT=0;
+    const overPill=(x,y)=>{ if(!pill.classList.contains('show')) return false; const r=pill.getBoundingClientRect(); return x>=r.left-14&&x<=r.right+14&&y>=r.top-14&&y<=r.bottom+14; };
+    function showPill(mm){ tgt=mm; $('mealDelTxt').textContent='Supprimer « '+mm[0]+' »'; pill.classList.remove('hot'); pill.classList.add('show'); clearTimeout(pillT); pillT=setTimeout(hidePill,8000); }
+    function hidePill(){ clearTimeout(pillT); pill.classList.remove('show','hot'); tgt=null; }
+    function delTarget(){
+      const mm=tgt; hidePill(); if(!mm) return; const m=MEALS.indexOf(mm); if(m<0) return;
+      const rec={mm:mm,m:m,st:mm[2].map(it=>{ const k=mm[0]+'|'+it[0]; return [k,S.d[k],S.w[k]]; }),hab:HAB[mm[0]]};
+      mm[2].forEach((it,i)=>dropState(m,i)); delete HAB[mm[0]]; saveHab(); MEALS.splice(m,1); refresh();
+      showToast('Repas « '+mm[0]+' » supprimé',()=>{
+        MEALS.splice(Math.min(rec.m,MEALS.length),0,rec.mm);
+        rec.st.forEach(([k,d,w])=>{ if(d!==undefined) S.d[k]=d; if(w!==undefined) S.w[k]=w; });
+        if(rec.hab!==undefined){ HAB[rec.mm[0]]=rec.hab; saveHab(); } refresh();
+      });
+    }
+    pill.addEventListener('click',delTarget);
+    const away=e=>{ if(pill.classList.contains('show')&&!(d&&d.on)&&!e.target.closest('#mealDelPill')) hidePill(); };
+    document.addEventListener('touchstart',away,{passive:true}); document.addEventListener('mousedown',away);
     const pt=e=>(e.touches&&e.touches[0])||(e.changedTouches&&e.changedTouches[0])||e;
     function begin(e){
       const h=e.target.closest&&e.target.closest('.my-mh'); if(!h||e.target.closest('label,button,input')) return;
       const card=h.closest('.my-card'); if(!card) return; const p=pt(e);
-      d={card:card,x:p.clientX,y:p.clientY,lastY:p.clientY,on:false,raf:0,timer:setTimeout(start,450)};
+      d={card:card,x:p.clientX,y:p.clientY,lastX:p.clientX,lastY:p.clientY,on:false,raf:0,timer:setTimeout(start,450)};
     }
     function start(){
-      if(!d) return; d.on=true; const r=d.card.getBoundingClientRect(); d.grab=d.lastY-r.top;
+      if(!d) return; d.on=true; const r=d.card.getBoundingClientRect(); d.grab=d.lastY-r.top; showPill(MEALS[+d.card.dataset.m]);
       d.card.classList.add('dragging'); view.classList.add('drag-on'); try{ if(navigator.vibrate) navigator.vibrate(12); }catch(e){}
       const loop=()=>{ if(!d||!d.on) return; const vr=view.getBoundingClientRect();
         if(d.lastY<vr.top+80) view.scrollTop-=12; else if(d.lastY>vr.bottom-120) view.scrollTop+=12;
@@ -4111,12 +4138,13 @@ document.addEventListener('click', function(e){
     function move(e){
       if(!d) return; const p=pt(e);
       if(!d.on){ if(Math.abs(p.clientX-d.x)>8||Math.abs(p.clientY-d.y)>8){ clearTimeout(d.timer); d=null; } return; }
-      if(e.cancelable) e.preventDefault(); d.lastY=p.clientY; place();
+      if(e.cancelable) e.preventDefault(); d.lastY=p.clientY; d.lastX=p.clientX; pill.classList.toggle('hot',overPill(p.clientX,p.clientY)); place();
     }
     function end(){
       if(!d) return; clearTimeout(d.timer); const was=d.on; cancelAnimationFrame(d.raf);
       if(was){
         d.card.classList.remove('dragging'); d.card.style.transform=''; view.classList.remove('drag-on');
+        if(overPill(d.lastX,d.lastY)){ d=null; delTarget(); return; }
         const order=[...box.children].map(x=>+x.dataset.m);
         if(order.some((v,i)=>v!==i)){ MEALS=order.map(i=>MEALS[i]); d=null; refresh(); return; }
       }

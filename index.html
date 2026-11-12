@@ -2303,6 +2303,25 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #mealView .my-mh > .my-hb{ order:3; }
 #mealView .my-mh > .my-ck{ order:4; }
 </style>
+<style>
+/* bouton Idées (ampoule) dans l'en-tête de repas + feuille Idées */
+#mealView .my-hbtn.idea svg{ stroke-width:2.2; }
+#mealView .my-hb{ gap:5px; }
+#mealView .my-hbtn{ width:37px; height:36px; border-radius:18px; }
+#mealView .my-mh > .my-ck{ width:42px; }
+@media (max-width:405px){ #mealView .my-hbtn{ width:33px; } #mealView .my-hb{ gap:4px; } #mealView .my-mh > .my-ck{ width:40px; } #mealView .my-hbtn svg{ width:19px; height:19px; } #mealView .my-hbtn.plus svg{ width:21px; height:21px; } }
+#mealView .my-hbtn svg{ width:21px; height:21px; } #mealView .my-hbtn.plus svg{ width:23px; height:23px; }
+.id-sub{ font-size:13px; font-weight:700; color:#4B5563; margin:0 2px 10px; }
+.id-rem{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:0 0 14px; }
+.id-rem span{ font-size:12.5px; font-weight:800; padding:6px 10px; border-radius:99px; background:#fff; border:1.5px solid #E1E4EA; color:#15171C; }
+.id-rem span b{ font-weight:900; } .id-rem .k{ border-color:#BFE8A8; } .id-rem .p{ border-color:#9CE4EA; } .id-rem .f{ border-color:#FFD58F; } .id-rem .c{ border-color:#FFB0B3; }
+.id-rem small{ font-size:11.5px; font-weight:700; color:#9AA1AD; }
+.id-it .id-n{ display:block; margin-top:3px; font-size:12px; font-weight:700; color:#4B5563; } .id-it .id-n .vv{ color:#15171C; font-weight:900; font-style:normal; }
+.id-it .id-c{ display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
+.id-it .id-c span{ font-size:10.5px; font-weight:800; padding:3px 8px; border-radius:99px; }
+.id-it .id-c .p{ background:#DDF7F9; color:#0C6F78; } .id-it .id-c .c{ background:#FFE2E3; color:#A5121F; } .id-it .id-c .f{ background:#FFF0D3; color:#8A5200; }
+.id-it .sr-nm b .hl-b, .id-it .sr-nm b .hl-n{ vertical-align:1px; }
+</style>
 </head>
 <body>
 
@@ -3548,6 +3567,12 @@ document.addEventListener('click', function(e){
   <button class="my-addmeal" onclick="BBXMeal.addMeal()" aria-label="Ajouter un repas" title="Ajouter un repas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
 </div>
 <button id="mealDelPill" class="m-delpill" type="button" aria-label="Supprimer le repas"><span>🗑</span><b id="mealDelTxt">Supprimer</b></button>
+<div id="mealIdeas" class="mc-ov mc-sheet" style="z-index:9250" aria-label="Idées">
+  <div class="mc-head"><b>Idées</b><button class="mc-x" onclick="BBXMeal.closeIdeas()" aria-label="Fermer">✕</button></div>
+  <div class="id-sub" id="idSub"></div>
+  <div class="id-rem" id="idRem"></div>
+  <div id="idList"></div>
+</div>
 <div id="mealPick" class="m-pick" onclick="if(event.target===this)BBXMeal.closePick()"><div class="m-pick-card"><b>Tableau nutritionnel</b><div class="m-pick-row"><button class="mc-big ib ibt red" onclick="BBXMeal.pickCam()" aria-label="Prendre une photo" title="Prendre une photo"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.5-2.5h7L17 8.5h3V19H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg></span><em>Prendre une photo</em></button><button class="mc-big ib ibt" onclick="BBXMeal.pickGal()" aria-label="Choisir dans la galerie" title="Choisir dans la galerie"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17.5l5.2-5 3.8 3.5 2.6-2.4 4.4 4"/></svg></span><em>Galerie</em></button></div></div></div>
 <input type="file" id="mfOcrGal" accept="image/*" hidden>
 <div id="mealToast" class="m-toast" role="status"><span id="toastTxt"></span><button id="toastUndo" aria-label="Annuler" title="Annuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h9a6 6 0 0 1 0 12h-3"/></svg></button></div>
@@ -3719,7 +3744,7 @@ document.addEventListener('click', function(e){
     S.v=5; save();
   }
   function build(){
-    $('mlMeals').innerHTML=MEALS.map(([t,ic,items],m)=>`<section class="my-card" data-m="${m}" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}"><div class="my-mh"><div class="my-mi">${ic}</div><div class="my-mt"><b>${t}</b><span id="mymp${m}"></span></div><div class="my-mk"><b id="mymk${m}"></b><small>kcal</small></div><div class="my-hb"><button class="my-hbtn scan" onclick="BBXMeal.scan(${m})" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></button><button class="my-hbtn plus" onclick="BBXMeal.search(${m})" aria-label="Ajouter un produit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><label class="my-ck all" title="Tout cocher"><input type="checkbox" id="mlall${m}" aria-label="Tout cocher : ${t}"><span></span></label></div>`+
+    $('mlMeals').innerHTML=MEALS.map(([t,ic,items],m)=>`<section class="my-card" data-m="${m}" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}"><div class="my-mh"><div class="my-mi">${ic}</div><div class="my-mt"><b>${t}</b><span id="mymp${m}"></span></div><div class="my-mk"><b id="mymk${m}"></b><small>kcal</small></div><div class="my-hb"><button class="my-hbtn idea" onclick="BBXMeal.ideas(${m})" aria-label="Idées pour ${t}" title="Idées adaptées à tes restes du jour"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 18h5.6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.3 1.1 2.1V16h5v-.1c0-.8.4-1.6 1.1-2.1A6 6 0 0 0 12 3z"/></svg></button><button class="my-hbtn scan" onclick="BBXMeal.scan(${m})" aria-label="Scanner un code-barres"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M7 12h10"/></svg></button><button class="my-hbtn plus" onclick="BBXMeal.search(${m})" aria-label="Ajouter un produit"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button></div><label class="my-ck all" title="Tout cocher"><input type="checkbox" id="mlall${m}" aria-label="Tout cocher : ${t}"><span></span></label></div>`+
       items.map((it,i)=>`<div class="my-it" id="myit${m}-${i}"><div class="my-row" data-m="${m}" data-i="${i}"><div class="my-th">${it[7]}</div><div class="my-nm"><b>${it[0]}</b><span id="mymt${m}-${i}"></span></div><div class="my-kc"><b id="mykc${m}-${i}"></b><small>kcal</small></div><label class="my-ck"><input type="checkbox" id="mlk${m}-${i}" ${S.d[key(m,i)]?'checked':''}><span></span></label></div>
         <div class="my-edit"><div class="my-st"><button data-d="-1" aria-label="Moins">−</button><input type="number" inputmode="decimal" min="0" step="any" id="mlc${m}-${i}" value="${r2(W(m,i,it)/it[2])}"><button data-d="1" aria-label="Plus">+</button></div><span class="my-u">${it[1]}</span>
         <div class="my-wf"><input type="number" inputmode="decimal" min="0" step="any" id="mlw${m}-${i}" value="${r1(W(m,i,it))}"><span class="my-u">${it[6]}</span></div>
@@ -3910,6 +3935,55 @@ document.addEventListener('click', function(e){
     finally{ $('mfOcrBtn').classList.remove('busy'); }
   }
   ['mfOcrFile','mfOcrGal'].forEach(id=>$(id).addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; e.target.value=''; if(f) ocrRun(f); }));
+  // ---------- Idées : aliments légers adaptés aux kcal / protéines / lipides / glucides restants ----------
+  const ideaState={m:0,list:[]};
+  function dayTotals(){
+    let K=0,P=0,F=0,C=0;
+    MEALS.forEach(([t,ic,items],m)=>items.forEach((it,i)=>{ if(!S.d[key(m,i)]) return; const f=W(m,i,it)/(it[2]*it[3]); K+=it[4]*f; P+=it[5]*f; F+=(it[8]||0)*f; C+=(it[9]||0)*f; }));
+    return {K:K,P:P,F:F,C:C};
+  }
+  function buildIdeas(R){
+    const light=R.k<60, cap=Math.max(50,Math.min(R.k*0.5,250)), cands=[], seen=new Set();
+    const add=(src,mine)=>{ const n=normS(src.name); if(seen.has(n)) return; if(![src.kcal,src.prot,src.fat,src.carb].every(v=>v!=null&&!isNaN(v))) return; if(src.unit&&src.unit!=='g') return; seen.add(n); cands.push({src:src,mine:mine}); };
+    FAV.forEach(f=>add(f,true)); FOODS.forEach(f=>add(f,false));
+    const out=[];
+    cands.forEach(({src,mine})=>{
+      const base=src.serving>0?src.serving:100, kd=src.kcal; let best=null;
+      for(const mult of [1,2,3,0.5]){   // une portion habituelle ; on double / triple seulement si elle est très légère, on la réduit si elle dépasse
+        const g=base*mult, k=kd*g/100, p=src.prot*g/100, f=src.fat*g/100, c=src.carb*g/100;
+        if(k>(light?60:cap)||p>R.p+2||f>R.f+2||c>R.c+3) continue;
+        best={g:g,mult:mult,k:k,p:p,f:f,c:c}; if(k>=70||mult===0.5) break;
+      }
+      if(!best||best.k<8) return;
+      const cov=(x,r)=>r>2?Math.min(1,x/r):0.3;
+      let sc=0.4*cov(best.p,R.p)+0.2*cov(best.c,R.c)+0.2*cov(best.f,R.f)+0.2*cov(best.k,R.k);
+      sc+=Math.max(0,Math.min(1,(200-kd)/200))*0.15+(mine?0.05:0);
+      const h=hlGet(src.name); if(h){ sc+=({a:.1,b:.05,c:0,d:-.1,e:-.2}[h.ns]||0)-(h.nova===4?.1:0); }
+      if(best.p*4>=best.k*0.25) sc+=0.05;      // plutôt protéiné
+      out.push({src:src,mine:mine,h:h,v:best,sc:sc});
+    });
+    out.sort((a,b)=>b.sc-a.sc);
+    const cnt={}, res=[]; for(const x of out){ const w=wordsOf(x.src.name)[0]||''; cnt[w]=(cnt[w]||0)+1; if(cnt[w]>2) continue; res.push(x); if(res.length>=12) break; }
+    return res;
+  }
+  function renderIdeas(){
+    const T=dayTotals(), R={k:Math.max(0,S.kg-T.K),p:Math.max(0,S.pg-T.P),f:Math.max(0,S.fg-T.F),c:Math.max(0,S.cg-T.C)};
+    $('idSub').textContent='Ajout dans : '+(MEALS[ideaState.m]?MEALS[ideaState.m][0]:'')+(R.k<60?' · objectifs presque atteints : options très légères':' · idées légères adaptées à tes restes du jour');
+    $('idRem').innerHTML=[['k',r(R.k),'kcal'],['p',r(R.p),'g prot.'],['f',r(R.f),'g lip.'],['c',r(R.c),'g gluc.']].map(x=>'<span class="'+x[0]+'"><b>'+x[1]+'</b> '+x[2]+'</span>').join('')+'<small>restants aujourd’hui</small>';
+    const L=ideaState.list=buildIdeas(R);
+    $('idList').innerHTML=L.length?L.map((x,i)=>{ const s=x.src,v=x.v, lbl=s.serving>0?s.label:'portion de 100 g', n=r2(v.g/(s.serving>0?s.serving:100));
+      const chips=[]; if(R.p>2&&v.p>=2) chips.push('<span class="p">'+r(v.p/R.p*100)+' % des prot.</span>'); if(R.c>3&&v.c>=3) chips.push('<span class="c">'+r(v.c/R.c*100)+' % des gluc.</span>'); if(R.f>2&&v.f>=1.5) chips.push('<span class="f">'+r(v.f/R.f*100)+' % des lip.</span>');
+      const hb=x.h?((x.h.ns?'<i class="hl-b" style="--c:'+NSC[x.h.ns]+'">'+x.h.ns.toUpperCase()+'</i>':'')+(x.h.nova?'<i class="hl-n" style="--c:'+NVC[x.h.nova]+'">'+x.h.nova+'</i>':'')):'';
+      return '<button class="sr-it id-it" onclick="BBXMeal.ideaPick('+i+')"><span class="sr-th">'+esc(s.emoji||'🍽️')+'</span><span class="sr-nm"><b>'+esc(s.name)+hb+'</b><span>'+n+' '+esc(lbl)+' · '+r(v.g)+' g</span><span class="id-n"><i class="vv">'+r(v.k)+'</i> kcal · P <i class="vv">'+r1(v.p)+'</i> · L <i class="vv">'+r1(v.f)+'</i> · G <i class="vv">'+r1(v.c)+'</i></span>'+(chips.length?'<span class="id-c">'+chips.join('')+'</span>':'')+'</span><span class="sr-go">＋</span></button>'; }).join(''):'<div class="mc-empty" style="padding:18px 4px">Aucune idée légère ne rentre dans ce qu’il te reste aujourd’hui.</div>';
+  }
+  function openIdeas(m){ ideaState.m=m; renderIdeas(); $('mealIdeas').scrollTop=0; $('mealIdeas').classList.add('show'); }
+  function ideaPick(i){
+    const x=ideaState.list[i]; if(!x) return; const s=x.src;
+    $('mealIdeas').classList.remove('show'); sr.fromForm=false;
+    const P=(s.portions&&s.portions.length)?s.portions:(s.serving>0?[{label:s.label||'portion',g:s.serving}]:[]);
+    openForm('add',ideaState.m,null,{h:x.h,name:s.name,kcal:s.kcal,prot:s.prot,fat:s.fat,carb:s.carb,serving:s.serving,label:s.label,portions:P,unit:'g',emoji:s.emoji,info:'Idée adaptée à tes restes du jour. Indique la quantité puis valide.'});
+    if(x.v.g>0&&!memQty(s.name,'g')){ $('mfQty').value=r1(x.v.g); fm.lastAuto=r1(x.v.g); fmPrev(); }
+  }
   // ---------- impact santé : Nutri-Score + NOVA (données Open Food Facts) ----------
   const NSC={a:'#038141',b:'#85BB2F',c:'#FECB02',d:'#EE8100',e:'#E63E11'}, NVC={1:'#038141',2:'#85BB2F',3:'#EE8100',4:'#E63E11'};
   const NVL={1:'Aliment brut ou peu transformé',2:'Ingrédient culinaire',3:'Aliment transformé',4:'Produit ultra-transformé'};
@@ -4917,6 +4991,7 @@ document.addEventListener('click', function(e){
     openCfg:()=>{ renderCfg(); $('mealCfg').classList.add('show'); }, closeCfg:()=>$('mealCfg').classList.remove('show'),
     add:m=>openForm('add',m), edit:(m,i)=>openForm('edit',m,i), del:delItem, move:moveItem, resetDef:resetDef,
     saveForm:saveForm, closeForm:()=>$('mealForm').classList.remove('show'),
+    ideas:openIdeas, closeIdeas:()=>$('mealIdeas').classList.remove('show'), ideaPick:ideaPick,
     ocr:()=>$('mealPick').classList.add('show'), closePick:()=>$('mealPick').classList.remove('show'), pickCam:()=>{ $('mealPick').classList.remove('show'); $('mfOcrFile').click(); }, pickGal:()=>{ $('mealPick').classList.remove('show'); $('mfOcrGal').click(); },
     scanTable:()=>{ const t=sc.target; stopCam(); closeScan(); openForm('add',t,null,{info:'Prends en photo le tableau nutritionnel du produit, ou choisis une image dans ta galerie.'}); $('mealPick').classList.add('show'); }, scan:scanOpen, closeScan:closeScan, manual:manual, scanMode:setScanMode, photoMode:photoMode,
     addWeigh:()=>openWeigh('add'), goalWeigh:openPlan, closePlan:()=>$('mealPlan').classList.remove('show'), savePlan:savePlan, plRender:renderPlan, plProg:plProg,

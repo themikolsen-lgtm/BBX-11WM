@@ -2020,6 +2020,41 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #mealView .my-hint{ margin-top:12px !important; }
 #mealView #mealPast{ padding-top:12px; }
 </style>
+<style>
+/* ===== Boutons « + » / Scan et cases à cocher agrandis (usage smartphone) ===== */
+#mealView .my-hb{ gap:6px; }
+#mealView .my-hbtn{ width:50px; height:40px; border-radius:20px; }
+#mealView .my-hbtn svg{ width:23px; height:23px; }
+#mealView .my-hbtn.plus svg{ width:25px; height:25px; }
+#mealView .my-card .my-mh{ gap:5px !important; padding:12px 8px !important; }
+#mealView .my-card .my-mi{ width:36px !important; height:36px !important; font-size:18px !important; }
+#mealView .my-card .my-mh > .my-mt > b{ font-size:14.5px !important; }
+#mealView .my-card .my-mk b{ font-size:19px !important; }
+#mealView .my-card .my-mh > .my-ck.all span{ width:30px !important; height:30px !important; border-width:2.2px; }
+#mealView .my-card .my-row .my-ck span{ width:28px !important; height:28px !important; font-size:15px !important; border-width:2px; }
+#mealView .my-card .my-it:not(:last-child)::after{ right:50px; }
+/* zone de toucher élargie sans changer la mise en page */
+#mealView .my-ck{ padding:8px; margin:-8px; }
+#mealView .my-hbtn{ position:relative; }
+#mealView .my-hbtn::after{ content:""; position:absolute; inset:-4px; }
+</style>
+<style>
+/* petits écrans : le bandeau du repas s'adapte sans tronquer le titre */
+@media (max-width:389px){
+  #mealView .my-card .my-mh{ padding:12px 6px !important; gap:4px !important; }
+  #mealView .my-card .my-mi{ width:32px !important; height:32px !important; font-size:16px !important; }
+  #mealView .my-card .my-mh > .my-mt > b{ font-size:13.5px !important; }
+  #mealView .my-card .my-mh > .my-mt > span{ font-size:9px !important; }
+  #mealView .my-card .my-mk b{ font-size:17px !important; }
+  #mealView .my-card .my-mk small{ font-size:8.5px !important; }
+  #mealView .my-hb{ gap:5px; }
+}
+@media (max-width:374px){
+  #mealView .my-hbtn{ width:46px; height:38px; border-radius:19px; }
+  #mealView .my-card .my-mh > .my-ck.all span{ width:28px !important; height:28px !important; }
+  #mealView .my-card .my-mh > .my-mt > b{ font-size:13px !important; }
+}
+</style>
 </head>
 <body>
 

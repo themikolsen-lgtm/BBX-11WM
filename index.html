@@ -2173,7 +2173,7 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 #mealView .my-dsum .sx-h b{ font-size:16px; position:relative; top:-2px; }
 #mealView .my-dsum .sx-c > .sx-bar{ height:9px; margin:6px 0 6px; background:#fff; }
 #mealView .my-dsum .sx-l{ font-size:10.5px; font-weight:800; font-style:italic; letter-spacing:-.01em; }
-#mealView .my-dsum .sx-c .sm-in{ border-bottom-color:transparent !important; width:auto; min-width:0; }
+#mealView .my-dsum .sx-c .sm-in{ border-bottom-color:transparent !important; }
 #mealView .my-dsum .sx-c{ border-left:1.5px solid #E7D8BF; }
 @media (max-width:405px){ #mealView .my-dsum .sx-h .sx-t{ font-size:11px; } #mealView .my-dsum .sx-h b{ font-size:14.5px; } #mealView .my-dsum .sx-l{ font-size:9.3px; } }
 </style>
@@ -2240,6 +2240,10 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .mh-f span{ font-size:11.5px; font-weight:800; padding:5px 10px; border-radius:99px; }
 .mh-f .good{ background:#E8F6E0; color:#14531A; } .mh-f .bad{ background:#FDE5E2; color:#8E1B10; }
 .mh-src{ margin-top:10px; font-size:10.5px; font-weight:600; color:#9AA1AD; }
+</style>
+<style>
+.hl-b{ display:inline-grid; place-items:center; width:17px; height:17px; margin-left:6px; vertical-align:2px; border-radius:5px; background:var(--c); color:#fff; font-style:normal; font-weight:900; font-size:10.5px; line-height:1; }
+.hl-b[style*="FECB02"]{ color:#5A4500; }
 </style>
 </head>
 <body>
@@ -3813,7 +3817,7 @@ document.addEventListener('click', function(e){
     box.innerHTML=html; box.hidden=false;
   }
   function openForm(mode,m,i,pref){
-    pref=pref||{}; renderHealth(mode==='edit'?null:pref.h);
+    pref=pref||{}; fm.h=mode==='edit'?null:pref.h; renderHealth(mode==='edit'?hlGet(MEALS[m][2][i][0]):(pref.h||hlGet(pref.name||'')));
     $('mfChips').innerHTML=MEALS.map(([t,ic],x)=>`<button type="button" class="mf-chip" style="--mc:${mcol(t)[0]};--mt:${mcol(t)[1]}" onclick="BBXMeal.setMeal(${x})">${esc(ic)} ${esc(t)}</button>`).join('');
     fm.mode=mode; fm.serving=pref.serving||0;
     $('mfInfo').className='mf-info';
@@ -3853,6 +3857,7 @@ document.addEventListener('click', function(e){
     const label=edit?fm.label:(fm.serving>0?(fm.newLabel||'portion'):'portion de 100 '+unit);
     const it=[nm,label,unitW,q/unitW,k*q/100,p*q/100,unit,emoji,isNaN(fa)?null:fa*q/100,isNaN(ca)?null:ca*q/100];
     upsertFav(it,fm.portions); bumpHabit(MEALS[mt][0],nm,q);
+    if(fm.h&&(fm.h.ns||fm.h.nova)){ HL[hlKey(nm)]=Object.assign({t:Date.now()},fm.h); saveHL(); }
     if(edit){
       const wasDone=!!S.d[key(fm.m,fm.i)]; dropState(fm.m,fm.i);
       if(mt===fm.m){ MEALS[mt][2][fm.i]=it; } else { MEALS[fm.m][2].splice(fm.i,1); MEALS[mt][2].push(it); }
@@ -4119,6 +4124,44 @@ document.addEventListener('click', function(e){
     finally{ clearTimeout(to); }
   }
   const errText=e=>e&&e.http?'erreur '+e.http:(e&&e.name==='AbortError'?'délai dépassé':(e&&e.message)||'inaccessible');
+  // ---------- évaluation santé mémorisée pour mes produits (bb9-health) + mise à jour automatique ----------
+  const HLKEY='bb9-health'; let HL={}; try{ HL=JSON.parse(localStorage.getItem(HLKEY)||'{}')||{}; }catch(e){ HL={}; }
+  const saveHL=()=>{ try{ localStorage.setItem(HLKEY,JSON.stringify(HL)); }catch(e){} };
+  const hlKey=n=>normS(String(n).replace(/\s*\(\d+\)\s*$/,''));
+  const hlGet=n=>{ const h=HL[hlKey(n)]; return h&&!h.miss&&(h.ns||h.nova)?h:null; };
+  function decorateHealth(){
+    document.querySelectorAll('#mlMeals .my-row').forEach(row=>{
+      const it=MEALS[+row.dataset.m]&&MEALS[+row.dataset.m][2][+row.dataset.i]; if(!it) return;
+      const b=row.querySelector('.my-nm b'); if(!b||b.querySelector('.hl-b')) return; const h=hlGet(it[0]); if(!h||!h.ns) return;
+      const e=document.createElement('i'); e.className='hl-b'; e.style.setProperty('--c',NSC[h.ns]); e.textContent=h.ns.toUpperCase(); e.title='Nutri-Score '+h.ns.toUpperCase()+(h.nova?' · NOVA '+h.nova:''); b.appendChild(e);
+    });
+  }
+  new MutationObserver(decorateHealth).observe($('mlMeals'),{childList:true});
+  let enriching=false;
+  async function enrichHealth(manual){
+    if(enriching||!navigator.onLine) return; enriching=true; let added=0;
+    try{
+      const seen={}, todo=[]; const now=Date.now();
+      MEALS.forEach(mm=>mm[2].forEach(it=>{ const k=hlKey(it[0]); if(seen[k]) return; seen[k]=1; const h=HL[k]; if(h&&(!h.miss||now-(h.t||0)<7*864e5)) return; todo.push(it); }));
+      for(const it of todo.slice(0,10)){
+        const k=hlKey(it[0]); let found=null;
+        try{
+          const q=String(it[0]).replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim(), br=(/\(([^)]*)\)/.exec(it[0])||[])[1]||'';
+          const qw=wordsOf(q).filter(w=>!STOP[w]&&w.length>1), kc=per100(it).k; let best=-1;
+          for(const c of await fetchOFF((q+' '+br).trim())){
+            if(!c.h||!(c.h.ns||c.h.nova)||c.kcal==null||!(kc>0)) continue;
+            if(Math.abs(c.kcal-kc)>Math.max(18,kc*0.12)) continue;
+            const cw=wordsOf(c._nm||c.name), sc=qw.filter(w=>cw.includes(w)).length/(qw.length||1);
+            if(sc>=0.6&&sc>best){ best=sc; found=c.h; }
+          }
+        }catch(e){ continue; }
+        if(found){ HL[k]=Object.assign({t:Date.now()},found); added++; } else HL[k]={miss:1,t:Date.now()};
+        saveHL(); await new Promise(r=>setTimeout(r,450));
+      }
+    }finally{ enriching=false; }
+    if(added){ decorateHealth(); showToast('Évaluation santé ajoutée à '+added+' produit'+(added>1?'s':''),null); }
+  }
+  setTimeout(enrichHealth,4000);
   function offHealth(pr,n){
     let ns=String(pr.nutriscore_grade||'').toLowerCase(); if(!/^[a-e]$/.test(ns)) ns=null;
     let nv=+pr.nova_group; if(!(nv>=1&&nv<=4)) nv=null;
@@ -4171,7 +4214,7 @@ document.addEventListener('click', function(e){
     const x=sr.list[i]; if(!x) return; sr.fromForm=false;
     const src=x.fav?'Dans tes produits.':(x.db?'Valeurs moyennes pour 100 '+(x.unit||'g')+'.':'Produit Open Food Facts.');
     const w=(x.serving>0&&x.label&&!/^portion de /.test(x.label))?' Poids moyen : 1 '+x.label+' ≈ '+r(x.serving)+' '+(x.unit||'g')+' (modifiable).':'';
-    openForm('add',sr.target,null,{h:x.h,name:x.name,kcal:x.kcal,prot:x.prot,fat:x.fat,carb:x.carb,serving:x.serving,label:x.label,portions:x.portions,unit:x.unit,emoji:x.emoji,
+    openForm('add',sr.target,null,{h:x.h||hlGet(x.name),name:x.name,kcal:x.kcal,prot:x.prot,fat:x.fat,carb:x.carb,serving:x.serving,label:x.label,portions:x.portions,unit:x.unit,emoji:x.emoji,
       info:src+w+' Indique la quantité puis valide.'+(x.kcal==null?' Les calories ne sont pas renseignées : complète-les.':'')});
   }
   $('srQ').addEventListener('input',liveSearch);
@@ -4276,7 +4319,7 @@ document.addEventListener('click', function(e){
   // ---------- supprimer un produit en le balayant vers la droite (avec « Annuler ») ----------
   let lastSwipe=0, toastTimer=0, undoFn=null;
   function showToast(txt,fn){
-    clearTimeout(toastTimer); undoFn=fn; $('toastTxt').textContent=txt; $('mealToast').classList.add('show');
+    clearTimeout(toastTimer); undoFn=fn; $('toastUndo').style.display=fn?'':'none'; $('toastTxt').textContent=txt; $('mealToast').classList.add('show');
     toastTimer=setTimeout(()=>{ $('mealToast').classList.remove('show'); undoFn=null; },6000);
   }
   function swipeDelete(m,i){

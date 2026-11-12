@@ -4497,6 +4497,15 @@ window.BBXBk=(function(){
   if(!Array.isArray(FAV)){   // première fois : mes produits = ceux déjà présents dans mes repas
     FAV=[]; MEALS.forEach(([t,ic,items])=>items.forEach(it=>{ if(FAV.some(f=>f.name===it[0])) return; const q=per100(it); FAV.push({name:it[0],kcal:q.k,prot:q.p,fat:q.f,carb:q.c,serving:it[2]>0?it[2]:0,label:it[1],emoji:it[7],unit:it[6]}); })); saveFav();
   }
+  // Réparation (une seule fois) : une autre appli (Phylomene) partageait ces données et a retiré les produits d'exemple. On les remet à leur place, sans toucher à tes autres produits.
+  try{ if(!localStorage.getItem('bb9-restore-defs-1')){
+    let ch=false;
+    DEF_MEALS.forEach(dm=>{ const m=MEALS.find(x=>x[0]===dm[0]); if(!m) return; dm[2].forEach((it,idx)=>{ if(m[2].some(x=>x[0]===it[0])) return; m[2].splice(Math.min(idx,m[2].length),0,JSON.parse(JSON.stringify(it))); ch=true; }); });
+    if(ch){ localStorage.setItem('bb9-mealdef',JSON.stringify(MEALS)); }
+    DEF_MEALS.forEach(dm=>dm[2].forEach(it=>{ if(FAV.some(f=>f.name===it[0])) return; const q=per100(it); FAV.push({name:it[0],kcal:q.k,prot:q.p,fat:q.f,carb:q.c,serving:it[2]>0?it[2]:0,label:it[1],emoji:it[7],unit:it[6]}); ch=true; }));
+    if(ch) saveFav();
+    localStorage.setItem('bb9-restore-defs-1','1');
+  } }catch(e){}
   function upsertFav(it,portions){
     const q=per100(it), f={name:it[0],kcal:q.k,prot:q.p,fat:q.f,carb:q.c,serving:it[2]>0?it[2]:0,label:it[1],emoji:it[7],unit:it[6],portions:portions||[]};
     FAV=FAV.filter(x=>normS(x.name)!==normS(f.name)); FAV.unshift(f); if(FAV.length>500) FAV.length=500; saveFav();

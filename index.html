@@ -2160,6 +2160,23 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .m-delpill.show{ transform:translate(-50%,0) scale(1); opacity:1; pointer-events:auto; }
 .m-delpill.hot{ background:#B80F28; transform:translate(-50%,0) scale(1.07); }
 </style>
+<style>
+/* ===== Progression repas : fidélité à la maquette (chevrons pleins, barres épaisses, objectifs sans soulignement) ===== */
+#mealView .my-dsum{ box-shadow:0 10px 24px -16px rgba(30,40,70,.30); }
+#mealView .my-fixed .my-dsum .my-day{ height:58px !important; padding:0 14px !important; }
+#mealView .my-dsum .my-dn{ width:42px !important; height:42px !important; }
+#mealView .my-dsum .my-dn svg{ width:25px !important; height:25px !important; stroke-width:3.8 !important; }
+#mealView .my-dsum .my-dn:disabled{ opacity:1 !important; }
+#mealView .my-dsum .my-dt b{ font-size:21px !important; font-weight:800 !important; }
+#mealView .my-dsum .sx-h{ align-items:baseline; }
+#mealView .my-dsum .sx-h .sx-t{ font-size:12.5px; font-weight:800; }
+#mealView .my-dsum .sx-h b{ font-size:16px; position:relative; top:-2px; }
+#mealView .my-dsum .sx-c > .sx-bar{ height:9px; margin:6px 0 6px; background:#fff; }
+#mealView .my-dsum .sx-l{ font-size:10.5px; font-weight:800; font-style:italic; letter-spacing:-.01em; }
+#mealView .my-dsum .sx-c .sm-in{ border-bottom-color:transparent !important; width:auto; min-width:0; }
+#mealView .my-dsum .sx-c{ border-left:1.5px solid #E7D8BF; }
+@media (max-width:405px){ #mealView .my-dsum .sx-h .sx-t{ font-size:11px; } #mealView .my-dsum .sx-h b{ font-size:14.5px; } #mealView .my-dsum .sx-l{ font-size:9.3px; } }
+</style>
 </head>
 <body>
 
@@ -3622,15 +3639,15 @@ document.addEventListener('click', function(e){
   }
   // ---- navigation Sport | Meal ----
   function setView(v){
-    const meal=v==='meal';
+    const meal=v==='meal', wasShown=$('mealView').classList.contains('show');
     $('mealView').classList.toggle('show',meal);
-    if(meal && !mealFocused){ mealFocused=true; setTimeout(focusMeal,60); setTimeout(()=>{ if(document.getElementById('mealView').scrollTop<1+0) focusMeal(); },500); }
+    if(meal && (!wasShown || !mealFocused)){ mealFocused=true; setTimeout(focusMeal,30); }
     $('navSport').classList.toggle('on',!meal); $('navMeal').classList.toggle('on',meal);
     $('navSport').setAttribute('aria-selected',String(!meal)); $('navMeal').setAttribute('aria-selected',String(meal));
     try{ localStorage.setItem('bb9-view',v); }catch(e){}
   }
   // ---------- repas courant : affiché juste sous « Progression » à l'ouverture ----------
-  let mealFocused=false, hiddenAt=0;
+  let mealFocused=false, hiddenAt=0, focusT=0, focusUser=false;
   function curMealIdx(){
     const h=new Date().getHours(), key=h>=18?'din':h>=15?'snk':h>=11?'dej':'pdj';
     const re={pdj:/petit/i,dej:/^d[ée]jeuner/i,snk:/snack|collation|go[uû]ter/i,din:/d[iî]ner|souper/i}[key];
@@ -3642,8 +3659,11 @@ document.addEventListener('click', function(e){
     const mvv=document.getElementById('mealView'), fxx=mvv&&mvv.querySelector('.my-fixed'); if(!mvv||!fxx||!mvv.classList.contains('show')) return;
     const card=mvv.querySelector('.my-card[data-m="'+curMealIdx()+'"]'); if(!card) return;
     const go=()=>{ const t=mvv.scrollTop+card.getBoundingClientRect().top-fxx.getBoundingClientRect().bottom-10; mvv.scrollTop=Math.max(0,t); };
-    mvv.style.scrollBehavior='auto';
-    go(); requestAnimationFrame(()=>{ go(); requestAnimationFrame(go); });
+    mvv.style.scrollBehavior='auto'; clearTimeout(focusT); focusUser=false;
+    const stop=()=>{ focusUser=true; };
+    mvv.addEventListener('touchstart',stop,{once:true,passive:true}); mvv.addEventListener('wheel',stop,{once:true,passive:true}); mvv.addEventListener('mousedown',stop,{once:true});
+    // la mise en page bouge au chargement (polices, images) : on recale plusieurs fois tant que l'utilisateur n'a pas touché l'écran
+    [0,120,350,800,1500,2500].forEach(ms=>setTimeout(()=>{ if(!focusUser) go(); },ms));
   }
   // à partir de 17 h, chaque jour : la page Sport s'affiche en premier (avant 17 h : Meal)
   function autoView(){
@@ -4631,7 +4651,7 @@ document.addEventListener('click', function(e){
   migrateMac(); build(); calc(); autoView();
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){ hiddenAt=Date.now(); releaseCam(); return; }
-    if(hiddenAt && Date.now()-hiddenAt>600000 && viewOff===0){ setTimeout(focusMeal,80); }
+    if(hiddenAt && Date.now()-hiddenAt>120000 && viewOff===0){ setTimeout(focusMeal,80); }
     if(S.day!==today()){ S.d={}; S.day=today(); save(); build(); calc(); }
     autoView();
   });

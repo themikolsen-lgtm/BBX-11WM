@@ -2284,6 +2284,17 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 .ms-tab em{ font-style:normal; font-weight:800; font-size:12px; opacity:.92; }
 .ms-tab:active span{ transform:scale(.94); }
 </style>
+<style>
+/* titres de page : noir, gras */
+.mc-head b, #mealView .mc-head b{ color:#15171C !important; font-weight:900; }
+/* choix photo / galerie */
+.m-pick{ position:fixed; inset:0; z-index:9700; display:flex; align-items:flex-end; justify-content:center; background:rgba(15,18,25,.45); opacity:0; pointer-events:none; transition:opacity .18s; }
+.m-pick.show{ opacity:1; pointer-events:auto; }
+.m-pick-card{ width:100%; max-width:480px; background:#fff; border-radius:26px 26px 0 0; padding:18px 18px calc(26px + env(safe-area-inset-bottom,0px)); transform:translateY(30px); transition:transform .22s cubic-bezier(.2,.9,.3,1); box-shadow:0 -14px 40px -16px rgba(0,0,0,.4); }
+.m-pick.show .m-pick-card{ transform:none; }
+.m-pick-card > b{ display:block; text-align:center; font-size:16px; font-weight:900; color:#15171C; margin-bottom:14px; }
+.m-pick-row{ display:flex; justify-content:center; gap:34px; }
+</style>
 </head>
 <body>
 
@@ -3529,6 +3540,8 @@ document.addEventListener('click', function(e){
   <button class="my-addmeal" onclick="BBXMeal.addMeal()" aria-label="Ajouter un repas" title="Ajouter un repas"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
 </div>
 <button id="mealDelPill" class="m-delpill" type="button" aria-label="Supprimer le repas"><span>🗑</span><b id="mealDelTxt">Supprimer</b></button>
+<div id="mealPick" class="m-pick" onclick="if(event.target===this)BBXMeal.closePick()"><div class="m-pick-card"><b>Tableau nutritionnel</b><div class="m-pick-row"><button class="mc-big ib ibt red" onclick="BBXMeal.pickCam()" aria-label="Prendre une photo" title="Prendre une photo"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5h3l1.5-2.5h7L17 8.5h3V19H4z"/><circle cx="12" cy="13.3" r="3.4"/></svg></span><em>Prendre une photo</em></button><button class="mc-big ib ibt" onclick="BBXMeal.pickGal()" aria-label="Choisir dans la galerie" title="Choisir dans la galerie"><span class="ibc"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M4 17.5l5.2-5 3.8 3.5 2.6-2.4 4.4 4"/></svg></span><em>Galerie</em></button></div></div></div>
+<input type="file" id="mfOcrGal" accept="image/*" hidden>
 <div id="mealToast" class="m-toast" role="status"><span id="toastTxt"></span><button id="toastUndo" aria-label="Annuler" title="Annuler"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h9a6 6 0 0 1 0 12h-3"/></svg></button></div>
 <div id="mealPlan" class="mc-ov mc-sheet" style="z-index:9400" aria-label="Objectif de poids">
   <div class="mc-head"><b>🎯 Objectif</b><button class="mc-x" onclick="BBXMeal.closePlan()" aria-label="Fermer">✕</button></div>
@@ -3888,7 +3901,7 @@ document.addEventListener('click', function(e){
     }catch(e){ err('Lecture impossible ('+((e&&e.message)||'erreur')+'). Vérifie ta connexion internet ou saisis les valeurs à la main.'); }
     finally{ $('mfOcrBtn').classList.remove('busy'); }
   }
-  $('mfOcrFile').addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; e.target.value=''; if(f) ocrRun(f); });
+  ['mfOcrFile','mfOcrGal'].forEach(id=>$(id).addEventListener('change',e=>{ const f=e.target.files&&e.target.files[0]; e.target.value=''; if(f) ocrRun(f); }));
   // ---------- impact santé : Nutri-Score + NOVA (données Open Food Facts) ----------
   const NSC={a:'#038141',b:'#85BB2F',c:'#FECB02',d:'#EE8100',e:'#E63E11'}, NVC={1:'#038141',2:'#85BB2F',3:'#EE8100',4:'#E63E11'};
   const NVL={1:'Aliment brut ou peu transformé',2:'Ingrédient culinaire',3:'Aliment transformé',4:'Produit ultra-transformé'};
@@ -4895,7 +4908,8 @@ document.addEventListener('click', function(e){
     openCfg:()=>{ renderCfg(); $('mealCfg').classList.add('show'); }, closeCfg:()=>$('mealCfg').classList.remove('show'),
     add:m=>openForm('add',m), edit:(m,i)=>openForm('edit',m,i), del:delItem, move:moveItem, resetDef:resetDef,
     saveForm:saveForm, closeForm:()=>$('mealForm').classList.remove('show'),
-    ocr:()=>$('mfOcrFile').click(), scanTable:()=>{ const t=sc.target; stopCam(); closeScan(); openForm('add',t,null,{info:'Photographie le tableau nutritionnel du produit.'}); $('mfOcrFile').click(); }, scan:scanOpen, closeScan:closeScan, manual:manual, scanMode:setScanMode, photoMode:photoMode,
+    ocr:()=>$('mealPick').classList.add('show'), closePick:()=>$('mealPick').classList.remove('show'), pickCam:()=>{ $('mealPick').classList.remove('show'); $('mfOcrFile').click(); }, pickGal:()=>{ $('mealPick').classList.remove('show'); $('mfOcrGal').click(); },
+    scanTable:()=>{ const t=sc.target; stopCam(); closeScan(); openForm('add',t,null,{info:'Prends en photo le tableau nutritionnel du produit, ou choisis une image dans ta galerie.'}); $('mealPick').classList.add('show'); }, scan:scanOpen, closeScan:closeScan, manual:manual, scanMode:setScanMode, photoMode:photoMode,
     addWeigh:()=>openWeigh('add'), goalWeigh:openPlan, closePlan:()=>$('mealPlan').classList.remove('show'), savePlan:savePlan, plRender:renderPlan, plProg:plProg,
     plLevel:v=>{ pl.level=v; renderPlan(); }, plSex:v=>{ pl.sex=v; renderPlan(); }, plUnit:u=>{ const w=durWeeks(); pl.unit=u; $('plDur').value=String(Math.max(1,Math.round(u==='days'?w*7:u==='months'?w*12/52:w))); renderPlan(); },
     plTarget:d=>{ const v=num($('plTarget').value)||num($('plCur').value)||70; $('plTarget').value=fk(Math.max(20,Math.round((v+d)*10)/10)); renderPlan(); }, plDur:d=>{ const v=num($('plDur').value)||0; $('plDur').value=String(Math.max(1,Math.round(v+d))); renderPlan(); },

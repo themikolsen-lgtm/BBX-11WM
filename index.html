@@ -2113,6 +2113,31 @@ body:has(#mealView.show) .nav-pill button.on{ background:#7DD957; color:#fff; bo
 /* couleurs du Suivi */
 .sm-prot .sm-bar i{ background:#55DDE4 !important; } .sm-lip .sm-bar i{ background:#FFB84D !important; } .sm-car .sm-bar i{ background:#FF5C60 !important; }
 </style>
+<style>
+/* type + chiffre sur la même ligne */
+#mealView .my-fixed .sum-full{ grid-template-columns:auto auto auto auto; justify-content:space-between; padding:12px 4px; }
+#mealView .my-fixed .sum-full.two{ grid-template-columns:auto auto; }
+#mealView .sx-c{ padding:0 7px; }
+#mealView .sx-c:first-child{ padding-left:10px; }
+#mealView .sx-c:last-child{ padding-right:10px; }
+#mealView .sx-h{ display:flex; align-items:baseline; justify-content:space-between; gap:6px; white-space:nowrap; }
+#mealView .sx-h .sx-t{ font-size:12px; }
+#mealView .sx-c.k .sx-h .sx-t{ font-size:14px; }
+#mealView .sx-h b{ font-size:16px; font-weight:800; font-style:italic; letter-spacing:-.02em; line-height:1; }
+#mealView .sx-c.k .sx-h b{ color:#7DD957; } #mealView .sx-c.p .sx-h b{ color:#35CBD8; }
+#mealView .sx-c.f .sx-h b{ color:#F5A524; } #mealView .sx-c.c .sx-h b{ color:#E3213B; }
+#mealView .sx-c.over .sx-h b{ color:#E3213B; }
+#mealView .sx-c > .sx-bar{ display:block; width:100%; margin:5px 0 4px; }
+@media (max-width:405px){
+  #mealView .sx-c{ padding:0 5px; } #mealView .sx-c:first-child{ padding-left:8px; } #mealView .sx-c:last-child{ padding-right:8px; }
+  #mealView .sx-h{ gap:4px; } #mealView .sx-h .sx-t{ font-size:10.5px; } #mealView .sx-c.k .sx-h .sx-t{ font-size:12.5px; }
+  #mealView .sx-h b{ font-size:14px; } #mealView .sx-l{ font-size:9px; } #mealView .sx-c .sm-in{ width:22px; }
+}
+</style>
+<style>
+#mealView .sx-c.k .sm-in{ width:31px; }
+#mealView .sx-c .sm-in{ font-size:inherit; }
+</style>
 </head>
 <body>
 
@@ -3339,10 +3364,10 @@ document.addEventListener('click', function(e){
   </div>
   <div class="my-sum">
     <div class="sum-full">
-    <div class="sx-c k"><div class="sx-t">kcal</div><div class="sx-r"><div class="sx-bar"><i id="barK"></i></div><b id="myRem">0</b><small id="myRemLab" hidden>Restants</small></div><div class="sx-l"><span id="myEat">0</span> / <input class="sm-in" id="mlKg" type="number" inputmode="numeric" min="0" aria-label="Objectif calories"> kcal</div></div>
-    <div class="sx-c p"><div class="sx-t">Protéines</div><div class="sx-r"><div class="sx-bar"><i id="barP"></i></div><b id="myPrem">0</b><small id="myPremLab" hidden>Restants</small></div><div class="sx-l"><span id="myPt">0</span> / <input class="sm-in" id="mlPg" type="number" inputmode="numeric" min="0" aria-label="Objectif protéines">g</div></div>
-    <div class="sx-c f"><div class="sx-t">Lipides</div><div class="sx-r"><div class="sx-bar"><i id="barF"></i></div><b id="myFrem">0</b><small id="myFremLab" hidden>Restants</small></div><div class="sx-l"><span id="myFt">0</span> / <input class="sm-in" id="mlFg" type="number" inputmode="numeric" min="0" aria-label="Objectif lipides">g</div></div>
-    <div class="sx-c c"><div class="sx-t">Glucides</div><div class="sx-r"><div class="sx-bar"><i id="barC"></i></div><b id="myCrem">0</b><small id="myCremLab" hidden>Restants</small></div><div class="sx-l"><span id="myCt">0</span> / <input class="sm-in" id="mlCg" type="number" inputmode="numeric" min="0" aria-label="Objectif glucides">g</div></div>
+    <div class="sx-c k"><div class="sx-h"><span class="sx-t">kcal</span><b id="myRem">0</b><small id="myRemLab" hidden>Restants</small></div><div class="sx-bar"><i id="barK"></i></div><div class="sx-l"><span id="myEat">0</span> / <input class="sm-in" id="mlKg" type="number" inputmode="numeric" min="0" aria-label="Objectif calories"> kcal</div></div>
+    <div class="sx-c p"><div class="sx-h"><span class="sx-t">Protéines</span><b id="myPrem">0</b><small id="myPremLab" hidden>Restants</small></div><div class="sx-bar"><i id="barP"></i></div><div class="sx-l"><span id="myPt">0</span> / <input class="sm-in" id="mlPg" type="number" inputmode="numeric" min="0" aria-label="Objectif protéines">g</div></div>
+    <div class="sx-c f"><div class="sx-h"><span class="sx-t">Lipides</span><b id="myFrem">0</b><small id="myFremLab" hidden>Restants</small></div><div class="sx-bar"><i id="barF"></i></div><div class="sx-l"><span id="myFt">0</span> / <input class="sm-in" id="mlFg" type="number" inputmode="numeric" min="0" aria-label="Objectif lipides">g</div></div>
+    <div class="sx-c c"><div class="sx-h"><span class="sx-t">Glucides</span><b id="myCrem">0</b><small id="myCremLab" hidden>Restants</small></div><div class="sx-bar"><i id="barC"></i></div><div class="sx-l"><span id="myCt">0</span> / <input class="sm-in" id="mlCg" type="number" inputmode="numeric" min="0" aria-label="Objectif glucides">g</div></div>
     <div class="mc-note" id="myMacNote"></div>
     <div class="my-plan" id="myPlan"></div>
     </div>
@@ -4496,7 +4521,7 @@ document.addEventListener('click', function(e){
     const H=HIST[dayKeyOff(viewOff)];
     if(!H){ $('pastSum').hidden=true; $('pastSum').innerHTML=''; sumMeasure(); box.innerHTML='<div class="mp-empty">Rien n’est enregistré pour ce jour.<small>Un jour est enregistré dès que tu coches ce que tu as mangé.</small></div>'; return; }
     const gk=H.kg||S.kg, gp=H.pg||S.pg, rk=gk-H.k, rp=gp-H.p;
-    const colH=(cls,t,eaten,goal,unit,rem,f)=>`<div class="sx-c ${cls}${rem<0?' over':''}"><div class="sx-t">${t}</div><div class="sx-r"><div class="sx-bar"><i style="width:${Math.max(0,Math.min(1,f||0))*100}%"></i></div><b>${Math.abs(Math.round(rem*10)/10)}</b></div><div class="sx-l">${eaten} / ${goal}${unit}</div></div>`;
+    const colH=(cls,t,eaten,goal,unit,rem,f)=>`<div class="sx-c ${cls}${rem<0?' over':''}"><div class="sx-h"><span class="sx-t">${t}</span><b>${Math.abs(Math.round(rem*10)/10)}</b></div><div class="sx-bar"><i style="width:${Math.max(0,Math.min(1,f||0))*100}%"></i></div><div class="sx-l">${eaten} / ${goal}${unit}</div></div>`;
     const cols=colH('k','kcal',H.k,gk,' kcal',rk,H.k/gk)+colH('p','Protéines',H.p,gp,'g',rp,H.p/gp)+(H.f!=null?colH('f','Lipides',H.f,H.fg||S.fg,'g',(H.fg||S.fg)-H.f,H.f/(H.fg||S.fg))+colH('c','Glucides',H.c,H.cg||S.cg,'g',(H.cg||S.cg)-H.c,H.c/(H.cg||S.cg)):'');
     const mini=(cls,t,v,g)=>`<div class="mc-mini ${cls}${v>g?' over':''}"><div class="mm-h"><span>${t}</span><div class="mm-r"><small>${v<=g?'Restants':'Dépassé'}</small><b>${Math.abs(Math.round((g-v)*10)/10)}</b></div></div><div class="mm-l">${v} / ${g} g</div><div class="mc-bar"><i style="width:${Math.max(0,Math.min(1,g>0?v/g:0))*100}%"></i></div></div>`;
     const bar=(cls,txt,rem,lab,f)=>`<div class="mc-row ${cls}${rem<0?' over':''}"><div class="mc-l">${txt}</div><div class="mc-r"><small>${rem>=0?'Restants':'Dépassé'}</small><b>${Math.abs(Math.round(rem*10)/10)}</b></div><div class="mc-bar"><i style="width:${Math.max(0,Math.min(1,f))*100}%"></i></div></div>`;

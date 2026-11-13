@@ -2938,6 +2938,7 @@ body:has(#mealView.show) .nav-pill button{background:#F1F2F4!important}
 <style id="navSolo3">
 body .nav-pill button, body:has(#mealView.show) .nav-pill button{width:50px!important;height:96px!important;border-radius:25px!important}
 </style>
+<style id="navMode">body.nav-slide .nav-pill{display:none!important}</style>
 </head>
 <body>
 
@@ -2973,6 +2974,7 @@ body .nav-pill button, body:has(#mealView.show) .nav-pill button{width:50px!impo
     <div class="prog-card">
       <div class="prog-head"><span>Progression</span><button class="prog-x" onclick="closeProg()" aria-label="Fermer">✕</button></div>
       <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Bêta</button></div></div>
+      <div class="prog-mode"><b>Navigation Workout / Meal</b><div class="pm-seg" id="navModeSeg"><button type="button" data-n="btn" onclick="setNavMode('btn')">Bouton</button><button type="button" data-n="slide" onclick="setNavMode('slide')">Slide</button></div></div>
       <div class="prog-sec first"><span>Mes exercices</span><span class="wt-saved" id="wtSaved">✓ Enregistré</span></div>
       <div class="prog-sub" style="margin-top:0">Pour chaque exo : jours, poids et récupération</div>
       <div class="rc-all">
@@ -6112,8 +6114,13 @@ window.BBXBk=(function(){
 <script id="swipeNav">
 (function(){
   let x0=0,y0=0,t0=0,ok=false;
+  const slideOn=()=>document.body.classList.contains('nav-slide');
+  window.setNavMode=function(m){ m=(m==='slide')?'slide':'btn'; try{ localStorage.setItem('bb9-navmode',m); }catch(e){} document.body.classList.toggle('nav-slide',m==='slide'); document.querySelectorAll('#navModeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.n===m)); };
+  let sv='btn'; try{ sv=localStorage.getItem('bb9-navmode')==='slide'?'slide':'btn'; }catch(e){}
+  setNavMode(sv);
   const inMeal=()=>!!document.querySelector('#mealView.show');
   function blocked(t){
+    if(!slideOn()) return true;
     if(!t||!t.closest) return true;
     if(t.closest('input,textarea,select,video,canvas,[contenteditable],.pm-seg,.ms,#scanOverlay')) return true;
     for(let e=t;e&&e!==document.body;e=e.parentElement){

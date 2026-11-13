@@ -2630,6 +2630,29 @@ body:has(.mc-ov.show) #mealFab, body:has(.mc-scan.show) #mealFab, body:has(#meal
 #mealForm .mf-btns{padding-top:6px;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
 #mealForm .mf-btns .mc-big.ib{width:52px !important;height:52px !important} #mealForm #mfOk{height:52px !important}
 </style>
+<style id="tabMode">
+.prog-mode{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 12px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.06)}
+.prog-mode b{font-size:14px;font-weight:800;color:#fff}
+.pm-seg{display:flex;gap:4px;padding:3px;border-radius:99px;background:rgba(255,255,255,.08)}
+.pm-seg button{border:0;border-radius:99px;padding:7px 16px;background:transparent;color:#B0B0B5;font:800 13px inherit;font-family:inherit;cursor:pointer}
+.pm-seg button.on{background:#FF1F3D;color:#fff}
+#tabBarHost{display:none}
+body.tabmode #tabBarHost{display:block;position:fixed;left:0;right:0;bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:44;padding:0 14px;pointer-events:none}
+body.tabmode .tab-bar{pointer-events:auto;filter:drop-shadow(0 18px 24px rgba(0,0,0,.65))}
+body.tabmode .tab-bar .ex-row{margin:0 !important;height:118px !important}
+body.tabmode .tab-bar .ex-photo{display:none !important}
+body.tabmode .tab-bar .ex-info{padding-left:16px !important}
+body.tabmode #inlineDetail{padding-bottom:240px}
+.tb-row{display:flex;align-items:center;gap:14px;height:76px;margin-bottom:10px;border-radius:22px;overflow:hidden;background:#0E0E10;border:1.5px solid rgba(255,255,255,.07);cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .1s}
+.tb-row:active{transform:scale(.985)}
+.tb-ph{flex:none;width:104px;height:100%;background-size:cover;background-position:center;background-color:#E9E9EC}
+.tb-nm{flex:1;min-width:0;font-weight:900;font-size:17px;color:#fff;line-height:1.2;letter-spacing:.01em}
+.tb-dot{flex:none;width:22px;height:22px;margin-right:16px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+.tb-row.sel{border-color:#FF1F3D;box-shadow:0 0 0 1px #FF1F3D,0 12px 26px -14px rgba(255,31,61,.7)}
+.tb-row.sel .tb-dot{border-color:#FF1F3D;background:radial-gradient(circle,#FF1F3D 0 5px,transparent 6px)}
+.tb-row.done{opacity:.5;filter:grayscale(1)}
+.tb-row.done .tb-dot{background:#fff;border-color:#fff}
+</style>
 </head>
 <body>
 
@@ -2656,6 +2679,7 @@ body:has(.mc-ov.show) #mealFab, body:has(.mc-scan.show) #mealFab, body:has(#meal
 
     <!-- INLINE DETAIL (shows the selected day right below) -->
     <div class="inline-detail" id="inlineDetail"></div>
+    <div id="tabBarHost"></div>
 
   </div>
 
@@ -2663,6 +2687,7 @@ body:has(.mc-ov.show) #mealFab, body:has(.mc-scan.show) #mealFab, body:has(#meal
   <div class="prog-overlay" id="progOverlay" onclick="if(event.target===this) closeProg()">
     <div class="prog-card">
       <div class="prog-head"><span>Progression</span><button class="prog-x" onclick="closeProg()" aria-label="Fermer">✕</button></div>
+      <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Tab</button></div></div>
       <div class="prog-sec first"><span>Mes exercices</span><span class="wt-saved" id="wtSaved">✓ Enregistré</span></div>
       <div class="prog-sub" style="margin-top:0">Pour chaque exo : jours, poids et récupération</div>
       <div class="rc-all">
@@ -3077,8 +3102,8 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     return `<button class="ex-go" onclick="startRest(this)" aria-label="Démarrer">${n+1 >= total ? 'Fin' : `<svg class="play" viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.9l10-6.5a1 1 0 0 0 0-1.8l-10-6.5A1 1 0 0 0 8 5.5z"/></svg>`}</button>`;
   }
   function refreshRow(id){
-    if(isAbdo(id)) return refreshAbdo(id);
-    keepScroll(()=>refreshRowInner(id));
+    if(isAbdo(id)){ const r = refreshAbdo(id); tabSync(); return r; }
+    keepScroll(()=>refreshRowInner(id)); tabSync();
   }
   function refreshRowInner(id){
     const ex = findEx(id), row = rowOf(id);
@@ -3276,9 +3301,29 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
   }
 
   // ---------- inline detail ----------
+  window.__tabMode = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab'; }catch(e){ return false; } })();
+  window.__tabSel = {};
   function showDetail(key){
     const d = DAYS.find(x=>x.key===key);
     let html = '';
+    const TAB = !!window.__tabMode; let rowHTMLRef = null;
+    document.body.classList.toggle('tabmode', TAB);
+    const tabIds = d.exercises.map(ex=>d.key+'|'+ex.name).concat(d.video ? [d.key+'|abdos'] : []);
+    let selId = window.__tabSel[d.key]; if(!tabIds.includes(selId)) selId = tabIds.find(id=>!isDone(id)) || tabIds[0] || null;
+    window.__tabSel[d.key] = selId;
+    const tabRow = ex => { const cid = d.key+'|'+ex.name, flip = ex.name.includes('Droite');
+      return `<div class="tb-row${isDone(cid)?' done':''}${cid===selId?' sel':''}" data-tid="${cid}" onclick="tabSelect(this.dataset.tid)"><div class="tb-ph" style="background-image:url('${ex.img}');${flip?'transform:scaleX(-1);':''}"></div><div class="tb-nm">${shortName(ex.name)}</div><span class="tb-dot"></span></div>`; };
+    const tabAbdoRow = aid => `<div class="tb-row${isDone(aid)?' done':''}${aid===selId?' sel':''}" data-tid="${aid}" onclick="tabSelect(this.dataset.tid)"><div class="tb-ph" style="background-image:url('${d.video.img}');"></div><div class="tb-nm">${d.video.title}</div><span class="tb-dot"></span></div>`;
+    const abdoHTML = () => { const aid = d.key + '|abdos'; return `<div class="ex-row abdo has-rest${isDone(aid)?' done':''}${restTimers[aid]?' resting':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).rest?' ab-rest':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).prep?' ab-prep':''}" data-id="${aid}">
+          <div class="ex-info">
+            <div class="ex-name">${d.video.title}</div>
+            <div class="ab-sub">${d.video.sub || ''}</div>
+            <div class="ex-dots">${abdoDotsHTML(aid)}</div>
+            <div class="ex-rest">${abdoStripHTML(aid)}</div>
+          </div>
+          <div class="ex-photo" style="background-image:url('${d.video.img}');" data-img="${d.video.img}" data-flip="false" onclick="openImageLightbox(this)"></div>
+          <div class="ex-action${restTimers[aid]&&!isDone(aid)?' split':''}">${abdoActionHTML(aid)}</div>
+        </div>`; };
     const hasList = d.exercises.length || d.video || d.abdoVideo || (d.videos && d.videos.length);
     if(hasList){
       if(!d.exercises.length && !(d.videos && d.videos.length)){
@@ -3300,6 +3345,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
         </div>`;
         return html;
       };
+      rowHTMLRef = rowHTML;
       if(d.exercises.length){
         const groups = [['mpc','MPC'],['dumb','Haltères'],['pdc','Poids du corps']];
         let first = true;
@@ -3309,7 +3355,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
           if(!first) html += `</div>`;
           html += `<div class="section-label ${g}" style="margin-top:${first ? 0 : 16}px;">${label}</div><div class="ex-list">`;
           first = false;
-          list.forEach(ex=>{ html += rowHTML(ex); });
+          list.forEach(ex=>{ html += TAB ? tabRow(ex) : rowHTML(ex); });
         });
       } else {
         html += `<div class="section-label vid" style="margin-top:14px;">Abdos &amp; vidéos</div><div class="ex-list">`;
@@ -3319,7 +3365,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
       }
       if(d.video){
         const aid = d.key + '|abdos';
-        html += `<div class="ex-row abdo has-rest${isDone(aid)?' done':''}${restTimers[aid]?' resting':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).rest?' ab-rest':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).prep?' ab-prep':''}" data-id="${aid}">
+        html += TAB ? tabAbdoRow(aid) : `<div class="ex-row abdo has-rest${isDone(aid)?' done':''}${restTimers[aid]?' resting':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).rest?' ab-rest':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).prep?' ab-prep':''}" data-id="${aid}">
           <div class="ex-info">
             <div class="ex-name">${d.video.title}</div>
             <div class="ab-sub">${d.video.sub || ''}</div>
@@ -3356,7 +3402,15 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
       html += `<div class="rest-note">${d.note || 'Repos complet.'}</div>`;
     }
     document.getElementById('inlineDetail').innerHTML = html;
+    { const host = document.getElementById('tabBarHost');
+      if(TAB && selId){ const sx = d.exercises.find(ex=>d.key+'|'+ex.name===selId); host.innerHTML = '<div class="tab-bar">' + (sx ? rowHTMLRef(sx) : abdoHTML()) + '</div>'; try{ Object.keys(overlays).forEach(id=>renderOverlay(id)); }catch(e){} }
+      else host.innerHTML = ''; }
   }
+  function tabSelect(id){ window.__tabSel[selectedKey] = id; keepScroll(()=>showDetail(selectedKey)); }
+  function tabSync(){ document.querySelectorAll('.tb-row').forEach(r=>r.classList.toggle('done', isDone(r.dataset.tid))); }
+  function setWMode(m){ window.__tabMode = (m==='tab'); try{ localStorage.setItem('bb9-wmode', m); }catch(e){} syncWMode(); showDetail(selectedKey); }
+  function syncWMode(){ document.querySelectorAll('.pm-seg button').forEach(b=>b.classList.toggle('on', (b.dataset.m==='tab')===!!window.__tabMode)); }
+  setTimeout(syncWMode,0);
 
   function openImageLightbox(el){
     const url = el.getAttribute('data-img');

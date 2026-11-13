@@ -2980,6 +2980,7 @@ body.tabmode .nav-pill, body.tabmode:has(#mealView.show) .nav-pill{bottom:calc(1
       <div class="prog-head"><span>Progression</span><button class="prog-x" onclick="closeProg()" aria-label="Fermer">✕</button></div>
       <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Bêta</button></div></div>
       <div class="prog-mode"><b>Navigation Workout / Meal</b><div class="pm-seg" id="navModeSeg"><button type="button" data-n="btn" onclick="setNavMode('btn')">Bouton</button><button type="button" data-n="slide" onclick="setNavMode('slide')">Slide</button></div></div>
+      <div class="prog-mode"><b>Après la pause : exo suivant</b><div class="pm-seg" id="autoNextSeg"><button type="button" data-a="on" onclick="setAutoNext('on')">Oui</button><button type="button" data-a="off" onclick="setAutoNext('off')">Non</button></div></div>
       <div class="prog-sec first"><span>Mes exercices</span><span class="wt-saved" id="wtSaved">✓ Enregistré</span></div>
       <div class="prog-sub" style="margin-top:0">Pour chaque exo : jours, poids et récupération</div>
       <div class="rc-all">
@@ -3444,7 +3445,10 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     if(!Object.keys(overlays).length && ovTick){ clearInterval(ovTick); ovTick = null; if(!restTick) releaseWake(); }
   }
   // Fin de la pause d'1 min (ou clic sur le chrono) : passer à l'exo suivant non terminé
+  window.setAutoNext=function(v){ v=(v==='off')?'off':'on'; window.__autoNext=(v==='on'); try{ localStorage.setItem('bb9-autonext',v); }catch(e){} document.querySelectorAll('#autoNextSeg button').forEach(b=>b.classList.toggle('on',b.dataset.a===v)); };
+  setTimeout(()=>{ let v='on'; try{ v=localStorage.getItem('bb9-autonext')==='off'?'off':'on'; }catch(e){} setAutoNext(v); },0);
   function goNextExo(id){
+    if(window.__autoNext===false) return;
     try{
       const TAB = !!window.__tabMode;
       const ids = TAB ? [...document.querySelectorAll('#inlineDetail .tb-row')].map(r=>r.dataset.tid)

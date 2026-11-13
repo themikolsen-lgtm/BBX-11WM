@@ -2653,6 +2653,7 @@ body.tabmode #inlineDetail{padding-bottom:240px}
 .tb-row.done{opacity:.5;filter:grayscale(1)}
 .tb-row.done .tb-dot{background:#fff;border-color:#fff}
 </style>
+<style>.tb-nm{padding-right:16px}</style>
 </head>
 <body>
 
@@ -3312,8 +3313,8 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     let selId = window.__tabSel[d.key]; if(!tabIds.includes(selId)) selId = tabIds.find(id=>!isDone(id)) || tabIds[0] || null;
     window.__tabSel[d.key] = selId;
     const tabRow = ex => { const cid = d.key+'|'+ex.name, flip = ex.name.includes('Droite');
-      return `<div class="tb-row${isDone(cid)?' done':''}${cid===selId?' sel':''}" data-tid="${cid}" onclick="tabSelect(this.dataset.tid)"><div class="tb-ph" style="background-image:url('${ex.img}');${flip?'transform:scaleX(-1);':''}"></div><div class="tb-nm">${shortName(ex.name)}</div><span class="tb-dot"></span></div>`; };
-    const tabAbdoRow = aid => `<div class="tb-row${isDone(aid)?' done':''}${aid===selId?' sel':''}" data-tid="${aid}" onclick="tabSelect(this.dataset.tid)"><div class="tb-ph" style="background-image:url('${d.video.img}');"></div><div class="tb-nm">${d.video.title}</div><span class="tb-dot"></span></div>`;
+      return `<div class="tb-row${isDone(cid)?' done':''}${cid===selId?' sel':''}" data-tid="${cid}" onclick="tabSelect(this.dataset.tid)"><div class="tb-ph" style="background-image:url('${ex.img}');${flip?'transform:scaleX(-1);':''}"></div><div class="tb-nm">${shortName(ex.name)}</div></div>`; };
+    const tabAbdoRow = aid => `<div class="tb-row${isDone(aid)?' done':''}${aid===selId?' sel':''}" data-tid="${aid}" onclick="tabSelect(this.dataset.tid)"><div class="tb-ph" style="background-image:url('${d.video.img}');"></div><div class="tb-nm">${d.video.title}</div></div>`;
     const abdoHTML = () => { const aid = d.key + '|abdos'; return `<div class="ex-row abdo has-rest${isDone(aid)?' done':''}${restTimers[aid]?' resting':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).rest?' ab-rest':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).prep?' ab-prep':''}" data-id="${aid}">
           <div class="ex-info">
             <div class="ex-name">${d.video.title}</div>

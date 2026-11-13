@@ -3411,7 +3411,22 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     delete overlays[id]; renderOverlay(id);
     if(!skipped){ if(o.kind==='pause') restAlert(); else { ringBell(); try{ navigator.vibrate && navigator.vibrate([200,100,200]); }catch(e){} } }
     if(o.onEnd) o.onEnd();
+    if(o.kind==='pause') goNextExo(id);
     if(!Object.keys(overlays).length && ovTick){ clearInterval(ovTick); ovTick = null; if(!restTick) releaseWake(); }
+  }
+  // Fin de la pause d'1 min (ou clic sur le chrono) : passer à l'exo suivant non terminé
+  function goNextExo(id){
+    try{
+      const TAB = !!window.__tabMode;
+      const ids = TAB ? [...document.querySelectorAll('#inlineDetail .tb-row')].map(r=>r.dataset.tid)
+                      : [...document.querySelectorAll('#inlineDetail .ex-row[data-id]')].map(r=>r.dataset.id);
+      const i = ids.indexOf(id); if(i<0) return;
+      let nxt = null;
+      for(let k=i+1;k<ids.length;k++){ if(!isDone(ids[k])){ nxt = ids[k]; break; } }
+      if(!nxt) return;
+      if(TAB){ tabSelect(nxt); }
+      else { const r = rowOf(nxt); if(r) r.scrollIntoView({behavior:'smooth', block:'center'}); }
+    }catch(e){}
   }
   function cancelOverlay(id){ if(overlays[id]){ delete overlays[id]; renderOverlay(id); } }
   function tickOverlays(){

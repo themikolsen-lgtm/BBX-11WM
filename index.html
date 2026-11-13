@@ -6115,7 +6115,7 @@ window.BBXBk=(function(){
   const inMeal=()=>!!document.querySelector('#mealView.show');
   function blocked(t){
     if(!t||!t.closest) return true;
-    if(t.closest('input,textarea,select,video,canvas,[contenteditable],.pm-seg,.ms,#scanOverlay,.my-card,.my-it,.my-row')) return true;
+    if(t.closest('input,textarea,select,video,canvas,[contenteditable],.pm-seg,.ms,#scanOverlay')) return true;
     for(let e=t;e&&e!==document.body;e=e.parentElement){
       const cs=getComputedStyle(e);
       if((cs.overflowX==='auto'||cs.overflowX==='scroll')&&e.scrollWidth>e.clientWidth+4) return true;

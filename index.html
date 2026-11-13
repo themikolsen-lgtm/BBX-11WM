@@ -3140,7 +3140,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     const n = Math.min(total, setsDone(id, ex) + 1);
     doneState.sets[id] = n;
     delete readyState[id];
-    if(n >= total){ doneState.items[id] = 1; delete restTimers[id]; /* plus de pause 1 min après un exo terminé */ }
+    if(n >= total){ doneState.items[id] = 1; delete restTimers[id]; startOverlay(id, 'pause', 60); }   // dernier set : pause de 1 min sur l'exo
     else {
       const dur = restOf(id, ex);
       restTimers[id] = { endAt: Date.now() + dur*1000, total: dur };
@@ -3215,7 +3215,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     else readyState[id] = true;
     refreshRow(id);
     restAlert();
-    /* plus de pause 1 min après les abdos */
+    if(abdo) startOverlay(id, 'pause', 60);
   }
   function tickRest(){
     for(const id in restTimers){

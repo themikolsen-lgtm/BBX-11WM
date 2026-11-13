@@ -2939,6 +2939,11 @@ body:has(#mealView.show) .nav-pill button{background:#F1F2F4!important}
 body .nav-pill button, body:has(#mealView.show) .nav-pill button{width:50px!important;height:96px!important;border-radius:25px!important}
 </style>
 <style id="navMode">body.nav-slide .nav-pill{display:none!important}</style>
+<style id="tabBottom">
+body.tabmode #tabBarHost{bottom:calc(12px + env(safe-area-inset-bottom,0px)) !important}
+body.tabmode #inlineDetail{padding-bottom:160px !important}
+body.tabmode .nav-pill, body.tabmode:has(#mealView.show) .nav-pill{bottom:calc(144px + env(safe-area-inset-bottom,0px)) !important}
+</style>
 </head>
 <body>
 

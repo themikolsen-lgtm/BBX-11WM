@@ -2921,6 +2921,14 @@ body:not(.tabmode) #inlineDetail .ex-row .pause-ov .po-time{font-size:46px!impor
 body:not(.tabmode) #inlineDetail .ex-row .pause-ov::after{content:"Récup. avant l'exo suivant · touche pour passer";font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8e8e93}
 body:not(.tabmode) #inlineDetail .ex-row.done.pausing > *:not(.pause-ov){visibility:hidden}
 </style>
+<style id="navSolo">
+/* un seul bouton, en bas à gauche : l'autre appli */
+body .nav-pill, body:has(#mealView.show) .nav-pill{left:16px!important;right:auto!important;transform:none!important;bottom:calc(16px + env(safe-area-inset-bottom,0px))!important;display:block!important;padding:0!important;gap:0!important;background:none!important;border:0!important;box-shadow:none!important;filter:none!important;backdrop-filter:none!important}
+body .nav-pill button, body:has(#mealView.show) .nav-pill button{width:58px!important;height:58px!important;border-radius:50%!important;clip-path:none!important;margin:0!important;padding:0!important;display:flex!important;align-items:center;justify-content:center;font-size:0!important;border:1.5px solid rgba(255,255,255,.28)!important;background:linear-gradient(160deg,#FF4560,#C0001B)!important;color:#fff!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),0 10px 26px rgba(0,0,0,.55),0 0 22px rgba(255,31,61,.55)!important}
+body .nav-pill button svg, body:has(#mealView.show) .nav-pill button svg{width:26px!important;height:26px!important;stroke:#fff!important}
+body .nav-pill button.on, body:has(#mealView.show) .nav-pill button.on{display:none!important}
+body .nav-pill button:active{transform:scale(.92)}
+</style>
 </head>
 <body>
 

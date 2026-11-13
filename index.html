@@ -4033,7 +4033,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     try{ localStorage.removeItem(PLAN_KEY); }catch(e){}
     planRefresh();
   }
-  function openProg(sec){ renderRests(); const ov=document.getElementById('progOverlay'); ov.classList.add('show'); setTimeout(()=>{ const t=sec==='rep'&&document.getElementById('progSecRep'); if(t){ t.scrollIntoView({block:'start'}); } else { ov.scrollTop=0; const c=ov.querySelector('.prog-card'); if(c) c.scrollTop=0; } },0); }
+  function openProg(sec){ renderRests(); const ov=document.getElementById('progOverlay'); ov.classList.add('show'); setTimeout(()=>{ const t=null; /* toujours en haut de la page */ if(t){ t.scrollIntoView({block:'start'}); } else { ov.scrollTop=0; const c=ov.querySelector('.prog-card'); if(c) c.scrollTop=0; } },0); }
   function closeProg(){ document.getElementById('progOverlay').classList.remove('show'); }
 </script>
 

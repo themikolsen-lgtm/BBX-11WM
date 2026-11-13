@@ -2654,6 +2654,76 @@ body.tabmode #inlineDetail{padding-bottom:240px}
 .tb-row.done .tb-dot{background:#fff;border-color:#fff}
 </style>
 <style>.tb-nm{padding-right:16px}</style>
+<style id="tabBarV2">
+body.tabmode #tabBarHost{padding:0 12px;bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+body.tabmode .tab-bar{filter:drop-shadow(0 22px 30px rgba(0,0,0,.7))}
+body.tabmode .tab-bar .ex-row{
+  display:grid !important;grid-template-columns:minmax(0,1fr) auto !important;grid-template-areas:"name act" "meta act" "dots act" "rest rest" !important;
+  gap:4px 14px !important;align-items:center !important;height:auto !important;min-height:0 !important;margin:0 !important;padding:16px 16px 14px !important;
+  background:linear-gradient(165deg,#232327 0%,#0F0F11 70%) !important;border:1px solid rgba(255,255,255,.12) !important;border-radius:32px !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08) !important;clip-path:none !important;animation:none !important;position:relative !important;overflow:hidden}
+body.tabmode .tab-bar .ex-row.resting{border-color:rgba(255,69,58,.7) !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 26px -6px rgba(255,69,58,.55) !important}
+body.tabmode .tab-bar .ex-row.ready{border-color:#FF1F3D !important;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 26px -6px rgba(255,31,61,.6) !important}
+body.tabmode .tab-bar .ex-row.done{opacity:.85;filter:none}
+body.tabmode .tab-bar .ex-info{display:contents !important}
+body.tabmode .tab-bar .ex-name{grid-area:name;font-size:21px !important;font-weight:900 !important;letter-spacing:-.01em;color:#fff !important;background:none !important;padding:0 !important;margin:0 !important;min-height:0 !important;line-height:1.15;text-decoration:none !important;display:block !important;-webkit-line-clamp:unset !important}
+body.tabmode .tab-bar .ex-sets{grid-area:meta;display:flex !important;align-items:center !important;gap:8px !important;margin:0 !important}
+body.tabmode .tab-bar .ex-sets .ex-nb{font-size:15px !important;font-weight:800;color:#C9C9CE !important}
+body.tabmode .tab-bar .ex-sets .ex-wt{font-size:12px !important;font-weight:800;color:#FF7285 !important;background:rgba(255,31,61,.16);padding:3px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.03em}
+body.tabmode .tab-bar .ab-sub{grid-area:meta;font-size:13px;font-weight:600;color:#9A9AA0}
+body.tabmode .tab-bar .ex-dots{grid-area:dots;display:flex !important;flex-direction:row !important;align-items:center !important;gap:10px !important;width:auto !important;margin:2px 0 0 !important;position:static !important}
+body.tabmode .tab-bar .ex-dots .dots-row{height:auto !important;gap:6px !important}
+body.tabmode .tab-bar .ex-dots .dot{width:11px !important;height:11px !important}
+body.tabmode .tab-bar .ex-dots .set-line{height:auto !important;width:auto !important;gap:6px !important;position:static !important}
+body.tabmode .tab-bar .set-label{font-size:12.5px !important;font-weight:700;color:#8E8E93 !important;flex:0 1 auto !important}
+body.tabmode .tab-bar .ex-row.ready .set-label{color:#FF4D63 !important}
+body.tabmode .tab-bar .set-undo{position:static !important;width:26px !important;height:26px !important;background:rgba(255,255,255,.1) !important;border-radius:50% !important;display:grid;place-items:center;padding:0 !important}
+body.tabmode .tab-bar .set-undo svg{width:14px;height:14px}
+body.tabmode .tab-bar .ex-action{grid-area:act;display:flex !important;flex-direction:row !important;gap:8px !important;width:auto !important;height:auto !important;margin:0 !important;clip-path:none !important;align-self:center}
+body.tabmode .tab-bar .ex-go,body.tabmode .tab-bar .ex-check{flex:none !important;width:70px !important;height:70px !important;min-height:0 !important;margin:0 !important;border-radius:50% !important;padding:0 !important;clip-path:none !important;display:grid;place-items:center;
+  background:#fff !important;color:#000 !important;font-size:17px !important;font-weight:900;box-shadow:0 12px 24px -10px rgba(255,255,255,.35) !important;border:0 !important}
+body.tabmode .tab-bar .ex-go svg.play{width:30px;height:30px;margin-left:4px;fill:#000;stroke:none}
+body.tabmode .tab-bar .ex-row.ready .ex-go{background:#FF1F3D !important;color:#fff !important;box-shadow:0 12px 26px -8px rgba(255,31,61,.8) !important}
+body.tabmode .tab-bar .ex-go.skip,body.tabmode .tab-bar .ex-go.pause{background:#2B2B2F !important;color:#fff !important;box-shadow:none !important;width:60px !important;height:60px !important}
+body.tabmode .tab-bar .ex-row.resting .ex-go.skip{background:#FF453A !important}
+body.tabmode .tab-bar .ex-go.skip svg,body.tabmode .tab-bar .ex-go.pause svg{width:26px;height:26px;stroke:#fff}
+body.tabmode .tab-bar .ex-check.on{background:#FF1F3D !important}
+body.tabmode .tab-bar .ex-check svg{width:30px;height:30px;margin:0 !important;stroke:#fff}
+body.tabmode .tab-bar .ex-check:not(.on){background:#fff !important}
+body.tabmode .tab-bar .ex-check:not(.on) svg{stroke:#000}
+body.tabmode .tab-bar .ex-action.split .ex-chrono{display:none}
+body.tabmode .tab-bar .ex-action.split .ex-go,body.tabmode .tab-bar .ex-action.split.ab-act .ex-go{margin:0 !important;flex:none !important;width:60px !important;height:60px !important}
+body.tabmode .tab-bar .ex-rest{grid-area:rest;width:100% !important;min-height:0 !important;margin:8px 0 0 !important;position:static !important;top:auto !important;justify-content:stretch !important;display:block !important}
+body.tabmode .tab-bar .rt-step{display:grid !important;grid-template-columns:50px 1fr 50px;align-items:center;width:100%;margin:0 !important;padding:5px !important;background:#1B1B1E !important;border-radius:99px !important}
+body.tabmode .tab-bar .rt-step button{width:44px !important;height:44px !important;background:#2B2B2F !important;font-size:22px !important}
+body.tabmode .tab-bar .rt-step span.rt-chrono{min-width:0 !important;font-size:28px !important;font-weight:900;letter-spacing:.01em;text-align:center;color:#fff}
+body.tabmode .tab-bar .ex-row.resting .rt-run,body.tabmode .tab-bar .rt-run{position:static !important;left:auto !important;right:auto !important;top:auto !important;width:100% !important;height:auto !important;min-height:0 !important;display:flex !important;flex-direction:column !important;align-items:stretch !important;justify-content:flex-start !important;gap:8px}
+body.tabmode .tab-bar .rt-left{position:static !important;text-align:left !important;font-size:44px !important;line-height:1 !important;font-weight:900;color:#fff;letter-spacing:-.02em;min-width:0 !important}
+body.tabmode .tab-bar .rt-left.low{color:#FF453A !important}
+body.tabmode .tab-bar .rt-bar{height:10px !important;background:#2A2A2E !important;border-radius:99px}
+body.tabmode .tab-bar .rt-bar i{border-radius:99px}
+body.tabmode .tab-bar .rest-done{text-align:center;font-size:14px;font-weight:800;color:#9A9AA0;padding:6px 0}
+body.tabmode .tab-bar .ab-total,body.tabmode .tab-bar .ab-cd{position:static}
+</style>
+<style>
+body.tabmode .tab-bar .ex-row .ex-rest,body.tabmode .tab-bar .ex-row.resting .ex-rest{height:auto !important;min-height:0 !important;position:static !important;right:auto !important;bottom:auto !important;width:100% !important}
+body.tabmode .tab-bar .ex-rest .rt-step{height:auto !important;padding:5px !important;gap:0 !important}
+body.tabmode .tab-bar .ex-rest .rt-step button{flex:none}
+body.tabmode .tab-bar .ex-row .rt-run{height:auto !important}
+body.tabmode .tab-bar .rt-step span.rt-chrono{font-style:normal !important}
+body.tabmode .tab-bar .rt-left{font-style:normal !important}
+body.tabmode .tab-bar .ex-name,body.tabmode .tab-bar .ex-sets,body.tabmode .tab-bar .ex-dots{height:auto !important}
+</style>
+<style id="tabGrid">
+body:not(.tabmode) .prog-mode.lay{display:none}
+body.tabmode.tabgrid .ex-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+body.tabmode.tabgrid .ex-list>.ex-row,body.tabmode.tabgrid .ex-list>.video-expand{grid-column:1/-1}
+body.tabmode.tabgrid .tb-row{flex-direction:column;align-items:stretch;gap:0;height:auto;margin:0;border-radius:24px}
+body.tabmode.tabgrid .tb-nm{order:1;flex:none;padding:12px 14px 10px;font-size:15px;min-height:2.5em;display:flex;align-items:center}
+body.tabmode.tabgrid .tb-ph{order:2;width:100%;height:132px}
+body.tabmode .tab-bar .ex-dots .dot{transform:none !important;border-radius:50% !important}
+body.tabmode .tab-bar .ex-go.skip svg,body.tabmode .tab-bar .ex-go.pause svg{stroke:#fff !important}
+</style>
 </head>
 <body>
 
@@ -2689,6 +2759,7 @@ body.tabmode #inlineDetail{padding-bottom:240px}
     <div class="prog-card">
       <div class="prog-head"><span>Progression</span><button class="prog-x" onclick="closeProg()" aria-label="Fermer">✕</button></div>
       <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Tab</button></div></div>
+      <div class="prog-mode lay"><b>Exos en mode Tab</b><div class="pm-seg"><button type="button" data-l="list" onclick="setWLayout('list')">Liste</button><button type="button" data-l="grid" onclick="setWLayout('grid')">Vignettes</button></div></div>
       <div class="prog-sec first"><span>Mes exercices</span><span class="wt-saved" id="wtSaved">✓ Enregistré</span></div>
       <div class="prog-sub" style="margin-top:0">Pour chaque exo : jours, poids et récupération</div>
       <div class="rc-all">
@@ -3304,11 +3375,13 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
   // ---------- inline detail ----------
   window.__tabMode = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab'; }catch(e){ return false; } })();
   window.__tabSel = {};
+  window.__tabLayout = (()=>{ try{ return localStorage.getItem('bb9-wlayout')==='grid'?'grid':'list'; }catch(e){ return 'list'; } })();
   function showDetail(key){
     const d = DAYS.find(x=>x.key===key);
     let html = '';
     const TAB = !!window.__tabMode; let rowHTMLRef = null;
     document.body.classList.toggle('tabmode', TAB);
+    document.body.classList.toggle('tabgrid', TAB && window.__tabLayout==='grid');
     const tabIds = d.exercises.map(ex=>d.key+'|'+ex.name).concat(d.video ? [d.key+'|abdos'] : []);
     let selId = window.__tabSel[d.key]; if(!tabIds.includes(selId)) selId = tabIds.find(id=>!isDone(id)) || tabIds[0] || null;
     window.__tabSel[d.key] = selId;
@@ -3410,7 +3483,8 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
   function tabSelect(id){ window.__tabSel[selectedKey] = id; keepScroll(()=>showDetail(selectedKey)); }
   function tabSync(){ document.querySelectorAll('.tb-row').forEach(r=>r.classList.toggle('done', isDone(r.dataset.tid))); }
   function setWMode(m){ window.__tabMode = (m==='tab'); try{ localStorage.setItem('bb9-wmode', m); }catch(e){} syncWMode(); showDetail(selectedKey); }
-  function syncWMode(){ document.querySelectorAll('.pm-seg button').forEach(b=>b.classList.toggle('on', (b.dataset.m==='tab')===!!window.__tabMode)); }
+  function setWLayout(l){ window.__tabLayout = (l==='grid')?'grid':'list'; try{ localStorage.setItem('bb9-wlayout', window.__tabLayout); }catch(e){} syncWMode(); document.body.classList.toggle('tabgrid', !!window.__tabMode && window.__tabLayout==='grid'); }
+  function syncWMode(){ document.querySelectorAll('.pm-seg button[data-m]').forEach(b=>b.classList.toggle('on', (b.dataset.m==='tab')===!!window.__tabMode)); document.querySelectorAll('.pm-seg button[data-l]').forEach(b=>b.classList.toggle('on', b.dataset.l===window.__tabLayout)); }
   setTimeout(syncWMode,0);
 
   function openImageLightbox(el){

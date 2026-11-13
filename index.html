@@ -2921,29 +2921,6 @@ body:not(.tabmode) #inlineDetail .ex-row .pause-ov .po-time{font-size:46px!impor
 body:not(.tabmode) #inlineDetail .ex-row .pause-ov::after{content:"Récup. avant l'exo suivant · touche pour passer";font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8e8e93}
 body:not(.tabmode) #inlineDetail .ex-row.done.pausing > *:not(.pause-ov){visibility:hidden}
 </style>
-<style id="wkLiquid">
-/* ===== LIQUID GLASS NEON — mode Tab ===== */
-body.tabmode .screens{background-image:radial-gradient(60% 30% at 15% 20%,rgba(255,31,61,.35),transparent 70%),radial-gradient(55% 28% at 90% 55%,rgba(255,90,120,.22),transparent 70%),radial-gradient(70% 30% at 30% 95%,rgba(180,20,60,.3),transparent 70%)!important;background-size:auto!important}
-/* tuiles / lignes */
-body.tabmode .tb-row{background:linear-gradient(160deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.04) 38%,rgba(255,31,61,.10) 100%)!important;border:1px solid rgba(255,255,255,.22)!important;backdrop-filter:blur(18px) saturate(1.8);-webkit-backdrop-filter:blur(18px) saturate(1.8);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -10px 22px rgba(255,31,61,.14),inset 0 0 0 1px rgba(255,31,61,.12),0 10px 28px rgba(0,0,0,.45),0 0 18px rgba(255,31,61,.18)!important;position:relative;overflow:hidden}
-body.tabmode .tb-row::after{content:"";position:absolute;left:-20%;top:-60%;width:140%;height:90%;background:radial-gradient(closest-side,rgba(255,255,255,.28),transparent);transform:rotate(-12deg);pointer-events:none;z-index:2;mix-blend-mode:soft-light}
-body.tabmode .tb-row .tb-nm{background:transparent!important;color:#fff!important;text-shadow:0 1px 10px rgba(0,0,0,.6),0 0 14px rgba(255,31,61,.55)}
-body.tabmode .tb-row .tb-ph{border-radius:16px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
-body.tabmode .tb-row.sel,body.tabmode .tb-row.on,body.tabmode .tb-row.active{border-color:rgba(255,90,120,.95)!important;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.7),inset 0 0 30px rgba(255,31,61,.35),0 0 0 1px #FF1F3D,0 0 30px rgba(255,31,61,.65)!important}
-/* barre du bas */
-body.tabmode #tabBarHost .tab-bar{background:linear-gradient(160deg,rgba(255,255,255,.20),rgba(255,255,255,.05) 40%,rgba(255,31,61,.14))!important;border:1px solid rgba(255,255,255,.28)!important;backdrop-filter:blur(26px) saturate(2);-webkit-backdrop-filter:blur(26px) saturate(2);box-shadow:inset 0 2px 0 rgba(255,255,255,.6),inset 0 -14px 26px rgba(255,31,61,.2),0 14px 40px rgba(0,0,0,.55),0 0 34px rgba(255,31,61,.4)!important;overflow:hidden}
-body.tabmode #tabBarHost .tab-bar::before{content:"";position:absolute;left:6%;right:30%;top:0;height:42%;border-radius:0 0 60% 60%/0 0 100% 100%;background:linear-gradient(180deg,rgba(255,255,255,.28),transparent);pointer-events:none;z-index:0}
-body.tabmode #tabBarHost .tab-bar .ex-row{background:transparent!important;border:0!important;box-shadow:none!important}
-body.tabmode #tabBarHost .tab-bar .ex-row::before{display:none!important}
-body.tabmode #tabBarHost .tab-bar .rt-step{background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.3)!important;backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 0 16px rgba(255,31,61,.2)!important}
-body.tabmode #tabBarHost .tab-bar .ex-name{text-shadow:0 0 14px rgba(255,31,61,.8)}
-body.tabmode #tabBarHost .tab-bar .ex-go{background:linear-gradient(160deg,rgba(255,90,120,.95),rgba(227,27,52,.85) 55%,rgba(120,10,25,.9))!important;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 0 22px rgba(255,255,255,.2),-8px 0 26px rgba(255,31,61,.5)!important}
-</style>
-<style id="wkLiquid2">
-body.tabmode #tabBarHost .tab-bar{border-radius:28px!important;background:linear-gradient(160deg,rgba(255,255,255,.18),rgba(255,255,255,.03) 40%,rgba(255,31,61,.16)),rgba(14,6,10,.62)!important}
-body.tabmode #tabBarHost .tab-bar .ex-row{border-radius:28px!important}
-body.tabmode #tabBarHost .tab-bar .ex-wt{background:rgba(0,0,0,.35)}
-</style>
 </head>
 <body>
 
@@ -2978,8 +2955,7 @@ body.tabmode #tabBarHost .tab-bar .ex-wt{background:rgba(0,0,0,.35)}
   <div class="prog-overlay" id="progOverlay" onclick="if(event.target===this) closeProg()">
     <div class="prog-card">
       <div class="prog-head"><span>Progression</span><button class="prog-x" onclick="closeProg()" aria-label="Fermer">✕</button></div>
-      <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Tab</button></div></div>
-      <div class="prog-mode lay"><b>Exos en mode Tab</b><div class="pm-seg"><button type="button" data-l="list" onclick="setWLayout('list')">Liste</button><button type="button" data-l="grid" onclick="setWLayout('grid')">Vignettes</button></div></div>
+      <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Bêta</button></div></div>
       <div class="prog-sec first"><span>Mes exercices</span><span class="wt-saved" id="wtSaved">✓ Enregistré</span></div>
       <div class="prog-sub" style="margin-top:0">Pour chaque exo : jours, poids et récupération</div>
       <div class="rc-all">
@@ -3620,13 +3596,13 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
   // ---------- inline detail ----------
   window.__tabMode = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab'; }catch(e){ return false; } })();
   window.__tabSel = {};
-  window.__tabLayout = (()=>{ try{ return localStorage.getItem('bb9-wlayout')==='grid'?'grid':'list'; }catch(e){ return 'list'; } })();
+  window.__tabLayout = (()=>{ try{ return 'list'; }catch(e){ return 'list'; } })();
   function showDetail(key){
     const d = DAYS.find(x=>x.key===key);
     let html = '';
     const TAB = !!window.__tabMode; let rowHTMLRef = null;
     document.body.classList.toggle('tabmode', TAB);
-    document.body.classList.toggle('tabgrid', TAB && window.__tabLayout==='grid');
+    document.body.classList.remove('tabgrid');
     const tabIds = d.exercises.map(ex=>d.key+'|'+ex.name).concat(d.video ? [d.key+'|abdos'] : []);
     let selId = window.__tabSel[d.key]; if(!tabIds.includes(selId)) selId = tabIds.find(id=>!isDone(id)) || tabIds[0] || null;
     window.__tabSel[d.key] = selId;

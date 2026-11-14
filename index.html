@@ -2944,58 +2944,52 @@ body.tabmode #tabBarHost{bottom:calc(12px + env(safe-area-inset-bottom,0px)) !im
 body.tabmode #inlineDetail{padding-bottom:160px !important}
 body.tabmode .nav-pill, body.tabmode:has(#mealView.show) .nav-pill{bottom:calc(144px + env(safe-area-inset-bottom,0px)) !important}
 </style>
-<style id="focusMode">
-/* ===== BÊTA « FOCUS » : héros photo + pastilles rondes ===== */
-body.tabmode #focusHero{position:relative;margin:6px 4px 14px;height:min(40vh,330px);border-radius:32px;overflow:hidden;background:#111 center/cover no-repeat;border:1.5px solid rgba(255,255,255,.18);box-shadow:0 18px 50px rgba(0,0,0,.65),0 0 40px rgba(255,31,61,.3)}
-body.tabmode #focusHero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 35%,rgba(0,0,0,.88)),radial-gradient(80% 50% at 15% 100%,rgba(255,31,61,.5),transparent 70%)}
-body.tabmode #focusHero .fh-txt{position:absolute;left:20px;right:20px;bottom:16px;z-index:2}
-body.tabmode #focusHero .fh-sec{font-size:11px;font-weight:800;letter-spacing:.3em;color:#FF4560;text-transform:uppercase;text-shadow:0 0 10px rgba(255,31,61,.8)}
-body.tabmode #focusHero .fh-nm{font-size:30px;line-height:1.05;font-weight:900;letter-spacing:.02em;text-transform:uppercase;color:#fff;margin-top:4px;text-shadow:0 2px 16px rgba(0,0,0,.7)}
-body.tabmode #focusHero .fh-cnt{position:absolute;right:16px;top:14px;z-index:2;padding:6px 12px;border-radius:99px;background:rgba(0,0,0,.45);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);font-weight:800;font-size:12px;letter-spacing:.14em;color:#fff}
-body.tabmode #inlineDetail .section-label{display:none!important}
-body.tabmode #inlineDetail .tb-row{display:inline-flex!important;flex-direction:column;align-items:center;gap:6px;width:74px!important;min-height:0!important;height:auto!important;padding:0!important;margin:0 5px 12px!important;background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;overflow:visible!important;vertical-align:top}
-body.tabmode #inlineDetail .tb-row::after{display:none!important}
-body.tabmode #inlineDetail .tb-row .tb-ph{position:relative!important;width:64px!important;height:64px!important;flex:none!important;border-radius:50%!important;border:2px solid rgba(255,255,255,.22)!important;box-shadow:0 6px 16px rgba(0,0,0,.5)!important;background-size:cover!important;background-position:center top!important}
-body.tabmode #inlineDetail .tb-row .tb-nm{font-size:9px!important;letter-spacing:.06em!important;text-align:center;max-width:74px;line-height:1.15;color:rgba(255,255,255,.7)!important;text-shadow:none!important}
-body.tabmode #inlineDetail .tb-row.sel .tb-ph{border-color:#FF1F3D!important;box-shadow:0 0 0 3px rgba(255,31,61,.35),0 0 22px rgba(255,31,61,.85)!important}
-body.tabmode #inlineDetail .tb-row.sel .tb-nm{color:#fff!important}
-body.tabmode #inlineDetail .tb-row.done .tb-ph{filter:grayscale(1) brightness(.55)}
-body.tabmode #inlineDetail .tb-row.done .tb-ph::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;background:rgba(0,0,0,.25);border-radius:50%}
+<style id="lightMode">
+/* ===== BÊTA « SOLEIL » : flat, clair, lumineux ===== */
+body.tabmode .screens{background:linear-gradient(#0A0A0C,#0A0A0C) 0 0/100% 145px no-repeat fixed,#F5F2EB!important;background-image:linear-gradient(#0A0A0C,#0A0A0C)!important;background-size:100% 145px!important;background-repeat:no-repeat!important;background-attachment:fixed!important;background-color:#F5F2EB!important}
+body.tabmode #inlineDetail{display:block!important;padding:8px 14px 190px!important}
+body.tabmode #inlineDetail .ex-list{display:block!important}
+body.tabmode #dateStrip,body.tabmode #inlineDetail .section-label svg,body.tabmode #tabBarHost .tab-bar{filter:none!important}
+body.tabmode #inlineDetail .date-strip,body.tabmode .date-strip#dateStrip{background:#fff!important;border:1px solid #E7E2D6!important;box-shadow:0 2px 0 #E7E2D6!important;backdrop-filter:none!important}
+body.tabmode .date-strip#dateStrip .dn-lab{color:#16161A!important;text-shadow:none!important;letter-spacing:.14em!important}
+body.tabmode .date-strip#dateStrip .dn-btn{background:#FFE6DF!important;box-shadow:none!important}
+body.tabmode .date-strip#dateStrip .dn-btn svg{stroke:#FF5B3A!important;filter:none!important}
+body.tabmode #inlineDetail .section-label{display:flex!important;align-items:center;gap:8px;color:#16161A!important;font-size:12px!important;font-weight:800!important;letter-spacing:.22em!important;margin:20px 2px 10px!important}
+body.tabmode #inlineDetail .section-label::after{background:#E1DBCB!important;box-shadow:none!important;height:2px!important;border-radius:2px}
+body.tabmode #inlineDetail .section-label svg{stroke:#FF5B3A!important;color:#FF5B3A!important;filter:none!important}
+/* lignes d'exos */
+body.tabmode #inlineDetail .tb-row{display:flex!important;flex-direction:row!important;align-items:center;gap:14px;width:auto!important;margin:0 0 10px!important;padding:10px 14px 10px 10px!important;border-radius:24px!important;background:#fff!important;border:2px solid transparent!important;box-shadow:0 1px 0 #E7E2D6!important;backdrop-filter:none!important;position:relative;overflow:hidden!important}
+body.tabmode #inlineDetail .tb-row::before,body.tabmode #inlineDetail .tb-row::after{display:none!important}
+body.tabmode #inlineDetail .tb-row .tb-ph{width:64px!important;height:64px!important;flex:none;border-radius:18px!important;border:0!important;box-shadow:none!important;background-color:#F0EDE5!important;background-size:cover!important;background-position:center!important;position:relative}
+body.tabmode #inlineDetail .tb-row .tb-nm{font-size:15px!important;font-weight:800!important;letter-spacing:.01em!important;text-transform:none!important;text-align:left!important;max-width:none!important;color:#16161A!important;text-shadow:none!important;line-height:1.2}
+body.tabmode #inlineDetail .tb-row.sel{background:#FFF1EC!important;border-color:#FF5B3A!important;box-shadow:0 6px 0 -2px rgba(255,91,58,.18)!important}
+body.tabmode #inlineDetail .tb-row.sel .tb-ph{box-shadow:0 0 0 3px #FF5B3A!important}
+body.tabmode #inlineDetail .tb-row.sel:not(.done)::after{display:none!important;content:"";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:800;letter-spacing:.16em;color:#FF5B3A;filter:none}
+body.tabmode #inlineDetail .tb-row.done{background:#EFEBE1!important;opacity:1}
+body.tabmode #inlineDetail .tb-row.done .tb-nm{color:#9C968A!important;text-decoration:line-through;text-decoration-color:#C9C3B5}
+body.tabmode #inlineDetail .tb-row.done .tb-ph{filter:grayscale(1) opacity(.55)}
+body.tabmode #inlineDetail .tb-row.done::after{display:flex!important;content:"✓";position:absolute;right:14px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:#19B36B;color:#fff;font-size:15px;font-weight:900;align-items:center;justify-content:center}
+body.tabmode #inlineDetail .tb-row.done.sel::after{content:"✓"}
+/* barre du bas */
+body.tabmode #tabBarHost .tab-bar{background:#fff!important;border:1px solid #E7E2D6!important;border-radius:30px!important;backdrop-filter:none!important;box-shadow:0 -2px 0 rgba(0,0,0,.02),0 14px 40px rgba(60,40,10,.22)!important;overflow:hidden}
+body.tabmode #tabBarHost .tab-bar::before{display:none!important}
+body.tabmode #tabBarHost .tab-bar .ex-row{background:transparent!important;border:0!important;box-shadow:none!important}
+body.tabmode #tabBarHost .tab-bar .ex-row::before,body.tabmode #tabBarHost .tab-bar .ex-row::after{display:none!important}
+body.tabmode #tabBarHost .tab-bar .ex-name{background:none!important;border:0!important;color:#16161A!important;text-shadow:none!important;box-shadow:none!important;text-transform:none!important;letter-spacing:0!important;font-size:18px!important;font-weight:900!important;padding:0!important}
+body.tabmode #tabBarHost .tab-bar .ex-nb{color:#16161A!important;text-shadow:none!important}
+body.tabmode #tabBarHost .tab-bar .ex-wt{background:#FFE6DF!important;color:#E8431F!important;border:0!important;text-shadow:none!important;border-radius:99px!important;padding:2px 10px!important;font-weight:800}
+body.tabmode #tabBarHost .tab-bar .dot{background:#E4DFD2!important;border:0!important;box-shadow:none!important}
+body.tabmode #tabBarHost .tab-bar .dot.done,body.tabmode #tabBarHost .tab-bar .dot.on,body.tabmode #tabBarHost .tab-bar .dot.cur{background:#FF5B3A!important;box-shadow:none!important}
+body.tabmode #tabBarHost .tab-bar .set-label{color:#8A8478!important}
+body.tabmode #tabBarHost .tab-bar .rt-step{background:#F2EEE4!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important}
+body.tabmode #tabBarHost .tab-bar .rt-step button{background:#fff!important;color:#16161A!important;border:0!important;box-shadow:0 1px 0 #E1DBCB!important}
+body.tabmode #tabBarHost .tab-bar .rt-chrono{color:#16161A!important;text-shadow:none!important}
+body.tabmode #tabBarHost .tab-bar .ex-go{background:#FF5B3A!important;box-shadow:none!important}
+body.tabmode #tabBarHost .tab-bar .ex-go svg{filter:none!important}
+body.tabmode .nav-pill{filter:drop-shadow(0 6px 10px rgba(60,40,10,.25))!important}
+body.tabmode .nav-pill button{background:#16161A!important;color:#fff!important}
+body.tabmode .nav-pill button svg{stroke:#fff!important}
 </style>
-<style id="focusMode2">
-body.tabmode #inlineDetail .ex-list{display:flex!important;flex-direction:row!important;flex-wrap:wrap;justify-content:center;gap:0!important}
-body.tabmode #focusHero::after{pointer-events:none}
-</style>
-<style id="focusMode3">
-body.tabmode #inlineDetail{display:flex!important;flex-wrap:wrap;justify-content:center;align-content:flex-start}
-body.tabmode #inlineDetail .ex-list{display:contents!important}
-body.tabmode #focusHero{flex:0 0 calc(100% - 8px);height:min(31vh,260px)!important;margin:4px 4px 12px!important}
-body.tabmode #focusHero .fh-nm{font-size:24px!important}
-</style>
-<style id="auroraMode">
-/* ===== BÊTA « AURORA » : timeline verticale cyan / violet ===== */
-body.tabmode #focusHero{display:none!important}
-body.tabmode .screens{background-image:radial-gradient(70% 30% at 85% 12%,rgba(34,211,238,.28),transparent 70%),radial-gradient(70% 34% at 10% 60%,rgba(139,92,246,.3),transparent 70%),radial-gradient(60% 26% at 80% 95%,rgba(34,211,238,.18),transparent 70%),linear-gradient(180deg,#05060f,#07091a)!important;background-size:auto!important}
-body.tabmode #inlineDetail{display:block!important;position:relative;padding:6px 6px 170px 6px!important}
-body.tabmode #inlineDetail .ex-list{display:block!important;position:relative}
-body.tabmode #inlineDetail .tb-row{display:flex!important;flex-direction:row!important;align-items:center;gap:16px;width:auto!important;margin:0 0 6px!important;padding:8px 14px 8px 8px!important;border-radius:26px!important;position:relative;background:linear-gradient(120deg,rgba(255,255,255,.07),rgba(255,255,255,.015))!important;border:1px solid rgba(255,255,255,.1)!important;box-shadow:none!important;backdrop-filter:blur(12px)!important;vertical-align:initial}
-body.tabmode #inlineDetail .tb-row::before{content:"";position:absolute;left:39px;top:-8px;bottom:-8px;width:2px;background:linear-gradient(180deg,rgba(34,211,238,.5),rgba(139,92,246,.5));z-index:0;opacity:.55}
-body.tabmode #inlineDetail .tb-row:first-child::before{top:50%}
-body.tabmode #inlineDetail .tb-row:last-child::before{bottom:50%}
-body.tabmode #inlineDetail .tb-row .tb-ph{width:62px!important;height:62px!important;z-index:1;border:2px solid rgba(34,211,238,.55)!important;box-shadow:0 0 0 4px #07091a,0 0 14px rgba(34,211,238,.35)!important}
-body.tabmode #inlineDetail .tb-row .tb-nm{font-size:14px!important;font-weight:800!important;letter-spacing:.05em!important;text-align:left!important;max-width:none!important;color:rgba(255,255,255,.88)!important;text-transform:uppercase}
-body.tabmode #inlineDetail .tb-row.sel{background:linear-gradient(120deg,rgba(34,211,238,.28),rgba(139,92,246,.26))!important;border-color:rgba(34,211,238,.9)!important;box-shadow:0 0 28px rgba(34,211,238,.45),inset 0 0 22px rgba(139,92,246,.25)!important;padding:12px 14px 12px 8px!important}
-body.tabmode #inlineDetail .tb-row.sel .tb-ph{width:78px!important;height:78px!important;border-color:#22D3EE!important;box-shadow:0 0 0 4px #07091a,0 0 26px rgba(34,211,238,.95)!important}
-body.tabmode #inlineDetail .tb-row.sel .tb-nm{font-size:16px!important;color:#fff!important;text-shadow:0 0 14px rgba(34,211,238,.9)!important}
-body.tabmode #inlineDetail .tb-row.done{opacity:.5}
-body.tabmode #inlineDetail .tb-row.done .tb-ph::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;background:rgba(0,0,0,.35);border-radius:50%}
-body.tabmode #inlineDetail .section-label{display:flex!important;color:#22D3EE!important;margin:14px 4px 8px!important}
-body.tabmode #inlineDetail .section-label::after{background:linear-gradient(90deg,#22D3EE,transparent)!important;box-shadow:0 0 8px #22D3EE!important}
-/* barre du bas recolorée (rouge -> cyan) */
-body.tabmode #tabBarHost .tab-bar{filter:hue-rotate(200deg) saturate(1.15)}
-body.tabmode .nav-pill{filter:hue-rotate(0deg)}
-</style>
-<style id="auroraMode2">body.tabmode #dateStrip,body.tabmode #inlineDetail .section-label svg{filter:hue-rotate(200deg) saturate(1.15)!important}</style>
 </head>
 <body>
 
@@ -6202,28 +6196,6 @@ window.BBXBk=(function(){
     if(dx<0 && !inMeal()) BBXNav.set('meal');
     else if(dx>0 && inMeal()) BBXNav.set('sport');
   },{passive:true});
-})();
-</script>
-<script id="focusHeroJS">
-(function(){
-  const host=()=>document.getElementById('inlineDetail');
-  function build(){
-    const h=host(); if(!h||!document.body.classList.contains('tabmode')){ const o=document.getElementById('focusHero'); if(o) o.remove(); return; }
-    const sel=h.querySelector('.tb-row.sel'); if(!sel) return;
-    const rows=[...h.querySelectorAll('.tb-row')], i=rows.indexOf(sel), ph=sel.querySelector('.tb-ph');
-    let el=document.getElementById('focusHero');
-    if(!el){ el=document.createElement('div'); el.id='focusHero'; h.insertBefore(el,h.firstChild); }
-    else if(el.parentNode!==h||h.firstChild!==el){ h.insertBefore(el,h.firstChild); }
-    const bg=ph?ph.style.backgroundImage:'', flip=ph&&ph.style.transform;
-    const sec=(sel.dataset.tid||'').indexOf('abdos')>=0?'Abdos':(sel.previousElementSibling&&sel.previousElementSibling.classList.contains('section-label')?sel.previousElementSibling.textContent.trim():'');
-    const key=sel.dataset.tid+'|'+bg;
-    if(el.dataset.k===key) return; el.dataset.k=key;
-    el.style.backgroundImage=bg; el.style.backgroundPosition='center top';
-    el.innerHTML='<div class="fh-cnt">'+(i+1)+' / '+rows.length+'</div><div class="fh-txt"><div class="fh-sec">'+(sec||'')+'</div><div class="fh-nm">'+sel.querySelector('.tb-nm').textContent+'</div></div>';
-  }
-  let busy=false;
-  new MutationObserver(()=>{ if(busy) return; busy=true; requestAnimationFrame(()=>{ busy=false; build(); }); }).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
-  build();
 })();
 </script>
 </body>

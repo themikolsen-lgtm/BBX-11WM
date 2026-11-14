@@ -2972,6 +2972,30 @@ body.tabmode #inlineDetail .ex-list{display:contents!important}
 body.tabmode #focusHero{flex:0 0 calc(100% - 8px);height:min(31vh,260px)!important;margin:4px 4px 12px!important}
 body.tabmode #focusHero .fh-nm{font-size:24px!important}
 </style>
+<style id="auroraMode">
+/* ===== BÊTA « AURORA » : timeline verticale cyan / violet ===== */
+body.tabmode #focusHero{display:none!important}
+body.tabmode .screens{background-image:radial-gradient(70% 30% at 85% 12%,rgba(34,211,238,.28),transparent 70%),radial-gradient(70% 34% at 10% 60%,rgba(139,92,246,.3),transparent 70%),radial-gradient(60% 26% at 80% 95%,rgba(34,211,238,.18),transparent 70%),linear-gradient(180deg,#05060f,#07091a)!important;background-size:auto!important}
+body.tabmode #inlineDetail{display:block!important;position:relative;padding:6px 6px 170px 6px!important}
+body.tabmode #inlineDetail .ex-list{display:block!important;position:relative}
+body.tabmode #inlineDetail .tb-row{display:flex!important;flex-direction:row!important;align-items:center;gap:16px;width:auto!important;margin:0 0 6px!important;padding:8px 14px 8px 8px!important;border-radius:26px!important;position:relative;background:linear-gradient(120deg,rgba(255,255,255,.07),rgba(255,255,255,.015))!important;border:1px solid rgba(255,255,255,.1)!important;box-shadow:none!important;backdrop-filter:blur(12px)!important;vertical-align:initial}
+body.tabmode #inlineDetail .tb-row::before{content:"";position:absolute;left:39px;top:-8px;bottom:-8px;width:2px;background:linear-gradient(180deg,rgba(34,211,238,.5),rgba(139,92,246,.5));z-index:0;opacity:.55}
+body.tabmode #inlineDetail .tb-row:first-child::before{top:50%}
+body.tabmode #inlineDetail .tb-row:last-child::before{bottom:50%}
+body.tabmode #inlineDetail .tb-row .tb-ph{width:62px!important;height:62px!important;z-index:1;border:2px solid rgba(34,211,238,.55)!important;box-shadow:0 0 0 4px #07091a,0 0 14px rgba(34,211,238,.35)!important}
+body.tabmode #inlineDetail .tb-row .tb-nm{font-size:14px!important;font-weight:800!important;letter-spacing:.05em!important;text-align:left!important;max-width:none!important;color:rgba(255,255,255,.88)!important;text-transform:uppercase}
+body.tabmode #inlineDetail .tb-row.sel{background:linear-gradient(120deg,rgba(34,211,238,.28),rgba(139,92,246,.26))!important;border-color:rgba(34,211,238,.9)!important;box-shadow:0 0 28px rgba(34,211,238,.45),inset 0 0 22px rgba(139,92,246,.25)!important;padding:12px 14px 12px 8px!important}
+body.tabmode #inlineDetail .tb-row.sel .tb-ph{width:78px!important;height:78px!important;border-color:#22D3EE!important;box-shadow:0 0 0 4px #07091a,0 0 26px rgba(34,211,238,.95)!important}
+body.tabmode #inlineDetail .tb-row.sel .tb-nm{font-size:16px!important;color:#fff!important;text-shadow:0 0 14px rgba(34,211,238,.9)!important}
+body.tabmode #inlineDetail .tb-row.done{opacity:.5}
+body.tabmode #inlineDetail .tb-row.done .tb-ph::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;background:rgba(0,0,0,.35);border-radius:50%}
+body.tabmode #inlineDetail .section-label{display:flex!important;color:#22D3EE!important;margin:14px 4px 8px!important}
+body.tabmode #inlineDetail .section-label::after{background:linear-gradient(90deg,#22D3EE,transparent)!important;box-shadow:0 0 8px #22D3EE!important}
+/* barre du bas recolorée (rouge -> cyan) */
+body.tabmode #tabBarHost .tab-bar{filter:hue-rotate(200deg) saturate(1.15)}
+body.tabmode .nav-pill{filter:hue-rotate(0deg)}
+</style>
+<style id="auroraMode2">body.tabmode #dateStrip,body.tabmode #inlineDetail .section-label svg{filter:hue-rotate(200deg) saturate(1.15)!important}</style>
 </head>
 <body>
 

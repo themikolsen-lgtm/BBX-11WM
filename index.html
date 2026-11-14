@@ -2704,6 +2704,28 @@ body.tabmode .tb-row.done{opacity:.45}
 body.tabmode .tab-bar .ex-row .ex-rest,body.tabmode .tab-bar .ex-row.resting .ex-rest{width:auto!important}
 body.tabmode .tab-bar .ex-rest .rt-step{display:inline-flex!important}
 </style>
+<style id="stepFlow">
+/* ===== BÊTA « PARCOURS » : un exo à la fois, balayage entre exos ===== */
+body.tabmode #inlineDetail>*:not(#stepStage){display:none!important}
+body.tabmode #inlineDetail{padding:4px 14px 250px!important}
+#stepStage{display:none}
+body.tabmode #stepStage{display:block}
+#stepStage .st-top{display:flex;align-items:center;justify-content:space-between;margin:6px 4px 10px}
+#stepStage .st-sec{font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:8px}
+#stepStage .st-sec i{width:8px;height:8px;border-radius:50%;background:#FF1F3D;box-shadow:0 0 10px #FF1F3D}
+#stepStage .st-cnt{font-weight:800;font-size:13px;color:#8e8e93;letter-spacing:.1em}
+#stepStage .st-seg{display:flex;gap:5px;margin:0 4px 14px}
+#stepStage .st-seg b{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.14);cursor:pointer}
+#stepStage .st-seg b.done{background:#fff}
+#stepStage .st-seg b.sel{background:#FF1F3D;box-shadow:0 0 10px rgba(255,31,61,.8)}
+#stepHero{position:relative;height:min(44vh,380px);border-radius:30px;overflow:hidden;background:#E9E9EC center top/cover no-repeat;border:1.5px solid rgba(227,27,52,.35);touch-action:pan-y}
+#stepHero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(0,0,0,.9));pointer-events:none}
+#stepHero .sh-nm{position:absolute;left:18px;right:70px;bottom:14px;z-index:2;font-weight:900;font-size:26px;line-height:1.05;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+#stepHero .sh-ok{position:absolute;left:16px;top:14px;z-index:2;padding:5px 12px;border-radius:99px;background:#19B36B;color:#fff;font-weight:800;font-size:12px;letter-spacing:.1em}
+#stepHero .sh-nav{position:absolute;top:50%;z-index:3;width:42px;height:42px;margin-top:-21px;border-radius:50%;border:0;background:rgba(10,10,12,.6);backdrop-filter:blur(8px);color:#fff;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center}
+#stepHero .sh-nav.p{left:10px}#stepHero .sh-nav.n{right:10px}
+#stepHero .sh-nav[disabled]{opacity:.25}
+</style>
 </head>
 <body>
 
@@ -5891,7 +5913,7 @@ window.BBXBk=(function(){
   function blocked(t){
     if(!slideOn()) return true;
     if(!t||!t.closest) return true;
-    if(t.closest('input,textarea,select,video,canvas,[contenteditable],.pm-seg,.ms,#scanOverlay')) return true;
+    if(t.closest('input,textarea,select,video,canvas,[contenteditable],.pm-seg,.ms,#scanOverlay,#stepHero')) return true;
     for(let e=t;e&&e!==document.body;e=e.parentElement){
       const cs=getComputedStyle(e);
       if((cs.overflowX==='auto'||cs.overflowX==='scroll')&&e.scrollWidth>e.clientWidth+4) return true;
@@ -5910,6 +5932,39 @@ window.BBXBk=(function(){
     if(dx<0 && !inMeal()) BBXNav.set('meal');
     else if(dx>0 && inMeal()) BBXNav.set('sport');
   },{passive:true});
+})();
+</script>
+<script id="stepFlowJS">
+(function(){
+  let busy=false,sx=0,sy=0;
+  function rows(){ return [...document.querySelectorAll('#inlineDetail .tb-row')]; }
+  function go(r){ if(r&&typeof tabSelect==='function') tabSelect(r.dataset.tid); }
+  function build(){
+    const h=document.getElementById('inlineDetail'); if(!h) return;
+    let st=document.getElementById('stepStage');
+    if(!document.body.classList.contains('tabmode')){ if(st) st.remove(); return; }
+    const R=rows(); const sel=R.find(r=>r.classList.contains('sel')); if(!sel) return;
+    const i=R.indexOf(sel), ph=sel.querySelector('.tb-ph'), done=sel.classList.contains('done');
+    const nm=sel.querySelector('.tb-nm').textContent;
+    let sec=''; const lab=sel.closest('.ex-list')&&sel.closest('.ex-list').previousElementSibling; if(lab&&lab.classList.contains('section-label')) sec=lab.textContent.trim();
+    if((sel.dataset.tid||'').indexOf('abdos')>=0) sec='Abdos';
+    const key=[i,R.length,nm,done,R.map(r=>r.classList.contains('done')?1:0).join('')].join('|');
+    if(st&&st.dataset.k===key&&st.parentNode===h&&h.firstChild===st) return;
+    if(!st){ st=document.createElement('div'); st.id='stepStage'; }
+    st.dataset.k=key;
+    st.innerHTML='<div class="st-top"><div class="st-sec"><i></i>'+(sec||'Séance')+'</div><div class="st-cnt">'+(i+1)+' / '+R.length+'</div></div>'
+      +'<div class="st-seg">'+R.map((r,k)=>'<b data-k="'+k+'" class="'+(r.classList.contains('done')?'done ':'')+(k===i?'sel':'')+'"></b>').join('')+'</div>'
+      +'<div id="stepHero">'+(done?'<div class="sh-ok">✓ TERMINÉ</div>':'')+'<button class="sh-nav p" '+(i?'':'disabled')+' aria-label="Précédent">‹</button><button class="sh-nav n" '+(i<R.length-1?'':'disabled')+' aria-label="Suivant">›</button><div class="sh-nm">'+nm+'</div></div>';
+    h.insertBefore(st,h.firstChild);
+    st.querySelectorAll('.st-seg b').forEach(b=>b.onclick=()=>go(R[+b.dataset.k]));
+    st.querySelector('.sh-nav.p').onclick=()=>go(R[i-1]);
+    st.querySelector('.sh-nav.n').onclick=()=>go(R[i+1]);
+    const hero=st.querySelector('#stepHero'); if(ph) hero.style.backgroundImage=ph.style.backgroundImage;
+    hero.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+    hero.addEventListener('touchend',e=>{ e.stopPropagation(); const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5) go(R[i+(dx<0?1:-1)]); },{passive:true});
+  }
+  new MutationObserver(()=>{ if(busy) return; busy=true; requestAnimationFrame(()=>{ busy=false; build(); }); }).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+  build();
 })();
 </script>
 </body>

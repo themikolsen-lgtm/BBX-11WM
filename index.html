@@ -2944,6 +2944,34 @@ body.tabmode #tabBarHost{bottom:calc(12px + env(safe-area-inset-bottom,0px)) !im
 body.tabmode #inlineDetail{padding-bottom:160px !important}
 body.tabmode .nav-pill, body.tabmode:has(#mealView.show) .nav-pill{bottom:calc(144px + env(safe-area-inset-bottom,0px)) !important}
 </style>
+<style id="focusMode">
+/* ===== BÊTA « FOCUS » : héros photo + pastilles rondes ===== */
+body.tabmode #focusHero{position:relative;margin:6px 4px 14px;height:min(40vh,330px);border-radius:32px;overflow:hidden;background:#111 center/cover no-repeat;border:1.5px solid rgba(255,255,255,.18);box-shadow:0 18px 50px rgba(0,0,0,.65),0 0 40px rgba(255,31,61,.3)}
+body.tabmode #focusHero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 35%,rgba(0,0,0,.88)),radial-gradient(80% 50% at 15% 100%,rgba(255,31,61,.5),transparent 70%)}
+body.tabmode #focusHero .fh-txt{position:absolute;left:20px;right:20px;bottom:16px;z-index:2}
+body.tabmode #focusHero .fh-sec{font-size:11px;font-weight:800;letter-spacing:.3em;color:#FF4560;text-transform:uppercase;text-shadow:0 0 10px rgba(255,31,61,.8)}
+body.tabmode #focusHero .fh-nm{font-size:30px;line-height:1.05;font-weight:900;letter-spacing:.02em;text-transform:uppercase;color:#fff;margin-top:4px;text-shadow:0 2px 16px rgba(0,0,0,.7)}
+body.tabmode #focusHero .fh-cnt{position:absolute;right:16px;top:14px;z-index:2;padding:6px 12px;border-radius:99px;background:rgba(0,0,0,.45);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.25);font-weight:800;font-size:12px;letter-spacing:.14em;color:#fff}
+body.tabmode #inlineDetail .section-label{display:none!important}
+body.tabmode #inlineDetail .tb-row{display:inline-flex!important;flex-direction:column;align-items:center;gap:6px;width:74px!important;min-height:0!important;height:auto!important;padding:0!important;margin:0 5px 12px!important;background:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;overflow:visible!important;vertical-align:top}
+body.tabmode #inlineDetail .tb-row::after{display:none!important}
+body.tabmode #inlineDetail .tb-row .tb-ph{position:relative!important;width:64px!important;height:64px!important;flex:none!important;border-radius:50%!important;border:2px solid rgba(255,255,255,.22)!important;box-shadow:0 6px 16px rgba(0,0,0,.5)!important;background-size:cover!important;background-position:center top!important}
+body.tabmode #inlineDetail .tb-row .tb-nm{font-size:9px!important;letter-spacing:.06em!important;text-align:center;max-width:74px;line-height:1.15;color:rgba(255,255,255,.7)!important;text-shadow:none!important}
+body.tabmode #inlineDetail .tb-row.sel .tb-ph{border-color:#FF1F3D!important;box-shadow:0 0 0 3px rgba(255,31,61,.35),0 0 22px rgba(255,31,61,.85)!important}
+body.tabmode #inlineDetail .tb-row.sel .tb-nm{color:#fff!important}
+body.tabmode #inlineDetail .tb-row.done .tb-ph{filter:grayscale(1) brightness(.55)}
+body.tabmode #inlineDetail .tb-row.done .tb-ph::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;background:rgba(0,0,0,.25);border-radius:50%}
+</style>
+<style id="focusMode2">
+body.tabmode #inlineDetail .ex-list{display:flex!important;flex-direction:row!important;flex-wrap:wrap;justify-content:center;gap:0!important}
+body.tabmode #focusHero::after{pointer-events:none}
+</style>
+<style id="focusMode3">
+body.tabmode #inlineDetail{display:flex!important;flex-wrap:wrap;justify-content:center;align-content:flex-start}
+body.tabmode #inlineDetail .ex-list{display:contents!important}
+body.tabmode #focusHero{flex:0 0 calc(100% - 8px);height:min(31vh,260px)!important;margin:4px 4px 12px!important}
+body.tabmode #focusHero .fh-nm{font-size:24px!important}
+</style>
 </head>
 <body>
 
@@ -6150,6 +6178,28 @@ window.BBXBk=(function(){
     if(dx<0 && !inMeal()) BBXNav.set('meal');
     else if(dx>0 && inMeal()) BBXNav.set('sport');
   },{passive:true});
+})();
+</script>
+<script id="focusHeroJS">
+(function(){
+  const host=()=>document.getElementById('inlineDetail');
+  function build(){
+    const h=host(); if(!h||!document.body.classList.contains('tabmode')){ const o=document.getElementById('focusHero'); if(o) o.remove(); return; }
+    const sel=h.querySelector('.tb-row.sel'); if(!sel) return;
+    const rows=[...h.querySelectorAll('.tb-row')], i=rows.indexOf(sel), ph=sel.querySelector('.tb-ph');
+    let el=document.getElementById('focusHero');
+    if(!el){ el=document.createElement('div'); el.id='focusHero'; h.insertBefore(el,h.firstChild); }
+    else if(el.parentNode!==h||h.firstChild!==el){ h.insertBefore(el,h.firstChild); }
+    const bg=ph?ph.style.backgroundImage:'', flip=ph&&ph.style.transform;
+    const sec=(sel.dataset.tid||'').indexOf('abdos')>=0?'Abdos':(sel.previousElementSibling&&sel.previousElementSibling.classList.contains('section-label')?sel.previousElementSibling.textContent.trim():'');
+    const key=sel.dataset.tid+'|'+bg;
+    if(el.dataset.k===key) return; el.dataset.k=key;
+    el.style.backgroundImage=bg; el.style.backgroundPosition='center top';
+    el.innerHTML='<div class="fh-cnt">'+(i+1)+' / '+rows.length+'</div><div class="fh-txt"><div class="fh-sec">'+(sec||'')+'</div><div class="fh-nm">'+sel.querySelector('.tb-nm').textContent+'</div></div>';
+  }
+  let busy=false;
+  new MutationObserver(()=>{ if(busy) return; busy=true; requestAnimationFrame(()=>{ busy=false; build(); }); }).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']});
+  build();
 })();
 </script>
 </body>

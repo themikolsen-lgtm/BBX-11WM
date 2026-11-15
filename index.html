@@ -2760,19 +2760,22 @@ body.beta #inlineDetail .ex-list{display:flex !important;flex-direction:column !
 body.beta #inlineDetail .ex-row{position:relative !important;overflow:visible!important;height:80px!important;min-height:0!important;margin:0!important;border-radius:999px!important;background:#020203!important;border:0!important;box-shadow:none!important;padding:0!important;display:block!important}
 body.beta #inlineDetail .ex-photo{display:block!important;position:absolute!important;left:14px!important;top:13px!important;width:53px!important;height:53px!important;flex:none!important;border-radius:50%!important;clip-path:none!important;background-size:cover!important;background-position:center!important;margin:0!important;opacity:1!important;z-index:1}
 body.beta #inlineDetail .ex-info{position:static!important;display:block!important;padding:0!important;min-height:0!important;height:auto!important}
-body.beta #inlineDetail .ex-name{position:absolute!important;top:-13px !important;left:50% !important;transform:translateX(-50%) !important;z-index:3 !important;display:flex !important;align-items:center !important;gap:11px !important;height:26px!important;min-height:0!important;margin:0!important;padding:0 10px 0 8px !important;border-radius:99px !important;background:#1A1315!important;color:#fff!important;font-size:11px!important;font-weight:700!important;line-height:26px !important;letter-spacing:0!important;white-space:nowrap !important;cursor:pointer !important;text-decoration:none!important}
+body.beta #inlineDetail .bt-pill{position:absolute !important;left:0 !important;right:0 !important;top:-13px !important;height:26px !important;display:flex !important;justify-content:center !important;z-index:3 !important;pointer-events:none !important}
+body.beta #inlineDetail .bt-in{pointer-events:auto !important;display:flex !important;align-items:center !important;gap:11px !important;height:26px !important;padding:0 9px !important;border-radius:99px !important;background:#1A1315 !important;position:static !important}
+body.beta #inlineDetail .ex-name{position:static !important;transform:none !important;display:block !important;height:auto !important;min-height:0 !important;margin:0 !important;padding:0 !important;background:none !important;color:#fff !important;font-size:11px !important;font-weight:700 !important;line-height:26px !important;letter-spacing:0 !important;white-space:nowrap !important;cursor:pointer;text-decoration:none !important}
 body.beta #inlineDetail .ex-row.done .ex-name{text-decoration:line-through!important;color:#8E8E93!important}
-body.beta #inlineDetail .ex-row:not(.done):is(.resting,:has(.dot.on)) .ex-name::before{content:"" !important;flex:none !important;width:10px !important;height:10px !important;border-radius:50% !important;background:#D3373F !important;animation:betaBlink 1s ease-in-out infinite}
+body.beta #inlineDetail .ex-row:not(.done):is(.resting,:has(.dot.on)) .bt-in::before{content:"" !important;flex:none !important;width:10px !important;height:10px !important;border-radius:50% !important;background:#D3373F !important;margin-right:-1px !important;animation:betaBlink 1s ease-in-out infinite}
 @keyframes betaBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.15;transform:scale(.8)}}
-body.beta #inlineDetail .ex-sets{position:absolute!important;left:75px !important;top:29px !important;transform:translateY(-50%) !important;display:flex !important;align-items:baseline !important;gap:7px !important;margin:0!important;height:auto!important;white-space:nowrap !important}
+body.beta #inlineDetail .ex-sets{position:absolute !important;left:75px !important;top:41.5px !important;transform:translateY(-50%) !important;display:flex !important;flex-direction:column !important;align-items:flex-start !important;gap:5px !important;margin:0 !important;height:auto !important;white-space:nowrap !important}
 body.beta #inlineDetail .ex-sets .ex-nb{font-size:12.5px!important;font-weight:800!important;color:#fff!important;line-height:1 !important}
-body.beta #inlineDetail .ex-sets .ex-wt{font-size:9px!important;font-weight:500!important;color:#2e2125!important;text-transform:uppercase !important;letter-spacing:0!important;line-height:1 !important}
-body.beta #inlineDetail .ex-dots{position:static!important;margin:0!important;height:auto!important}
-body.beta #inlineDetail .dots-row{position:absolute !important;left:75px !important;top:40.5px !important;display:flex !important;gap:3px !important;margin:0!important}
-body.beta #inlineDetail .dots-row .dot{width:8px!important;height:14.5px!important;border-radius:99px!important;border:1.5px solid #fff!important;background:transparent!important;transform:none!important;margin:0!important;box-sizing:border-box !important}
-body.beta #inlineDetail .dots-row .dot.on{background:#D3373F!important;border-color:#D3373F!important}
+body.beta #inlineDetail .ex-sets .ex-wt{font-size:9px!important;font-weight:500!important;color:#4a393e!important;text-transform:uppercase !important;letter-spacing:0!important;line-height:1 !important}
+body.beta #inlineDetail .ex-dots{position:static !important;margin:0 !important;height:auto !important;display:none !important}
+body.beta #inlineDetail .ex-row:not(.done):is(.resting,:has(.dot.on)) .ex-dots{display:block !important}
+body.beta #inlineDetail .dots-row{position:static !important;display:flex !important;gap:1.5px !important;margin:0 0 0 0 !important;padding-left:0 !important}
+body.beta #inlineDetail .dots-row .dot{width:7px !important;height:11px !important;border-radius:99px !important;border:1.2px solid #fff !important;background:transparent !important;transform:none !important;margin:0 !important;box-sizing:border-box}
+body.beta #inlineDetail .dots-row .dot.on{background:#7ED957 !important;border-color:#7ED957 !important}
 body.beta #inlineDetail .ex-dots .set-label{display:none!important}
-body.beta #inlineDetail .ex-dots .set-line{width:17px!important;justify-content:flex-start!important;position:absolute!important;left:177px !important;top:31px !important;margin:0!important;padding:0!important}
+body.beta #inlineDetail .ex-dots .set-line{width:17px!important;justify-content:flex-start!important;position:absolute!important;left:177px !important;top:34px !important;margin:0!important;padding:0!important}
 body.beta #inlineDetail .set-undo{width:17px!important;height:17px!important;min-width:0!important;padding:0!important;border-radius:50%!important;background:#D3373F!important;display:grid !important;place-items:center !important}
 body.beta #inlineDetail .set-undo svg{width:10px!important;height:10px!important;stroke:#000!important}
 body.beta #inlineDetail .ex-row .ex-rest{position:absolute!important;left:183px!important;right:auto!important;top:26px!important;bottom:auto!important;width:101px!important;height:28px!important;min-height:0!important;margin:0!important;transform:none!important}
@@ -3476,7 +3479,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
   function showDetail(key){
     const d = DAYS.find(x=>x.key===key);
     let html = '';
-    const TAB = !!window.__tabMode; let rowHTMLRef = null;
+    const TAB = !!window.__tabMode; const BETA = !!window.__betaFlag; let rowHTMLRef = null;
     document.body.classList.toggle('tabmode', TAB); document.body.classList.toggle('beta', !!window.__betaFlag);
     document.body.classList.remove('tabgrid');
     const tabIds = d.exercises.map(ex=>d.key+'|'+ex.name).concat(d.video ? [d.key+'|abdos'] : []);
@@ -3512,9 +3515,9 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
         const cid = d.key + '|' + ex.name;
         html += `<div class="ex-row has-rest${isDone(cid)?' done':''}${restTimers[cid]?' resting':''}${readyState[cid]&&!restTimers[cid]?' ready':''}" data-id="${cid}">
           <div class="ex-info">
-            <div class="ex-name">${shortName(ex.name)}</div>
+            ${BETA ? `<div class="bt-pill"><div class="bt-in"><div class="ex-name">${shortName(ex.name)}</div><div class="ex-dots">${dotsHTML(cid, ex)}</div></div></div>` : `<div class="ex-name">${shortName(ex.name)}</div>`}
             <div class="ex-sets"><b class="ex-nb">${fmtSets(ex.sets)}</b>${ex.load ? `<span class="ex-wt">${loadOf(ex)}</span>` : ''}</div>
-            <div class="ex-dots">${dotsHTML(cid, ex)}</div>
+            ${BETA ? '' : `<div class="ex-dots">${dotsHTML(cid, ex)}</div>`}
             <div class="ex-rest">${restStripHTML(cid, ex)}</div>
           </div>
           <div class="ex-photo" style="background-image:url('${ex.img}');${flip ? 'transform:scaleX(-1);' : ''}" data-img="${ex.img}" data-flip="${flip}" onclick="openImageLightbox(this)"></div>
@@ -3544,9 +3547,9 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
         const aid = d.key + '|abdos';
         html += TAB ? tabAbdoRow(aid) : `<div class="ex-row abdo has-rest${isDone(aid)?' done':''}${restTimers[aid]?' resting':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).rest?' ab-rest':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).prep?' ab-prep':''}" data-id="${aid}">
           <div class="ex-info">
-            <div class="ex-name">${d.video.title}</div>
+            ${BETA ? `<div class="bt-pill"><div class="bt-in"><div class="ex-name">${d.video.title}</div><div class="ex-dots">${abdoDotsHTML(aid)}</div></div></div>` : `<div class="ex-name">${d.video.title}</div>`}
             <div class="ab-sub">${d.video.sub || ''}</div>
-            <div class="ex-dots">${abdoDotsHTML(aid)}</div>
+            ${BETA ? '' : `<div class="ex-dots">${abdoDotsHTML(aid)}</div>`}
             <div class="ex-rest">${abdoStripHTML(aid)}</div>
           </div>
           <div class="ex-photo" style="background-image:url('${d.video.img}');" data-img="${d.video.img}" data-flip="false" onclick="openImageLightbox(this)"></div>

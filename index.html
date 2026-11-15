@@ -2746,11 +2746,10 @@ body.tabmode .nav-pill, body.tabmode:has(#mealView.show) .nav-pill{bottom:calc(1
 <style id="noHint">#mealView .my-hint{display:none!important}</style>
 <style id="smoothSum">#mealView .my-fixed .my-sum,#mealView .my-fixed .sum-full,#mealView .my-fixed .sum-mini{will-change:height,opacity,transform}</style>
 <style id="betaNormal">
-/* Bêta = même langage visuel que Normal (photo biseautée, pastilles, bloc play blanc) */
-body.tabmode .tb-row{height:84px;background:#0A0A0C;border:1.5px solid rgba(227,27,52,.28);border-radius:26px}
-body.tabmode .tb-ph{width:128px;clip-path:polygon(0 0,100% 0,82% 100%,0 100%)}
-body.tabmode .tb-nm{padding-left:2px;font-size:16px}
-body.tabmode .tb-row.sel{border-color:#FF1F3D;box-shadow:0 0 0 1px #FF1F3D,0 10px 24px -12px rgba(255,31,61,.7)}
+/* Bêta = liste identique au mode Normal (cartes complètes), l'exo choisi est piloté depuis la barre du bas */
+body.tabmode .tb-row{display:block;position:relative;background:none;border:0;height:auto;border-radius:26px;margin:0}
+body.tabmode .tb-row .ex-row,body.tabmode .tb-row .ex-row *{pointer-events:none}
+body.tabmode .tb-row.sel{box-shadow:0 0 0 2px #FF1F3D,0 10px 24px -12px rgba(255,31,61,.7)}
 body.tabmode .tb-row.done{opacity:.45}
 body.tabmode .tab-bar .ex-row .ex-rest,body.tabmode .tab-bar .ex-row.resting .ex-rest{width:auto!important}
 body.tabmode .tab-bar .ex-rest .rt-step{display:inline-flex!important}
@@ -3446,8 +3445,14 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
     let selId = window.__tabSel[d.key]; if(!tabIds.includes(selId)) selId = tabIds.find(id=>!isDone(id)) || tabIds[0] || null;
     window.__tabSel[d.key] = selId;
     const tabRow = ex => { const cid = d.key+'|'+ex.name, flip = ex.name.includes('Droite');
-      return `<div class="tb-row${isDone(cid)?' done':''}${cid===selId?' sel':''}" data-tid="${cid}" onclick="tabSelect(this.dataset.tid)"><div class="tb-ph" style="background-image:url('${ex.img}');${flip?'transform:scaleX(-1);':''}"></div><div class="tb-nm">${shortName(ex.name)}</div></div>`; };
-    const tabAbdoRow = aid => `<div class="tb-row${isDone(aid)?' done':''}${aid===selId?' sel':''}" data-tid="${aid}" onclick="tabSelect(this.dataset.tid)"><div class="tb-ph" style="background-image:url('${d.video.img}');"></div><div class="tb-nm">${d.video.title}</div></div>`;
+      return `<div class="tb-row${isDone(cid)?' done':''}${cid===selId?' sel':''}" data-tid="${cid}" onclick="tabSelect(this.dataset.tid)"><div class="ex-row has-rest${isDone(cid)?' done':''}">
+        <div class="ex-info"><div class="ex-name">${shortName(ex.name)}</div>
+          <div class="ex-sets"><b class="ex-nb">${fmtSets(ex.sets)}</b>${ex.load ? `<span class="ex-wt">${loadOf(ex)}</span>` : ''}</div>
+          <div class="ex-dots">${dotsHTML(cid, ex)}</div>
+          <div class="ex-rest">${restStripHTML(cid, ex)}</div></div>
+        <div class="ex-photo" style="background-image:url('${ex.img}');${flip ? 'transform:scaleX(-1);' : ''}"></div>
+        <div class="ex-action">${actionHTML(cid, ex)}</div></div></div>`; };
+    const tabAbdoRow = aid => `<div class="tb-row${isDone(aid)?' done':''}${aid===selId?' sel':''}" data-tid="${aid}" onclick="tabSelect(this.dataset.tid)"><div class="ex-row abdo has-rest${isDone(aid)?' done':''}"><div class="ex-info"><div class="ex-name">${d.video.title}</div><div class="ab-sub">${d.video.sub || ''}</div><div class="ex-dots">${abdoDotsHTML(aid)}</div></div><div class="ex-photo" style="background-image:url('${d.video.img}');"></div><div class="ex-action">${abdoActionHTML(aid)}</div></div></div>`;
     const abdoHTML = () => { const aid = d.key + '|abdos'; return `<div class="ex-row abdo has-rest${isDone(aid)?' done':''}${restTimers[aid]?' resting':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).rest?' ab-rest':''}${restTimers[aid]&&!isDone(aid)&&abdoPhase(restLeft(aid)).prep?' ab-prep':''}" data-id="${aid}">
           <div class="ex-info">
             <div class="ex-name">${d.video.title}</div>

@@ -3432,7 +3432,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
   }
 
   // ---------- inline detail ----------
-  window.__tabMode = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab'; }catch(e){ return false; } })();
+  window.__betaFlag = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab'; }catch(e){ return false; } })(); window.__tabMode = false; /* Bêta = copie conforme du mode Normal */
   window.__tabSel = {};
   window.__tabLayout = (()=>{ try{ return 'list'; }catch(e){ return 'list'; } })();
   function showDetail(key){
@@ -3548,9 +3548,9 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
   }
   function tabSelect(id){ window.__tabSel[selectedKey] = id; keepScroll(()=>showDetail(selectedKey)); }
   function tabSync(){ document.querySelectorAll('.tb-row').forEach(r=>r.classList.toggle('done', isDone(r.dataset.tid))); }
-  function setWMode(m){ window.__tabMode = (m==='tab'); try{ localStorage.setItem('bb9-wmode', m); }catch(e){} syncWMode(); showDetail(selectedKey); }
+  function setWMode(m){ window.__betaFlag = (m==='tab'); window.__tabMode = false; try{ localStorage.setItem('bb9-wmode', m); }catch(e){} syncWMode(); showDetail(selectedKey); }
   function setWLayout(l){ window.__tabLayout = (l==='grid')?'grid':'list'; try{ localStorage.setItem('bb9-wlayout', window.__tabLayout); }catch(e){} syncWMode(); document.body.classList.toggle('tabgrid', !!window.__tabMode && window.__tabLayout==='grid'); }
-  function syncWMode(){ document.querySelectorAll('.pm-seg button[data-m]').forEach(b=>b.classList.toggle('on', (b.dataset.m==='tab')===!!window.__tabMode)); document.querySelectorAll('.pm-seg button[data-l]').forEach(b=>b.classList.toggle('on', b.dataset.l===window.__tabLayout)); }
+  function syncWMode(){ document.querySelectorAll('.pm-seg button[data-m]').forEach(b=>b.classList.toggle('on', (b.dataset.m==='tab')===!!window.__betaFlag)); document.querySelectorAll('.pm-seg button[data-l]').forEach(b=>b.classList.toggle('on', b.dataset.l===window.__tabLayout)); }
   setTimeout(syncWMode,0);
 
   function openImageLightbox(el){

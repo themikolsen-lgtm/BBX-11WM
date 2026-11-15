@@ -2726,6 +2726,18 @@ body.tabmode #stepStage{display:block}
 #stepHero .sh-nav.p{left:10px}#stepHero .sh-nav.n{right:10px}
 #stepHero .sh-nav[disabled]{opacity:.25}
 </style>
+<style id="vidEdit">
+.vid-edit{margin-left:8px;border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:99px;padding:3px 10px;font:700 11px inherit;font-family:inherit;letter-spacing:.04em;cursor:pointer}
+#vidEditSheet{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.65);display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
+#vidEditSheet .ve-card{width:100%;max-width:520px;background:#111114;border-radius:28px 28px 0 0;border:1px solid rgba(227,27,52,.35);padding:20px 18px calc(22px + env(safe-area-inset-bottom,0px))}
+#vidEditSheet .ve-h{font-weight:900;font-size:18px;color:#fff;margin-bottom:12px}
+#vidEditSheet label{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#8e8e93;margin:10px 2px 6px}
+#vidEditSheet input{width:100%;box-sizing:border-box;padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:#1b1b20;color:#fff;font-size:16px}
+#vidEditSheet .ve-err{color:#FF4560;font-size:13px;min-height:18px;margin-top:8px}
+#vidEditSheet .ve-row{display:flex;gap:8px;margin-top:6px}
+#vidEditSheet .ve-row button{flex:1;padding:13px 6px;border-radius:99px;border:0;background:rgba(255,255,255,.1);color:#fff;font-weight:800;font-size:14px;font-family:inherit}
+#vidEditSheet .ve-row button.ok{background:#E31B34}
+</style>
 </head>
 <body>
 
@@ -2895,7 +2907,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
       ]},
     { key:'mer', abbr:'Mer', num:3, name:'Mercredi', focus:'Cuisse et fessier', label:'Cuisse et fessier', color:'#E7E8ED', tag:'#D3D5DC', photo:IMG_MER,
       video:{title:'Abdos 5 min avec haltère', sub:'Portefeuille · Russian twist · Prise marteau · Crunch lesté · Russian twist', id:'Soal-6UL18U', img:EX_ABDO},
-      videos:[{title:'Cuisse et fessier 10 min', id:'KpBgr65byaQ'}, {title:'Pompe 5 min', id:'6RPHspLzUew'}],
+      videos:[{title:'Cuisse et fessier 10 min', id:'KpBgr65byaQ'}, {title:'Pompe 5 min', id:'6RPHspLzUew'}, {title:'Vidéo guidée', id:'u1My2n961KM'}],
       exercises:[]},
     { key:'jeu', abbr:'Jeu', num:4, name:'Jeudi', focus:"Pectoraux + Épaules", label:"Pectoraux + Épaules", color:'#DCF3E4', tag:'#B9E7C9', photo:IMG_JEU,
       video:{title:'Abdos 5 min avec haltère', sub:'Portefeuille · Russian twist · Prise marteau · Crunch lesté · Russian twist', id:'Soal-6UL18U', img:EX_ABDO},
@@ -2933,7 +2945,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
         {name:'Tractions', sets:'4×8–12', load:'PDC', rest:120, img:EX9},
       ]},
     { key:'dim', abbr:'Dim', num:7, name:'Dimanche', focus:'Repos', label:'Repos', note:'Repos', color:'#E7E8ED', tag:'#D3D5DC', photo:IMG_DIM,
-      videos:[{title:'Pompe 5 min', id:'6RPHspLzUew'}],
+      videos:[{title:'Pompe 5 min', id:'6RPHspLzUew'}, {title:'Vidéo guidée', id:'u1My2n961KM'}],
       exercises:[]},
   ];
 
@@ -3481,12 +3493,13 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
           <div class="ex-action${restTimers[aid]&&!isDone(aid)?' split':''}">${abdoActionHTML(aid)}</div>
         </div>`;
       }
-      (d.videos || []).forEach((v,i)=>{
+      (d.videos || []).forEach((v0,i)=>{
+        const v = vidOv(v0);
         const k = d.key + '-v' + i;
         html += `<div class="ex-row">
           <div class="ex-info">
             <div class="ex-name">${v.title}</div>
-            <div class="ex-sets">Vidéo guidée</div>
+            <div class="ex-sets">Vidéo guidée <button class="vid-edit" type="button" onclick="editVideo('${v0.title.replace(/'/g,"\\'")}')">✎ lien</button></div>
           </div>
           <button class="video-play-btn" id="videoBtn-${k}" onclick="toggleVideoRow('${k}','${v.id}')" aria-label="Lire la vidéo"><span>▶</span></button>
         </div>
@@ -3525,6 +3538,29 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBAQE
     content.innerHTML = `<div class="lightbox-close" onclick="closeLightbox(event)">✕</div><img src="${url}" style="${flip ? 'transform:scaleX(-1);' : ''}">`;
     document.getElementById('lightboxOverlay').classList.add('show');
   }
+
+  // ---------- liens vidéo modifiables ----------
+  const VIDOV_KEY='bb9-vidlinks';
+  let vidOvs={}; try{ vidOvs=JSON.parse(localStorage.getItem(VIDOV_KEY))||{}; }catch(e){}
+  function vidOv(v){ const o=vidOvs[v.title]; return o?{title:o.t||v.title,id:o.id||v.id}:v; }
+  function ytId(u){ u=(u||'').trim(); const m=u.match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/)||u.match(/^([A-Za-z0-9_-]{11})$/); return m?m[1]:null; }
+  function editVideo(origTitle){
+    const cur=vidOvs[origTitle]||{}; let box=document.getElementById('vidEditSheet'); if(box) box.remove();
+    box=document.createElement('div'); box.id='vidEditSheet';
+    box.innerHTML='<div class="ve-card"><div class="ve-h">Modifier la vidéo</div><label>Lien YouTube</label><input id="veLink" type="url" inputmode="url" placeholder="https://youtu.be/..." value="'+(cur.id?'https://youtu.be/'+cur.id:'')+'"><label>Titre (facultatif)</label><input id="veTitle" type="text" placeholder="'+origTitle.replace(/"/g,'&quot;')+'" value="'+(cur.t||'').replace(/"/g,'&quot;')+'"><div class="ve-err" id="veErr"></div><div class="ve-row"><button type="button" id="veReset">Réinitialiser</button><button type="button" id="veCancel">Annuler</button><button type="button" id="veOk" class="ok">Enregistrer</button></div></div>';
+    document.body.appendChild(box);
+    box.onclick=e=>{ if(e.target===box) box.remove(); };
+    document.getElementById('veCancel').onclick=()=>box.remove();
+    document.getElementById('veReset').onclick=()=>{ delete vidOvs[origTitle]; try{localStorage.setItem(VIDOV_KEY,JSON.stringify(vidOvs));}catch(e){} box.remove(); refreshDetail(); };
+    document.getElementById('veOk').onclick=()=>{
+      const l=document.getElementById('veLink').value.trim(), t=document.getElementById('veTitle').value.trim(), id=l?ytId(l):(cur.id||null);
+      if(l&&!id){ document.getElementById('veErr').textContent='Lien YouTube non reconnu.'; return; }
+      if(!id&&!t){ delete vidOvs[origTitle]; } else vidOvs[origTitle]={id:id||undefined,t:t||undefined};
+      try{localStorage.setItem(VIDOV_KEY,JSON.stringify(vidOvs));}catch(e){} box.remove(); refreshDetail();
+    };
+  }
+  window.editVideo=editVideo;
+  function refreshDetail(){ try{ showDetail(selectedKey); }catch(e){} }
 
   function toggleVideoRow(key, id){
     const expand = document.getElementById('videoExpand-'+key);

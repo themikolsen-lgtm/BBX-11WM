@@ -2754,39 +2754,6 @@ body.tabmode .tb-row.done{opacity:.45}
 body.tabmode .tab-bar .ex-row .ex-rest,body.tabmode .tab-bar .ex-row.resting .ex-rest{width:auto!important}
 body.tabmode .tab-bar .ex-rest .rt-step{display:inline-flex!important}
 </style>
-<style id="betaDesign">
-/* ===== BÊTA : cartes pilule, nom en étiquette sur le bord, point rouge clignotant ===== */
-body.beta #inlineDetail .ex-list{display:flex;flex-direction:column;gap:34px;padding-top:22px}
-body.beta #inlineDetail .ex-row{position:relative;overflow:visible!important;height:116px!important;min-height:0!important;margin:0!important;border-radius:999px!important;background:#050507!important;border:0!important;box-shadow:none!important;padding:0 0 0 30px!important}
-body.beta #inlineDetail .ex-photo{display:none!important}
-body.beta #inlineDetail .ex-info{min-height:0!important;padding:26px 0 0 0!important;flex:1 1 auto;justify-content:flex-start;position:static}
-body.beta #inlineDetail .ex-name{position:absolute!important;top:-20px;left:50%;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:12px;min-height:0!important;height:auto!important;padding:11px 24px!important;border-radius:99px;background:#1A1315!important;color:#fff!important;font-size:17px!important;font-weight:800!important;white-space:nowrap;cursor:pointer;text-decoration:none!important}
-body.beta #inlineDetail .ex-row.done .ex-name{text-decoration:line-through!important;color:#8E8E93!important}
-body.beta #inlineDetail .ex-row:not(.done):is(.resting,:has(.dot.on)) .ex-name::before{content:"";flex:none;width:17px;height:17px;border-radius:50%;background:#D3373F;animation:betaBlink 1s ease-in-out infinite}
-@keyframes betaBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.15;transform:scale(.8)}}
-body.beta #inlineDetail .ex-sets .ex-wt{color:#4a3a3d!important}
-body.beta #inlineDetail .ex-action{flex:0 0 118px!important;width:118px;margin:0!important;align-self:stretch;overflow:hidden;border-radius:0 999px 999px 0}
-body.beta #inlineDetail .ex-go{position:relative;border-radius:0!important;clip-path:polygon(20% 0,100% 0,100% 100%,0 100%)!important;font-size:0!important;color:transparent!important;background:#fff!important}
-body.beta #inlineDetail .ex-go svg{display:none!important}
-body.beta #inlineDetail .ex-go::after{content:"";position:absolute;left:58%;top:50%;width:56px;height:56px;transform:translate(-50%,-50%);background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'><circle cx='28' cy='28' r='28' fill='black'/><path d='M23 17l11 11-11 11' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat}
-body.beta #inlineDetail .ex-row.resting .ex-go,body.beta #inlineDetail .ex-row.resting .ex-go.skip{background:#D3373F!important}
-body.beta #inlineDetail .ex-row.resting .ex-go::after{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'><circle cx='28' cy='28' r='28' fill='black'/><path d='M23 17l11 11-11 11' fill='none' stroke='%23D3373F' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/></svg>")}
-body.beta #inlineDetail .ex-row.done .ex-go{background:#555!important}
-body.beta #inlineDetail .ex-list{gap:46px!important}
-body.beta #inlineDetail .ex-row .ex-rest{position:absolute!important;left:auto!important;right:126px!important;top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important;top:calc(50% + 14px)!important}
-body.beta #inlineDetail .ex-row .rt-step{background:#1A1315!important;padding:3px 4px!important}
-body.beta #inlineDetail .ex-row .rt-step button{width:26px!important;height:26px!important;background:transparent!important;font-size:20px!important}
-body.beta #inlineDetail .ex-row .rt-step span.rt-chrono{font-size:21px!important;min-width:56px!important;font-style:italic!important}
-body.beta #inlineDetail .ex-row.resting .ex-rest{left:32%!important;right:128px!important;top:50px!important;bottom:14px!important;transform:none!important;width:auto!important;height:auto!important}
-body.beta #inlineDetail .ex-row.resting .rt-run{position:static!important;display:block!important;height:100%!important;min-height:0!important}
-body.beta #inlineDetail .ex-row.resting .rt-left{position:absolute!important;right:0;top:0;font-size:38px!important;line-height:1;font-weight:900;color:#D3373F!important;font-style:italic!important}
-body.beta #inlineDetail .ex-row.resting .rt-bar{position:absolute!important;left:0;right:0;bottom:0;height:8px!important;margin:0!important}
-body.beta #inlineDetail .ex-row.resting .rt-bar i{background:#D3373F!important}
-body.beta #inlineDetail .ex-row .ex-dots .set-label{display:none!important}
-body.beta #inlineDetail .ex-row.resting .ex-dots .set-line{position:absolute!important;left:auto!important;right:calc(128px + 100px);top:48px;margin:0!important}
-body.beta #inlineDetail .ex-row.resting .set-undo{background:#D3373F!important;width:28px;height:28px}
-
-</style>
 </head>
 <body>
 
@@ -3472,7 +3439,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
     const d = DAYS.find(x=>x.key===key);
     let html = '';
     const TAB = !!window.__tabMode; let rowHTMLRef = null;
-    document.body.classList.toggle('tabmode', TAB); document.body.classList.toggle('beta', !!window.__betaFlag);
+    document.body.classList.toggle('tabmode', TAB);
     document.body.classList.remove('tabgrid');
     const tabIds = d.exercises.map(ex=>d.key+'|'+ex.name).concat(d.video ? [d.key+'|abdos'] : []);
     let selId = window.__tabSel[d.key]; if(!tabIds.includes(selId)) selId = tabIds.find(id=>!isDone(id)) || tabIds[0] || null;
@@ -3579,7 +3546,6 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
       if(TAB && selId){ const sx = d.exercises.find(ex=>d.key+'|'+ex.name===selId); host.innerHTML = '<div class="tab-bar">' + (sx ? rowHTMLRef(sx) : abdoHTML()) + '</div>'; try{ Object.keys(overlays).forEach(id=>renderOverlay(id)); }catch(e){} }
       else host.innerHTML = ''; }
   }
-  document.addEventListener('click',e=>{ if(!document.body.classList.contains('beta')) return; const n=e.target.closest&&e.target.closest('#inlineDetail .ex-name'); if(!n) return; const ph=n.closest('.ex-row').querySelector('.ex-photo'); if(ph) openImageLightbox(ph); });
   function tabSelect(id){ window.__tabSel[selectedKey] = id; keepScroll(()=>showDetail(selectedKey)); }
   function tabSync(){ document.querySelectorAll('.tb-row').forEach(r=>r.classList.toggle('done', isDone(r.dataset.tid))); }
   function setWMode(m){ window.__betaFlag = (m==='tab'); window.__tabMode = false; try{ localStorage.setItem('bb9-wmode', m); }catch(e){} syncWMode(); showDetail(selectedKey); }

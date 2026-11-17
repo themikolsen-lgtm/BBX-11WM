@@ -2685,7 +2685,7 @@ body:has(#mealView.show) .nav-pill button{background:#F1F2F4!important}
 <style id="navSolo3">
 body .nav-pill button, body:has(#mealView.show) .nav-pill button{width:50px!important;height:96px!important;border-radius:25px!important}
 </style>
-<style id="navMode">body.nav-slide .nav-pill{display:none!important}</style>
+<style id="navMode">body.nav-slide .nav-pill, html body.nav-slide:has(#mealView.show) .nav-pill, html body.nav-slide .nav-pill button{display:none!important}</style>
 <style id="tabBottom">
 body.tabmode #tabBarHost{bottom:calc(12px + env(safe-area-inset-bottom,0px)) !important}
 body.tabmode #inlineDetail{padding-bottom:160px !important}
@@ -4639,7 +4639,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 17/11 · 9 h 05</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 17/11 · 10 h 05</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
 </div>
 <script>
 window.BBXBk=(function(){

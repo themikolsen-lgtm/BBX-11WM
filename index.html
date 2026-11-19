@@ -2812,6 +2812,9 @@ body.beta #inlineDetail .ex-row.abdo .rt-run.ab-run2 .rt-bar{width:100% !importa
 /* exercice terminé : rangé dans une petite pastille sombre au-dessus de l'exercice suivant */
 body.beta #inlineDetail .ex-row.done:not(.wb-show){display:none !important}
 body.beta #inlineDetail .wb-hide{display:none !important}
+/* en-tête : dégradé discret au lieu d'un cadre flou à bord net quand la liste passe dessous */
+body.beta .top-sticky{background:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;isolation:isolate}
+html body.beta .top-sticky::before{display:block !important;content:'';position:absolute;left:0;right:0;top:0;bottom:-34px;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,rgba(9,1,2,.92) 0%,rgba(9,1,2,.78) 62%,rgba(9,1,2,0) 100%);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 60%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 60%,transparent 100%)}
 body.beta #inlineDetail .ex-row.wb-cur{border-color:#FF2D46 !important;box-shadow:0 0 0 2px #FF2D46,0 0 22px 2px rgba(255,45,70,.55),0 0 46px 6px rgba(227,27,52,.22) !important;animation:wbGlow 2.2s ease-in-out infinite !important}
 @keyframes wbGlow{0%,100%{box-shadow:0 0 0 2px #FF2D46,0 0 18px 1px rgba(255,45,70,.45),0 0 40px 4px rgba(227,27,52,.18)}50%{box-shadow:0 0 0 2px #FF4A5F,0 0 28px 4px rgba(255,45,70,.7),0 0 56px 10px rgba(227,27,52,.3)}}
 body.beta .dn-lab{cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -4928,7 +4931,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 14 h 05</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 14 h 35</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>

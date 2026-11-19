@@ -2783,10 +2783,17 @@ body.beta #inlineDetail .ex-row.abdo .ab-sub{position:static !important;transfor
 body.beta #inlineDetail .ex-row.abdo .bt-in .ex-name{max-width:calc(100vw - 80px) !important}
 body.beta #inlineDetail .ex-row.abdo .rt-step .rt-chrono{font-size:38px !important}
 /* exercice terminé : rangé dans une petite pastille sombre au-dessus de l'exercice suivant */
+body.beta #inlineDetail .ex-row.done:not(.wb-show){display:none !important}
+body.beta #inlineDetail .wb-done{align-self:center;width:84px;height:22px;border-radius:999px;border:0;padding:0;background:#1A1115;box-shadow:0 0 0 1px rgba(255,255,255,.05);cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
+body.beta #inlineDetail .wb-done.open{background:#241A1F}
+body.beta #inlineDetail .wb-done:active{transform:scale(.96)}
+body:not(.beta) .wb-done{display:none !important}
 body.beta #inlineDetail .ex-row.done{height:34px !important;min-height:0 !important;background:none !important;border:0 !important;box-shadow:none !important;opacity:1 !important;margin:0 !important;filter:none !important;animation:none !important}
 body.beta #inlineDetail .ex-row.done::before,body.beta #inlineDetail .ex-row.done::after{display:none !important}
 body.beta #inlineDetail .ex-row.done>:not(.ex-info),body.beta #inlineDetail .ex-row.done .ex-info>:not(.bt-pill){display:none !important}
-body.beta #inlineDetail .ex-row.done .ex-info{padding:0 !important;position:static !important}
+body.beta #inlineDetail .ex-row.done .ex-info{padding:0 !important;position:static !important;opacity:1 !important;visibility:visible !important}
+body.beta #inlineDetail .ex-row.done .bt-pill,body.beta #inlineDetail .ex-row.done .bt-pill *{visibility:visible !important;filter:none !important}
+body.beta #inlineDetail .ex-row.done .ex-info{filter:none !important}
 body.beta #inlineDetail .ex-row.done .bt-pill{top:0 !important}
 body.beta #inlineDetail .ex-row.done .bt-in{height:34px !important;padding:0 8px 0 12px !important;gap:8px !important;background:#151013 !important;opacity:.9}
 body.beta #inlineDetail .ex-row.done .bt-in::before{content:"✓" !important;width:auto !important;height:auto !important;background:none !important;box-shadow:none !important;animation:none !important;color:#34C759;font-weight:900;font-size:14px;border-radius:0 !important}
@@ -4885,7 +4892,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 10 h 30</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 10 h 50</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>
@@ -7317,6 +7324,40 @@ function BBXClear(){   // vide seulement le cache de l'app : les données et les
     if(skip>0){ skip--; return; }
     var id=stack.pop(); if(id) close(id);
   });
+})();
+</script>
+<script id="wbDoneJs">
+/* Workout Bêta : les exercices faits sont rangés dans une pastille vide ; un clic les affiche, un autre les cache */
+(function(){
+  var open={}, busy=false;
+  function apply(){
+    var host=document.getElementById('inlineDetail'); if(!host) return;
+    busy=true;
+    try{
+      host.querySelectorAll('.wb-done').forEach(function(b){ b.remove(); });
+      if(!document.body.classList.contains('beta')){ host.querySelectorAll('.wb-show').forEach(function(r){ r.classList.remove('wb-show'); }); return; }
+      host.querySelectorAll('.ex-list').forEach(function(list){
+        var rows=[].slice.call(list.children), i=0;
+        while(i<rows.length){
+          var r=rows[i];
+          if(r.classList&&r.classList.contains('ex-row')&&r.classList.contains('done')){
+            var grp=[]; while(i<rows.length&&rows[i].classList&&rows[i].classList.contains('ex-row')&&rows[i].classList.contains('done')){ grp.push(rows[i]); i++; }
+            var key=grp[0].getAttribute('data-id')||String(Math.random()), on=!!open[key];
+            var b=document.createElement('button'); b.type='button'; b.className='wb-done'+(on?' open':''); b.setAttribute('aria-label',on?'Cacher les exercices faits':'Afficher les exercices faits ('+grp.length+')');
+            b.onclick=(function(k){ return function(e){ e.stopPropagation(); open[k]=!open[k]; apply(); }; })(key);
+            list.insertBefore(b,grp[0]);
+            grp.forEach(function(x){ x.classList.toggle('wb-show',on); });
+          } else i++;
+        }
+      });
+    } finally { setTimeout(function(){ busy=false; },0); }
+  }
+  var t=0; function later(){ if(busy) return; cancelAnimationFrame(t); t=requestAnimationFrame(apply); }
+  function start(){ var host=document.getElementById('inlineDetail'); if(!host) return setTimeout(start,300);
+    new MutationObserver(later).observe(host,{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
+    new MutationObserver(later).observe(document.body,{attributes:true,attributeFilter:['class']}); apply(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
+  window.BBXwbDone=apply;
 })();
 </script>
 </body>

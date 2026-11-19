@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<script>document.documentElement.classList.add('mt-beta');try{localStorage.removeItem('bb9-mtheme');if(localStorage.getItem('bb9-mtheme2')!=='normal')document.documentElement.classList.add('mt-b2');if(localStorage.getItem('bb9-wtheme')==='beta')document.documentElement.classList.add('wt-b2');}catch(e){}</script>
+<script>document.documentElement.classList.add('mt-beta');try{localStorage.removeItem('bb9-mtheme');if(localStorage.getItem('bb9-mtheme2')!=='normal')document.documentElement.classList.add('mt-b2');}catch(e){}</script>
 
 <script id="bbxSafe">
 /* Sauvegarde automatique : copie des données (bb9*) dans IndexedDB à chaque changement + restauration si le navigateur efface le stockage */
@@ -2752,47 +2752,8 @@ body.tabmode .tab-bar .ex-row .ex-rest,body.tabmode .tab-bar .ex-row.resting .ex
 body.tabmode .tab-bar .ex-rest .rt-step{display:inline-flex!important}
 </style>
 <style id="betaDesign">
-/* ===== BÊTA : reproduction de la maquette (carte 358x80) ===== */
-body.beta #inlineDetail .ex-list{display:flex !important;flex-direction:column !important;gap:30px !important;padding-top:14px !important}
-body.beta #inlineDetail .ex-row{position:relative !important;overflow:visible!important;height:95px!important;min-height:0!important;margin:0!important;border-radius:999px!important;background:#020203!important;border:0!important;box-shadow:none!important;padding:0!important;display:block!important}
-body.beta #inlineDetail .ex-photo{display:block!important;position:absolute!important;left:10px!important;top:9.7px!important;width:76px!important;height:76px!important;flex:none!important;border-radius:50%!important;clip-path:none!important;background-size:cover!important;background-position:center!important;margin:0!important;opacity:1!important;z-index:1}
-body.beta #inlineDetail .ex-info{position:static!important;display:block!important;padding:0!important;min-height:0!important;height:auto!important}
-body.beta #inlineDetail .bt-pill{position:absolute !important;left:0 !important;right:0 !important;top:-12.7px !important;height:25.4px !important;display:flex !important;justify-content:center !important;z-index:3 !important;pointer-events:none !important}
-body.beta #inlineDetail .bt-in{pointer-events:auto !important;display:flex !important;align-items:center !important;gap:10px !important;height:25.4px !important;padding:0 8.5px 0 8px !important;border-radius:99px !important;background:#1A1315 !important;position:static !important}
-body.beta #inlineDetail .ex-name{position:static !important;transform:none !important;display:block !important;height:auto !important;min-height:0 !important;margin:0 !important;padding:0 !important;background:none !important;color:#fff !important;font-size:10.4px !important;font-weight:700 !important;line-height:25.4px !important;letter-spacing:0 !important;white-space:nowrap !important;cursor:pointer;text-decoration:none !important}
-body.beta #inlineDetail .ex-row.done .ex-name{text-decoration:line-through!important;color:#8E8E93!important}
-body.beta #inlineDetail .ex-row:not(.done):is(.resting,:has(.dot.on)) .bt-in::before{content:"" !important;flex:none !important;width:10px !important;height:10px !important;border-radius:50% !important;background:#D3373F !important;margin-right:-1px !important;animation:betaBlink 1s ease-in-out infinite}
-@keyframes betaBlink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.15;transform:scale(.8)}}
-body.beta #inlineDetail .ex-sets{position:absolute !important;left:93px !important;top:50.3px !important;transform:translateY(-50%) !important;display:flex !important;flex-direction:column !important;align-items:center !important;gap:5px !important;margin:0 !important;height:auto !important;white-space:nowrap !important}
-body.beta #inlineDetail .ex-sets .ex-nb{font-size:10.8px!important;font-weight:800!important;color:#fff!important;line-height:1 !important}
-body.beta #inlineDetail .ex-sets .ex-wt{font-size:8px!important;font-weight:500!important;color:#4a393e!important;text-transform:uppercase !important;letter-spacing:0!important;line-height:1 !important}
-body.beta #inlineDetail .ex-dots{position:static !important;margin:0 !important;height:auto !important;display:none !important}
-body.beta #inlineDetail .ex-row:not(.done):is(.resting,:has(.dot.on)) .ex-dots{display:block !important}
-body.beta #inlineDetail .dots-row{position:static !important;display:flex !important;gap:1.7px !important;margin:0 0 0 0 !important;padding-left:0 !important}
-body.beta #inlineDetail .dots-row .dot{width:6.5px !important;height:10.6px !important;border-radius:99px !important;border:1.2px solid #fff !important;background:transparent !important;transform:none !important;margin:0 !important;box-sizing:border-box}
-body.beta #inlineDetail .dots-row .dot.on{background:#7ED957 !important;border-color:#7ED957 !important}
-body.beta #inlineDetail .ex-dots .set-label{display:none!important}
-body.beta #inlineDetail .ex-dots .set-line{width:15.4px!important;justify-content:flex-start!important;position:absolute!important;left:171px !important;top:42.5px !important;margin:0!important;padding:0!important}
-body.beta #inlineDetail .set-undo{width:15.4px!important;height:15.4px!important;min-width:0!important;padding:0!important;border-radius:50%!important;background:#D3373F!important;display:grid !important;place-items:center !important}
-body.beta #inlineDetail .set-undo svg{width:9px!important;height:9px!important;stroke:#000!important}
-body.beta #inlineDetail .ex-row .ex-rest{position:absolute!important;left:149.5px!important;right:auto!important;top:31.3px!important;bottom:auto!important;width:121px!important;height:32.8px!important;min-height:0!important;margin:0!important;transform:none!important}
-body.beta #inlineDetail .ex-row .rt-step{width:121px !important;height:32.8px!important;box-sizing:border-box !important;display:flex!important;align-items:center !important;justify-content:space-between !important;background:#150F11!important;padding:0 10px!important;gap:0!important;border-radius:99px !important}
-body.beta #inlineDetail .ex-row .rt-step button{width:18px!important;height:28px!important;background:transparent!important;color:#fff!important;font-size:22px!important;font-weight:800 !important;padding:0!important;border-radius:0!important}
-body.beta #inlineDetail .ex-row .rt-step span.rt-chrono{font-size:24px!important;min-width:0!important;font-weight:800 !important;font-style:italic!important;color:#fff !important}
-body.beta #inlineDetail .ex-row.resting .ex-rest{left:171px!important;width:93px!important;top:0!important;height:95px!important}
-body.beta #inlineDetail .ex-row.resting .rt-run{position:static!important;display:block!important;height:auto!important;min-height:0!important}
-body.beta #inlineDetail .ex-row.resting .rt-left{position:absolute!important;left:24px !important;right:0 !important;top:31.7px !important;min-width:0!important;text-align:right !important;font-size:32px!important;line-height:32px !important;font-weight:800 !important;color:#D3373F!important;font-style:italic!important}
-body.beta #inlineDetail .ex-row.resting .rt-left{display:flex !important;justify-content:flex-end !important;text-align:right !important;left:0 !important;right:0 !important;width:100% !important;padding:0 !important;margin:0 !important}
-body.beta #inlineDetail .ex-row.resting .rt-left *{text-align:right !important;margin:0 !important}
-body.beta #inlineDetail .ex-row.resting .rt-bar{position:absolute!important;left:-14px !important;right:-2px !important;top:80.4px !important;height:3.2px!important;margin:0!important;background:#1A1315!important;border-radius:99px !important;flex:none !important}
-body.beta #inlineDetail .ex-row.resting .rt-bar i{background:#D3373F!important;border-radius:99px !important}
-body.beta #inlineDetail .ex-action{position:absolute!important;right:0 !important;top:0 !important;bottom:0 !important;width:83px!important;flex:none!important;margin:0!important;overflow:hidden !important;border-radius:0 999px 999px 0 !important}
-body.beta #inlineDetail .ex-go{position:relative !important;width:100%!important;height:100%!important;border-radius:0!important;clip-path:polygon(21% 0,100% 0,100% 100%,0 100%)!important;font-size:0!important;color:transparent!important;background:#fff!important;padding:0!important}
-body.beta #inlineDetail .ex-go svg{display:none!important}
-body.beta #inlineDetail .ex-go::after{content:"" !important;position:absolute !important;left:54% !important;top:50% !important;width:21px !important;height:26px !important;transform:translate(-50%,-50%) !important;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 22'><path d='M1 1.5v19l15-9.5z' fill='black' stroke='black' stroke-width='1.5' stroke-linejoin='round'/></svg>") center/contain no-repeat !important}
-body.beta #inlineDetail .ex-row.resting .ex-go,body.beta #inlineDetail .ex-row.resting .ex-go.skip{background:#D3373F!important}
-body.beta #inlineDetail .ex-row.resting .ex-go::after{width:29px !important;height:31px !important;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 24'><path d='M2 7l5 5-5 5' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/><path d='M9 2l10 10-10 10' fill='none' stroke='black' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/></svg>") !important}
-body.beta #inlineDetail .ex-row.done .ex-go{background:#555!important}
+/* Bêta du Workout : recréé le 19/11 comme copie exacte du mode Normal.
+   Les personnalisations du Bêta s'écrivent ici, sous body.beta. */
 </style>
 <style id="cfUI">
 .cf-h{ margin:20px 4px 8px; font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#6B7280 !important; }
@@ -3170,10 +3131,6 @@ html body #mealView .sum-full .sx-c .sx-l .sm-in{ width:auto !important; min-wid
 <style id="noNova">.hl-n{ display:none !important; }
 #mealForm .mf-health .mh-row:has(.mh-nv){ display:none !important; }
 #mealForm .mf-health .mh-row{ grid-column:1/-1; }</style>
-<style id="themeWB2">
-/* ===== Thème Bêta du Workout — copie exacte du design normal du Workout, à personnaliser =====
-   Tout ce qui est écrit ici, sous html.wt-b2, ne s'applique qu'au Workout en thème Bêta. */
-</style>
 <style id="ocrCtaCss">.sr-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 7px 1px 0;vertical-align:middle;box-shadow:0 0 0 2px #fff}#mealForm .mf-ocrcta{display:flex;align-items:center;justify-content:center;gap:9px;width:calc(100% - 28px);margin:2px 14px 12px;height:52px;border-radius:999px;border:1.5px dashed #16a34a;background:rgba(22,163,74,.08);color:#166534;font:inherit;font-size:15px;font-weight:800;cursor:pointer}#mealForm .mf-ctaw{order:8}#mealForm .mf-ctaw[hidden]{display:none!important}html.mt-b2 body #mealForm .mf-ctaw{background:#fff;padding:0 var(--cardx,0px) 4px}#mealForm .mf-ocrcta svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}#mealForm .mf-ocrcta:active{transform:scale(.98)}</style>
 <style id="themeB2">
 /* ===== Thème Bêta — copie du design normal (Meal), puis personnalisation =====
@@ -4195,7 +4152,6 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
       if(TAB && selId){ const sx = d.exercises.find(ex=>d.key+'|'+ex.name===selId); host.innerHTML = '<div class="tab-bar">' + (sx ? rowHTMLRef(sx) : abdoHTML()) + '</div>'; try{ Object.keys(overlays).forEach(id=>renderOverlay(id)); }catch(e){} }
       else host.innerHTML = ''; }
   }
-  document.addEventListener('click',e=>{ if(!document.body.classList.contains('beta')) return; const n=e.target.closest&&e.target.closest('#inlineDetail .ex-name'); if(!n) return; const ph=n.closest('.ex-row').querySelector('.ex-photo'); if(ph) openImageLightbox(ph); });
   function tabSelect(id){ window.__tabSel[selectedKey] = id; keepScroll(()=>showDetail(selectedKey)); }
   function tabSync(){ document.querySelectorAll('.tb-row').forEach(r=>r.classList.toggle('done', isDone(r.dataset.tid))); }
   function setWMode(m){ window.__betaFlag = (m==='tab'); window.__tabMode = false; try{ localStorage.setItem('bb9-wmode', m); }catch(e){} syncWMode(); showDetail(selectedKey); }
@@ -4820,9 +4776,6 @@ document.addEventListener('click', function(e){
     <div class="cm-box"><div class="cm-t">Apparence de Meal</div>
       <div class="cm-seg" id="themeSeg" role="group" aria-label="Thème"><button data-u="normal" onclick="BBXMeal.setTheme('normal')">Normal</button><button data-u="beta" onclick="BBXMeal.setTheme('beta')">Bêta</button></div>
       <div class="cm-d" id="themeD"></div></div>
-    <div class="cm-box"><div class="cm-t">Apparence du Workout</div>
-      <div class="cm-seg" id="wthemeSeg" role="group" aria-label="Thème du Workout"><button data-u="normal" onclick="BBXMeal.setWTheme('normal')">Normal</button><button data-u="beta" onclick="BBXMeal.setWTheme('beta')">Bêta</button></div>
-      <div class="cm-d" id="wthemeD"></div></div>
   </div>
   <div class="cf-sec" style="--c:#7CB9FF"><div class="cf-h"><i>☁️</i>Synchronisation</div>
   <div class="cm-box" id="syncBox">
@@ -4889,7 +4842,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 08 h 55</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 09 h 05</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>
@@ -5170,7 +5123,7 @@ window.BBXBk=(function(){
   function refresh(){ saveDef(); save(); build(); calc(); renderCfg(); }
   function renderCfg(){
     usdaSeg();
-    themeSeg(); wthemeSeg();
+    themeSeg();
     lensSeg();
     if(window.BBXSync) BBXSync.render();
     ciqSeg();
@@ -5858,8 +5811,6 @@ window.BBXBk=(function(){
   const LENSKEY='bb9-camlens', camLens=()=>{ try{ return localStorage.getItem(LENSKEY)==='main'?'main':'auto'; }catch(e){ return 'auto'; } };
   function lensSeg(){ const v=camLens(); document.querySelectorAll('#lensSeg [data-u]').forEach(b=>{ const o=b.dataset.u===v; b.classList.toggle('on',o); b.setAttribute('aria-pressed',o); }); const d=$('lensD'); if(d) d.textContent=v==='main'?'Objectif principal : celui que choisit le téléphone par défaut.':'Auto : utilise le second objectif (double capteur) quand le téléphone en a un, plus net de près.'; }
   const THEMEKEY='bb9-mtheme2', themeOf=()=>{ try{ return localStorage.getItem(THEMEKEY)==='normal'?'normal':'beta'; }catch(e){ return 'beta'; } };   // Bêta par défaut
-  const WTHEMEKEY='bb9-wtheme', wthemeOf=()=>{ try{ return localStorage.getItem(WTHEMEKEY)==='beta'?'beta':'normal'; }catch(e){ return 'normal'; } };   // Workout : Normal par défaut
-  function wthemeSeg(){ const v=wthemeOf(); document.querySelectorAll('#wthemeSeg [data-u]').forEach(b=>{ const o=b.dataset.u===v; b.classList.toggle('on',o); b.setAttribute('aria-pressed',o); }); const d=$('wthemeD'); if(d) d.textContent=v==='beta'?'Bêta : copie du design normal du Workout, prête à être personnalisée.':'Normal : le design habituel du Workout.'; }
   function themeSeg(){ const v=themeOf(); document.querySelectorAll('#themeSeg [data-u]').forEach(b=>{ const o=b.dataset.u===v; b.classList.toggle('on',o); b.setAttribute('aria-pressed',o); }); const d=$('themeD'); if(d) d.textContent=v==='beta'?'Bêta : copie du design normal, prête à être personnalisée.':'Normal : le design habituel de Meal.'; }
   function camSwitch(){
     const cams=sc.cams||[]; if(cams.length<2) return; const cur=(cam.stream&&cam.stream.getVideoTracks()[0].getSettings().deviceId)||'', i=Math.max(0,cams.findIndex(c=>c.deviceId===cur)), nx=cams[(i+1)%cams.length];
@@ -7053,7 +7004,6 @@ window.BBXBk=(function(){
   window.BBXMeal={
     setCiq:v=>{ try{ localStorage.setItem(CIQON,v==='off'?'off':'on'); }catch(e){} ciqSeg(); },
     setUsda:v=>{ try{ localStorage.setItem(USDAON,v==='off'?'off':'on'); }catch(e){} usdaSeg(); },
-    setWTheme:v=>{ v=v==='beta'?'beta':'normal'; try{ localStorage.setItem(WTHEMEKEY,v); }catch(e){} document.documentElement.classList.toggle('wt-b2',v==='beta'); wthemeSeg(); },
     setTheme:v=>{ v=v==='beta'?'beta':'normal'; try{ localStorage.setItem(THEMEKEY,v); }catch(e){} document.documentElement.classList.add('mt-beta'); document.documentElement.classList.toggle('mt-b2',v==='beta'); themeSeg(); },
     setLens:v=>{ try{ localStorage.setItem(LENSKEY,v==='main'?'main':'auto'); }catch(e){} window.__camAuto=false; lensSeg(); },
     setUsdaKey:v=>{ try{ v=String(v||'').trim(); if(v) localStorage.setItem(USDAKEY,v); else localStorage.removeItem(USDAKEY); }catch(e){} },

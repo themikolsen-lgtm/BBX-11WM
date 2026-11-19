@@ -4124,7 +4124,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
   }
 
   // ---------- inline detail ----------
-  window.__betaFlag = (()=>{ try{ return localStorage.getItem('bb9-wmode')!=='normal'; }catch(e){ return true; } })(); /* Bêta par défaut */ window.__beta2Flag = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab2'; }catch(e){ return false; } })(); /* Bêta 2 = Bêta 1 + body.beta2 */ window.__tabMode = false; /* Bêta = copie conforme du mode Normal */
+  try{ if(!localStorage.getItem('bb9-wmode-b1')){ if(localStorage.getItem('bb9-wmode')!=='tab2') localStorage.setItem('bb9-wmode','tab'); localStorage.setItem('bb9-wmode-b1','1'); } }catch(e){} /* 19/11 : Bêta enregistré pour tout le monde (une seule fois, chacun peut revenir en Normal) */ window.__betaFlag = (()=>{ try{ return localStorage.getItem('bb9-wmode')!=='normal'; }catch(e){ return true; } })(); /* Bêta par défaut */ window.__beta2Flag = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab2'; }catch(e){ return false; } })(); /* Bêta 2 = Bêta 1 + body.beta2 */ window.__tabMode = false; /* Bêta = copie conforme du mode Normal */
   window.__tabSel = {};
   window.__tabLayout = (()=>{ try{ return 'list'; }catch(e){ return 'list'; } })();
   function showDetail(key){
@@ -4928,7 +4928,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 14 h 00</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 14 h 05</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>

@@ -2754,6 +2754,34 @@ body.tabmode .tab-bar .ex-rest .rt-step{display:inline-flex!important}
 <style id="betaDesign">
 /* Bêta du Workout : recréé le 19/11 comme copie exacte du mode Normal.
    Les personnalisations du Bêta s'écrivent ici, sous body.beta. */
+/* Bêta du Workout : vignette d'exercice « après » (19/11) — nom en pastille sur le bord haut, chrono en grand */
+body.beta #inlineDetail .ex-list{gap:32px !important;padding-top:24px !important}
+body.beta #inlineDetail .ex-row{overflow:visible !important}
+body.beta #inlineDetail .ex-photo{border-radius:35px 0 0 35px !important}
+body.beta #inlineDetail .ex-go{border-radius:0 35px 35px 0 !important}
+body.beta #inlineDetail .ex-info{display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;gap:2px !important;padding:16px 4px 6px !important;flex:1 1 auto !important;min-width:0 !important}
+body.beta #inlineDetail .bt-pill{position:absolute !important;top:-17px !important;left:0 !important;right:0 !important;display:flex !important;justify-content:center !important;z-index:3 !important;pointer-events:none}
+body.beta #inlineDetail .bt-in{pointer-events:auto;display:flex !important;align-items:center !important;gap:9px !important;height:34px !important;padding:0 14px !important;border-radius:999px !important;background:#1A1115 !important;box-shadow:0 0 0 1px rgba(255,255,255,.05),0 8px 18px -8px rgba(0,0,0,.8) !important;max-width:calc(100vw - 40px);white-space:nowrap}
+body.beta #inlineDetail .bt-in .ex-name{background:none !important;padding:0 !important;margin:0 !important;font-size:15px !important;font-weight:800 !important;color:#fff !important;overflow:hidden;text-overflow:ellipsis;max-width:170px;letter-spacing:0 !important}
+body.beta #inlineDetail .ex-row:not(.done):is(.resting,:has(.dot.on)) .bt-in::before{content:"";flex:none;width:12px;height:12px;border-radius:50%;background:#E31B34;box-shadow:0 0 8px rgba(227,27,52,.8);animation:wbBlink 1.6s ease-in-out infinite}
+@keyframes wbBlink{0%,100%{opacity:1}50%{opacity:.35}}
+body.beta #inlineDetail .bt-in .ex-dots{display:flex !important;flex-direction:row !important;align-items:center !important;gap:6px !important;margin:0 !important;position:static !important}
+body.beta #inlineDetail .bt-in .dots-row{display:flex !important;gap:2px !important;margin:0 !important}
+body.beta #inlineDetail .bt-in .dots-row .dot{width:8px !important;height:15px !important;border-radius:99px !important;border-width:1.3px !important;margin:0 !important}
+body.beta #inlineDetail .bt-in .set-label{display:none !important}
+body.beta #inlineDetail .bt-in .set-line{display:flex !important;position:static !important;margin:0 !important;min-height:0 !important;height:auto !important;inset:auto !important;transform:none !important}
+body.beta #inlineDetail .bt-in .set-undo{position:static !important;width:24px !important;height:24px !important;margin:0 !important;transform:none !important}
+body.beta #inlineDetail .bt-in .set-undo svg{width:14px !important;height:14px !important}
+body.beta #inlineDetail .ex-sets{display:flex !important;align-items:baseline !important;justify-content:center !important;gap:10px !important;margin:0 !important;position:static !important;transform:none !important}
+body.beta #inlineDetail .ex-sets .ex-nb{font-size:21px !important;font-weight:800 !important;color:#fff !important}
+body.beta #inlineDetail .ex-sets .ex-wt{font-size:14px !important;font-weight:600 !important;color:#4A3D42 !important;letter-spacing:.02em}
+body.beta #inlineDetail .ex-rest{position:static !important;margin:4px 0 0 !important;width:100% !important;justify-content:center !important;inset:auto !important}
+body.beta #inlineDetail .rt-step{background:none !important;padding:0 !important;gap:12px !important;height:auto !important}
+body.beta #inlineDetail .rt-step button{font-size:32px !important;font-weight:700 !important;color:#fff !important;width:auto !important;height:auto !important;padding:0 4px !important;background:none !important}
+body.beta #inlineDetail .rt-step .rt-chrono{font-size:44px !important;font-weight:900 !important;font-style:italic !important;color:#fff !important;letter-spacing:-.02em;line-height:1 !important}
+body.beta #inlineDetail .rt-run{width:100% !important;display:flex !important;flex-direction:column !important;align-items:center !important;gap:6px !important}
+body.beta #inlineDetail .rt-run .rt-left{font-size:44px !important;line-height:1 !important;position:static !important}
+body.beta #inlineDetail .rt-run .rt-bar{width:86% !important;position:static !important}
 </style>
 <style id="cfUI">
 .cf-h{ margin:20px 4px 8px; font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#6B7280 !important; }
@@ -4842,7 +4870,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 09 h 20</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 09 h 45</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>

@@ -2811,6 +2811,8 @@ body.beta #inlineDetail .ex-row.abdo .rt-run.ab-run2 .rt-bar{width:100% !importa
 /* exercice terminé : rangé dans une petite pastille sombre au-dessus de l'exercice suivant */
 body.beta #inlineDetail .ex-row.done:not(.wb-show){display:none !important}
 body.beta #inlineDetail .wb-hide{display:none !important}
+body.beta #inlineDetail .ex-row.wb-cur{border-color:#FF2D46 !important;box-shadow:0 0 0 2px #FF2D46,0 0 22px 2px rgba(255,45,70,.55),0 0 46px 6px rgba(227,27,52,.22) !important;animation:wbGlow 2.2s ease-in-out infinite !important}
+@keyframes wbGlow{0%,100%{box-shadow:0 0 0 2px #FF2D46,0 0 18px 1px rgba(255,45,70,.45),0 0 40px 4px rgba(227,27,52,.18)}50%{box-shadow:0 0 0 2px #FF4A5F,0 0 28px 4px rgba(255,45,70,.7),0 0 56px 10px rgba(227,27,52,.3)}}
 body.beta .dn-lab{cursor:pointer;-webkit-tap-highlight-color:transparent}
 body.beta #inlineDetail .wb-done{position:relative;display:block;width:40px;height:9px;border-radius:999px;border:0;padding:0;margin:2px auto 12px;background:#2A1F24;box-shadow:none;cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
 body.beta #inlineDetail .wb-done::before{content:'';position:absolute;inset:-12px -20px}
@@ -4921,7 +4923,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 12 h 45</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 13 h 00</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>
@@ -7365,8 +7367,13 @@ function BBXClear(){   // vide seulement le cache de l'app : les données et les
     busy=true;
     try{
       host.querySelectorAll('.wb-done').forEach(function(b){ b.remove(); });
+      if(!document.body.classList.contains('beta')) host.querySelectorAll('.wb-cur').forEach(function(r){ r.classList.remove('wb-cur'); });
       host.querySelectorAll('.wb-hide').forEach(function(e){ e.classList.remove('wb-hide'); });
       if(!document.body.classList.contains('beta')){ host.querySelectorAll('.wb-show').forEach(function(r){ r.classList.remove('wb-show'); }); return; }
+      // exercice en cours : liseré rouge lumineux, qui passe au suivant dès qu'il est fini
+      host.querySelectorAll('.wb-cur').forEach(function(r){ r.classList.remove('wb-cur'); });
+      var cur=host.querySelector('.ex-row.resting:has(.bt-pill)')||[].slice.call(host.querySelectorAll('.ex-row')).find(function(r){ return r.querySelector('.bt-pill')&&!r.classList.contains('done'); });
+      if(cur) cur.classList.add('wb-cur');
       var done=host.querySelectorAll('.ex-row.done');
       done.forEach(function(r){ r.classList.toggle('wb-show',open); });
       if(!done.length) return;

@@ -2800,6 +2800,7 @@ body.beta #inlineDetail .ex-row:not(.abdo):not(.done) .bt-in .set-undo svg{width
 /* exercice terminé : rangé dans une petite pastille sombre au-dessus de l'exercice suivant */
 body.beta #inlineDetail .ex-row.done:not(.wb-show){display:none !important}
 body.beta #inlineDetail .wb-hide{display:none !important}
+body.beta .dn-lab{cursor:pointer;-webkit-tap-highlight-color:transparent}
 body.beta #inlineDetail .wb-done{position:relative;display:block;width:40px;height:9px;border-radius:999px;border:0;padding:0;margin:2px auto 12px;background:#2A1F24;box-shadow:none;cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
 body.beta #inlineDetail .wb-done::before{content:'';position:absolute;inset:-12px -20px}
 body.beta #inlineDetail .wb-done.open{background:#241A1F}
@@ -4909,7 +4910,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 12 h 00</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 12 h 05</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>
@@ -7374,6 +7375,8 @@ function BBXClear(){   // vide seulement le cache de l'app : les données et les
     new MutationObserver(later).observe(document.body,{attributes:true,attributeFilter:['class']}); apply(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start); else start();
   window.BBXwbDone=apply;
+  // appui sur le jour (« Aujourd'hui ») = même effet que la petite pastille
+  document.addEventListener('click',function(e){ if(!document.body.classList.contains('beta')) return; var l=e.target.closest&&e.target.closest('.dn-lab'); if(!l||!document.querySelector('#inlineDetail .ex-row.done')) return; open=!open; apply(); });
 })();
 </script>
 </body>

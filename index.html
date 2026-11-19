@@ -2799,7 +2799,8 @@ body.beta #inlineDetail .ex-row:not(.abdo):not(.done) .bt-in .set-undo{position:
 body.beta #inlineDetail .ex-row:not(.abdo):not(.done) .bt-in .set-undo svg{width:16px !important;height:16px !important}
 /* exercice terminé : rangé dans une petite pastille sombre au-dessus de l'exercice suivant */
 body.beta #inlineDetail .ex-row.done:not(.wb-show){display:none !important}
-body.beta #inlineDetail .wb-done{position:relative;align-self:center;width:40px;height:9px;border-radius:999px;border:0;padding:0;margin:-24px 0 -2px;background:#2A1F24;box-shadow:none;cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
+body.beta #inlineDetail .wb-hide{display:none !important}
+body.beta #inlineDetail .wb-done{position:relative;display:block;width:40px;height:9px;border-radius:999px;border:0;padding:0;margin:2px auto 12px;background:#2A1F24;box-shadow:none;cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
 body.beta #inlineDetail .wb-done::before{content:'';position:absolute;inset:-12px -20px}
 body.beta #inlineDetail .wb-done.open{background:#241A1F}
 body.beta #inlineDetail .wb-done:active{transform:scale(.96)}
@@ -4908,7 +4909,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 11 h 45</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 12 h 00</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>
@@ -7343,29 +7344,28 @@ function BBXClear(){   // vide seulement le cache de l'app : les données et les
 })();
 </script>
 <script id="wbDoneJs">
-/* Workout Bêta : les exercices faits sont rangés dans une pastille vide ; un clic les affiche, un autre les cache */
+/* Workout Bêta : une seule pastille vide sous « Aujourd'hui » range tous les exercices faits ; un clic les affiche, un autre les cache.
+   Les titres de matériel dont tous les exercices sont faits disparaissent aussi. */
 (function(){
-  var open={}, busy=false;
+  var open=false, busy=false;
   function apply(){
     var host=document.getElementById('inlineDetail'); if(!host) return;
     busy=true;
     try{
       host.querySelectorAll('.wb-done').forEach(function(b){ b.remove(); });
+      host.querySelectorAll('.wb-hide').forEach(function(e){ e.classList.remove('wb-hide'); });
       if(!document.body.classList.contains('beta')){ host.querySelectorAll('.wb-show').forEach(function(r){ r.classList.remove('wb-show'); }); return; }
-      host.querySelectorAll('.ex-list').forEach(function(list){
-        var rows=[].slice.call(list.children), i=0;
-        while(i<rows.length){
-          var r=rows[i];
-          if(r.classList&&r.classList.contains('ex-row')&&r.classList.contains('done')){
-            var grp=[]; while(i<rows.length&&rows[i].classList&&rows[i].classList.contains('ex-row')&&rows[i].classList.contains('done')){ grp.push(rows[i]); i++; }
-            var key=grp[0].getAttribute('data-id')||String(Math.random()), on=!!open[key];
-            var b=document.createElement('button'); b.type='button'; b.className='wb-done'+(on?' open':''); b.setAttribute('aria-label',on?'Cacher les exercices faits':'Afficher les exercices faits ('+grp.length+')');
-            b.onclick=(function(k){ return function(e){ e.stopPropagation(); open[k]=!open[k]; apply(); }; })(key);
-            list.insertBefore(b,grp[0]);
-            grp.forEach(function(x){ x.classList.toggle('wb-show',on); });
-          } else i++;
-        }
+      var done=host.querySelectorAll('.ex-row.done');
+      done.forEach(function(r){ r.classList.toggle('wb-show',open); });
+      if(!done.length) return;
+      if(!open) host.querySelectorAll('.ex-list').forEach(function(list){
+        var rows=list.querySelectorAll(':scope > .ex-row'); if(!rows.length) return;
+        for(var k=0;k<rows.length;k++) if(!rows[k].classList.contains('done')) return;
+        list.classList.add('wb-hide'); var lab=list.previousElementSibling; if(lab&&lab.classList.contains('section-label')) lab.classList.add('wb-hide');
       });
+      var b=document.createElement('button'); b.type='button'; b.className='wb-done'+(open?' open':''); b.setAttribute('aria-label',open?'Cacher les exercices faits':'Afficher les exercices faits ('+done.length+')');
+      b.onclick=function(e){ e.stopPropagation(); open=!open; apply(); };
+      host.insertBefore(b,host.firstChild);
     } finally { setTimeout(function(){ busy=false; },0); }
   }
   var t=0; function later(){ if(busy) return; cancelAnimationFrame(t); t=requestAnimationFrame(apply); }

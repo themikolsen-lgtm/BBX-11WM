@@ -2784,7 +2784,8 @@ body.beta #inlineDetail .ex-row.abdo .bt-in .ex-name{max-width:calc(100vw - 80px
 body.beta #inlineDetail .ex-row.abdo .rt-step .rt-chrono{font-size:38px !important}
 /* exercice terminé : rangé dans une petite pastille sombre au-dessus de l'exercice suivant */
 body.beta #inlineDetail .ex-row.done:not(.wb-show){display:none !important}
-body.beta #inlineDetail .wb-done{align-self:center;width:84px;height:22px;border-radius:999px;border:0;padding:0;background:#1A1115;box-shadow:0 0 0 1px rgba(255,255,255,.05);cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
+body.beta #inlineDetail .wb-done{position:relative;align-self:center;width:40px;height:9px;border-radius:999px;border:0;padding:0;margin:-24px 0 -2px;background:#2A1F24;box-shadow:none;cursor:pointer;flex:none;-webkit-tap-highlight-color:transparent}
+body.beta #inlineDetail .wb-done::before{content:'';position:absolute;inset:-12px -20px}
 body.beta #inlineDetail .wb-done.open{background:#241A1F}
 body.beta #inlineDetail .wb-done:active{transform:scale(.96)}
 body:not(.beta) .wb-done{display:none !important}
@@ -4892,7 +4893,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 10 h 50</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 11 h 20</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>

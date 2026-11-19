@@ -2837,6 +2837,10 @@ body.beta #inlineDetail .rt-run{width:100% !important;display:flex !important;fl
 body.beta #inlineDetail .rt-run .rt-left{font-size:44px !important;line-height:1 !important;position:static !important}
 body.beta #inlineDetail .rt-run .rt-bar{width:86% !important;position:static !important}
 </style>
+<style id="beta2Design">
+/* ===== Bêta 2 du Workout : copie exacte du Bêta 1 (il hérite de toutes ses règles body.beta).
+   Les personnalisations du Bêta 2 s'écrivent ici, sous body.beta2. ===== */
+</style>
 <style id="cfUI">
 .cf-h{ margin:20px 4px 8px; font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#6B7280 !important; }
 .cf-db{ padding:6px 12px 12px !important; }
@@ -3476,7 +3480,7 @@ html.mt-beta.mt-b2 body #mealForm .mf-ue2{ background:#fff; margin:0 !important;
   <div class="prog-overlay" id="progOverlay" onclick="if(event.target===this) closeProg()">
     <div class="prog-card">
       <div class="prog-head"><span>Progression</span><button class="prog-x" onclick="closeProg()" aria-label="Fermer">✕</button></div>
-      <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Bêta</button></div></div>
+      <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Bêta</button><button type="button" data-m="tab2" onclick="setWMode('tab2')">Bêta 2</button></div></div>
       <div class="prog-mode"><b>Navigation Workout / Meal</b><div class="pm-seg" id="navModeSeg"><button type="button" data-n="btn" onclick="setNavMode('btn')">Bouton</button><button type="button" data-n="slide" onclick="setNavMode('slide')">Slide</button></div></div>
       <div class="prog-mode"><b>Après la pause : exo suivant</b><div class="pm-seg" id="autoNextSeg"><button type="button" data-a="on" onclick="setAutoNext('on')">Oui</button><button type="button" data-a="off" onclick="setAutoNext('off')">Non</button></div></div>
       <div class="prog-sec first"><span>Mes exercices</span><span class="wt-saved" id="wtSaved">✓ Enregistré</span></div>
@@ -4120,14 +4124,14 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
   }
 
   // ---------- inline detail ----------
-  window.__betaFlag = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab'; }catch(e){ return false; } })(); window.__tabMode = false; /* Bêta = copie conforme du mode Normal */
+  window.__betaFlag = (()=>{ try{ return localStorage.getItem('bb9-wmode')!=='normal'; }catch(e){ return true; } })(); /* Bêta par défaut */ window.__beta2Flag = (()=>{ try{ return localStorage.getItem('bb9-wmode')==='tab2'; }catch(e){ return false; } })(); /* Bêta 2 = Bêta 1 + body.beta2 */ window.__tabMode = false; /* Bêta = copie conforme du mode Normal */
   window.__tabSel = {};
   window.__tabLayout = (()=>{ try{ return 'list'; }catch(e){ return 'list'; } })();
   function showDetail(key){
     const d = DAYS.find(x=>x.key===key);
     let html = '';
     const TAB = !!window.__tabMode; const BETA = !!window.__betaFlag; let rowHTMLRef = null;
-    document.body.classList.toggle('tabmode', TAB); document.body.classList.toggle('beta', !!window.__betaFlag);
+    document.body.classList.toggle('tabmode', TAB); document.body.classList.toggle('beta', !!window.__betaFlag); document.body.classList.toggle('beta2', !!window.__beta2Flag);
     document.body.classList.remove('tabgrid');
     const tabIds = d.exercises.map(ex=>d.key+'|'+ex.name).concat(d.video ? [d.key+'|abdos'] : []);
     let selId = window.__tabSel[d.key]; if(!tabIds.includes(selId)) selId = tabIds.find(id=>!isDone(id)) || tabIds[0] || null;
@@ -4236,9 +4240,9 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
   }
   function tabSelect(id){ window.__tabSel[selectedKey] = id; keepScroll(()=>showDetail(selectedKey)); }
   function tabSync(){ document.querySelectorAll('.tb-row').forEach(r=>r.classList.toggle('done', isDone(r.dataset.tid))); }
-  function setWMode(m){ window.__betaFlag = (m==='tab'); window.__tabMode = false; try{ localStorage.setItem('bb9-wmode', m); }catch(e){} syncWMode(); showDetail(selectedKey); }
+  function setWMode(m){ window.__betaFlag = (m==='tab'||m==='tab2'); window.__beta2Flag = (m==='tab2'); window.__tabMode = false; try{ localStorage.setItem('bb9-wmode', m); }catch(e){} syncWMode(); showDetail(selectedKey); }
   function setWLayout(l){ window.__tabLayout = (l==='grid')?'grid':'list'; try{ localStorage.setItem('bb9-wlayout', window.__tabLayout); }catch(e){} syncWMode(); document.body.classList.toggle('tabgrid', !!window.__tabMode && window.__tabLayout==='grid'); }
-  function syncWMode(){ document.querySelectorAll('.pm-seg button[data-m]').forEach(b=>b.classList.toggle('on', (b.dataset.m==='tab')===!!window.__betaFlag)); document.querySelectorAll('.pm-seg button[data-l]').forEach(b=>b.classList.toggle('on', b.dataset.l===window.__tabLayout)); }
+  function syncWMode(){ document.querySelectorAll('.pm-seg button[data-m]').forEach(b=>b.classList.toggle('on', b.dataset.m===(window.__beta2Flag?'tab2':window.__betaFlag?'tab':'normal'))); document.querySelectorAll('.pm-seg button[data-l]').forEach(b=>b.classList.toggle('on', b.dataset.l===window.__tabLayout)); }
   setTimeout(syncWMode,0);
 
   function openImageLightbox(el){
@@ -4924,7 +4928,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 13 h 45</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 19/11 · 14 h 00</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>

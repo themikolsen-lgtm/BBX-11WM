@@ -2812,6 +2812,12 @@ body.beta #inlineDetail .ex-row.abdo .rt-run.ab-run2 .rt-bar{width:100% !importa
 /* exercice terminé : rangé dans une petite pastille sombre au-dessus de l'exercice suivant */
 body.beta #inlineDetail .ex-row.done:not(.wb-show){display:none !important}
 body.beta #inlineDetail .wb-hide{display:none !important}
+body.beta #inlineDetail .wb-next{position:absolute;left:33%;right:calc(18.6% + 4px);top:0;bottom:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(90deg,rgba(14,5,8,0),rgba(14,5,8,.9) 18%,rgba(14,5,8,.9) 82%,rgba(14,5,8,0));cursor:pointer;-webkit-tap-highlight-color:transparent;animation:wbIn .25s ease}
+body.beta #inlineDetail .wb-next span{font-size:10px;white-space:nowrap;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#D8CED3}
+body.beta #inlineDetail .wb-next b{font-size:40px;line-height:1;font-weight:900;font-style:italic;color:#FF2D46;letter-spacing:-.02em}
+body.beta #inlineDetail .wb-next i{font-style:normal;font-size:10.5px;font-weight:700;color:#8E8590}
+body.beta #inlineDetail .ex-row.wb-wait .ex-sets,body.beta #inlineDetail .ex-row.wb-wait .ex-rest{visibility:hidden}
+@keyframes wbIn{from{opacity:0}to{opacity:1}}
 /* en-tête : dégradé discret au lieu d'un cadre flou à bord net quand la liste passe dessous */
 body.beta .top-sticky{background:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;isolation:isolate}
 html body.beta .top-sticky::before{display:block !important;content:'';position:absolute;left:0;right:0;top:0;bottom:-34px;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,rgba(9,1,2,.92) 0%,rgba(9,1,2,.78) 62%,rgba(9,1,2,0) 100%);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 60%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 60%,transparent 100%)}
@@ -4954,7 +4960,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 19/11 · 17 h 20</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 20/11 · 11 h 20</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>
@@ -7449,6 +7455,16 @@ function BBXClear(){   // vide seulement le cache de l'app : les données et les
       host.querySelectorAll('.wb-cur').forEach(function(r){ r.classList.remove('wb-cur'); });
       var cur=host.querySelector('.ex-row.resting:has(.bt-pill)')||[].slice.call(host.querySelectorAll('.ex-row')).find(function(r){ return r.querySelector('.bt-pill')&&!r.classList.contains('done'); });
       if(cur) cur.classList.add('wb-cur');
+      // pause d'1 min entre deux exos : le décompte s'affiche sur l'exercice suivant
+      host.querySelectorAll('.wb-next').forEach(function(e){ e.remove(); });
+      host.querySelectorAll('.wb-wait').forEach(function(r){ r.classList.remove('wb-wait'); });
+      var pt=host.querySelector('.ex-row.pausing .pause-ov .po-time');
+      if(pt&&cur&&!cur.classList.contains('pausing')){
+        var nx=document.createElement('div'); nx.className='wb-next';
+        nx.innerHTML='<span>Votre exo commence dans</span><b>'+pt.textContent+'</b><i>Touchez pour commencer</i>';
+        nx.onclick=function(e){ e.stopPropagation(); var ov=host.querySelector('.ex-row.pausing .pause-ov'); if(ov) ov.click(); };
+        cur.appendChild(nx); cur.classList.add('wb-wait');
+      }
       var done=host.querySelectorAll('.ex-row.done');
       done.forEach(function(r){ r.classList.toggle('wb-show',open); });
       if(!done.length) return;

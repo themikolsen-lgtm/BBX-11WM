@@ -2812,10 +2812,11 @@ body.beta #inlineDetail .ex-row.abdo .rt-run.ab-run2 .rt-bar{width:100% !importa
 /* exercice terminé : rangé dans une petite pastille sombre au-dessus de l'exercice suivant */
 body.beta #inlineDetail .ex-row.done:not(.wb-show){display:none !important}
 body.beta #inlineDetail .wb-hide{display:none !important}
-body.beta #inlineDetail .wb-next{position:absolute;left:33%;right:calc(18.6% + 4px);top:0;bottom:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(90deg,rgba(14,5,8,0),rgba(14,5,8,.9) 18%,rgba(14,5,8,.9) 82%,rgba(14,5,8,0));cursor:pointer;-webkit-tap-highlight-color:transparent;animation:wbIn .25s ease}
+body.beta #inlineDetail .wb-next{position:absolute;left:33%;right:calc(18.6% + 4px);top:18px;bottom:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:linear-gradient(90deg,rgba(14,5,8,0),rgba(14,5,8,.9) 18%,rgba(14,5,8,.9) 82%,rgba(14,5,8,0));cursor:pointer;-webkit-tap-highlight-color:transparent;animation:wbIn .25s ease}
 body.beta #inlineDetail .wb-next span{font-size:10px;white-space:nowrap;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#D8CED3}
 body.beta #inlineDetail .wb-next b{font-size:40px;line-height:1;font-weight:900;font-style:italic;color:#FF2D46;letter-spacing:-.02em}
 body.beta #inlineDetail .wb-next i{font-style:normal;font-size:10.5px;font-weight:700;color:#8E8590}
+body.beta #inlineDetail .ex-row.wb-wait .bt-pill{z-index:6 !important}
 body.beta #inlineDetail .ex-row.wb-wait .ex-sets,body.beta #inlineDetail .ex-row.wb-wait .ex-rest{visibility:hidden}
 @keyframes wbIn{from{opacity:0}to{opacity:1}}
 /* en-tête : dégradé discret au lieu d'un cadre flou à bord net quand la liste passe dessous */
@@ -4960,7 +4961,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 20/11 · 11 h 20</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 20/11 · 11 h 25</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>

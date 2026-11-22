@@ -3748,7 +3748,21 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
       if(ABDO_MASTER){ if(planDays('abdo').includes(d.key)) d.video = ABDO_MASTER; else delete d.video; }
     });
   }
-  applyPlan();
+  // ---------- Programme 2 (22/11) : exercices propres par jour, posés une fois dans bb9-progs ; actif quand bb9-custom existe ----------
+  const PROG2_DEF={"lun": {"label": "Épaules + haut des pectoraux", "ex": [{"name": "Shoulder Press machine", "sets": "3×8–12", "load": "28 kg/B", "rest": 120, "img": "EX_SHO"}, {"name": "Élévations latérales", "sets": "3×12–20", "load": "7,5 kg/B", "rest": 75, "img": "EX8"}, {"name": "Élévations latérales penché", "sets": "2×12–20", "load": "7,5 kg/B", "rest": 75, "img": "EX_ELEVB"}, {"name": "Développé incliné haltères", "sets": "3×8–12", "load": "18 kg/B", "rest": 120, "img": "EX_INCH"}, {"name": "Oiseau haltères", "sets": "2×12–20", "load": "7,5 kg/B", "rest": 75, "img": "EX_ELEVB"}]}, "mar": {"label": "Dos + biceps", "ex": [{"name": "Rowing machine convergente", "sets": "3×10–15", "load": "28 kg/B", "rest": 105, "img": "EX10"}, {"name": "Rowing haltère un bras", "sets": "3×10–15", "load": "14 kg/B", "rest": 105, "img": "EX_ROWH"}, {"name": "Shrugs haltères", "sets": "2×12–15", "load": "18 kg/B", "rest": 75, "img": "EX11"}, {"name": "Curl biceps", "sets": "2×10–15", "load": "10 kg/B", "rest": 75, "img": "EX_BIC"}, {"name": "Curl marteau", "sets": "2×10–15", "load": "10 kg/B", "rest": 75, "img": "EX_MAR"}]}, "mer": {"label": "Épaules légères", "ex": [{"name": "Élévations latérales", "sets": "3×12–20", "load": "7,5 kg/B", "rest": 75, "img": "EX8"}, {"name": "Oiseau haltères", "sets": "3×12–20", "load": "7,5 kg/B", "rest": 75, "img": "EX_ELEVB"}, {"name": "Shoulder Press léger", "sets": "2×10–12", "load": "léger", "rest": 120, "img": "EX_SHO"}, {"name": "Rotation externe légère", "sets": "2×12–15", "load": "léger", "rest": 60, "img": "EX8"}]}, "jeu": {"label": "Pectoraux + dos", "ex": [{"name": "Développé incliné machine", "sets": "3×8–12", "load": "28 kg/B", "rest": 120, "img": "EX3"}, {"name": "Développé couché machine", "sets": "3×8–12", "load": "28 kg/B", "rest": 120, "img": "EX_DEV"}, {"name": "Rowing machine", "sets": "3×10–15", "load": "28 kg/B", "rest": 105, "img": "EX10"}, {"name": "Écartés haltères", "sets": "2×12–15", "load": "10 kg/B", "rest": 75, "img": "EX_INCH"}]}, "ven": {"label": "Épaules + bras", "ex": [{"name": "Shoulder Press machine", "sets": "3×8–12", "load": "28 kg/B", "rest": 120, "img": "EX_SHO"}, {"name": "Élévations latérales", "sets": "3×12–20", "load": "7,5 kg/B", "rest": 75, "img": "EX8"}, {"name": "Oiseau haltères", "sets": "2×12–20", "load": "7,5 kg/B", "rest": 75, "img": "EX_ELEVB"}, {"name": "Curl biceps", "sets": "2×10–15", "load": "10 kg/B", "rest": 75, "img": "EX_BIC"}, {"name": "Extension triceps haltère", "sets": "2×10–15", "load": "10 kg/B", "rest": 75, "img": "EX6"}]}, "sam": {"label": "Dos + rappel pectoraux", "ex": [{"name": "Rowing haltère un bras", "sets": "3×10–15", "load": "14 kg/B", "rest": 105, "img": "EX_ROWH"}, {"name": "Rowing machine", "sets": "3×10–15", "load": "28 kg/B", "rest": 105, "img": "EX10"}, {"name": "Développé incliné haltères", "sets": "2×10–15", "load": "18 kg/B", "rest": 120, "img": "EX_INCH"}, {"name": "Écartés inversés", "sets": "2×15–20", "load": "7,5 kg/B", "rest": 75, "img": "EX_ELEVB"}]}, "dim": {"label": "Repos – récupération et mobilité douce", "ex": []}};
+  try{ let P=JSON.parse(localStorage.getItem('bb9-progs')||'null');
+    if(!P||!P.p){ const cur={}; ['bb9-plan','bb9-sets','bb9-reps','bb9-rest','bb9-weights','bb9-vidlinks'].forEach(k=>{ const v=localStorage.getItem(k); if(v!=null) cur[k]=v; }); P={a:1,p:{'1':cur}}; }
+    if(!P.v2){ const keep={}; const v=(P.p['2']||{})['bb9-vidlinks']; if(v) keep['bb9-vidlinks']=v; keep['bb9-custom']=JSON.stringify(PROG2_DEF); keep['bb9-plan']=(P.p['1']||{})['bb9-plan']||null; if(!keep['bb9-plan']) delete keep['bb9-plan'];
+      P.p['2']=keep; P.v2=1; localStorage.setItem('bb9-progs',JSON.stringify(P));
+      if(+P.a===2){ ['bb9-plan','bb9-sets','bb9-reps','bb9-rest','bb9-weights','bb9-vidlinks','bb9-custom'].forEach(k=>{ if(keep[k]!=null) localStorage.setItem(k,keep[k]); else localStorage.removeItem(k); }); } }
+  }catch(e){}
+  const EXIMG={EX_SHO:EX_SHO,EX8:EX8,EX_ELEVB:EX_ELEVB,EX_INCH:EX_INCH,EX10:EX10,EX_ROWH:EX_ROWH,EX11:EX11,EX_BIC:EX_BIC,EX_MAR:EX_MAR,EX3:EX3,EX_DEV:EX_DEV,EX6:EX6,EX9:EX9};
+  function applyCustom(){ let C=null; try{ C=JSON.parse(localStorage.getItem('bb9-custom')||'null'); }catch(e){} if(!C) return;
+    DAYS.forEach(d=>{ const c=C[d.key]; if(!c) return;
+      d.exercises=(c.ex||[]).map(e=>{ const x=Object.assign({},e,{img:EXIMG[e.img]||EX_SHO,_s0:e.sets}); const sn=setsPrefs[x.name], rp=repsPrefs[x.name]; x.sets=(sn||rp)?(sn||parseInt(x._s0)||1)+'×'+(rp||repsOf0(x)):x._s0; return x; });
+      d.label=c.label; d.focus=c.label; if(!d.exercises.length) d.note=c.label; else delete d.note; });
+  }
+  applyPlan(); applyCustom();
 
   const JS_DAY_TO_KEY = ['dim','lun','mar','mer','jeu','ven','sam'];
   const todayKey = JS_DAY_TO_KEY[new Date().getDay()];
@@ -4155,7 +4169,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
 
   // ---------- type de matériel : MPC / haltères / poids du corps ----------
   function exType(ex){
-    if(/MPC/.test(ex.name)) return 'mpc';
+    if(/MPC|machine/i.test(ex.name)) return 'mpc';
     if(/PDC/.test(ex.load || '')) return 'pdc';
     return 'dumb';
   }
@@ -4676,7 +4690,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
     const ex = EXO_MASTER[i], v = Math.min(10, Math.max(1, pxCurS(i) + dir));
     if(v === (parseInt(ex._s0) || 1)) delete setsPrefs[ex.name]; else setsPrefs[ex.name] = v;
     try{ localStorage.setItem(SETS_KEY, JSON.stringify(setsPrefs)); }catch(e){}
-    applyPlan(); pxMod(i);
+    applyPlan(); applyCustom(); pxMod(i);
     const el = document.getElementById('pxs' + i); if(el) el.textContent = v;
     renderDateStrip(); renderFeatured(); showDetail(selectedKey);
   }
@@ -4717,7 +4731,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
     const ex = EXO_MASTER[i], n = normReps(v); if(!n) return false;
     if(n === repsOf0(ex)) delete repsPrefs[ex.name]; else repsPrefs[ex.name] = n;
     try{ localStorage.setItem(REPS_KEY, JSON.stringify(repsPrefs)); }catch(e){}
-    applyPlan(); pxMod(i);
+    applyPlan(); applyCustom(); pxMod(i);
     renderDateStrip(); renderFeatured(); showDetail(selectedKey);
     return true;
   }
@@ -4748,7 +4762,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
   }
   function planRefresh(){
     try{ localStorage.setItem(PLAN_KEY, JSON.stringify(planPrefs)); }catch(e){}
-    applyPlan(); renderRests();
+    applyPlan(); applyCustom(); renderRests();
     renderDateStrip(); renderFeatured(); showDetail(selectedKey);
   }
   function toggleVid(i, key){ togglePlanKey(i < 0 ? 'abdo' : 'vid:' + VID_MASTER[i].title, key); }
@@ -4768,7 +4782,7 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
     planRefresh();
   }
   // ---------- programmes 1 et 2 : chacun garde son planning, ses séries / répétitions, ses temps de repos, ses charges et ses liens vidéo ----------
-const PROGS_KEY='bb9-progs', PROG_KEYS=['bb9-plan','bb9-sets','bb9-reps','bb9-rest','bb9-weights','bb9-vidlinks'];
+const PROGS_KEY='bb9-progs', PROG_KEYS=['bb9-plan','bb9-sets','bb9-reps','bb9-rest','bb9-weights','bb9-vidlinks','bb9-custom'];
 function progSnap(){ const o={}; PROG_KEYS.forEach(k=>{ const v=localStorage.getItem(k); if(v!=null) o[k]=v; }); return o; }
 function progsGet(){ let P=null; try{ P=JSON.parse(localStorage.getItem(PROGS_KEY)||'null'); }catch(e){}
   if(!P||!P.p){ const cur=progSnap(); P={a:1,p:{'1':cur,'2':JSON.parse(JSON.stringify(cur))}}; try{ localStorage.setItem(PROGS_KEY,JSON.stringify(P)); }catch(e){} }   // 1re fois : Programme 2 = copie du programme actuel
@@ -4977,7 +4991,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 22/11 · 20 h 40</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 22/11 · 21 h 00</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>

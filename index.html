@@ -2846,6 +2846,7 @@ body.beta #inlineDetail .rt-run{width:100% !important;display:flex !important;fl
 body.beta #inlineDetail .rt-run .rt-left{font-size:44px !important;line-height:1 !important;position:static !important}
 body.beta #inlineDetail .rt-run .rt-bar{width:86% !important;position:static !important}
 </style>
+<style id="progsCss">.prog-mode:has(#progSeg){flex-direction:column !important;align-items:stretch !important;gap:10px !important}#progSeg{width:100% !important;display:flex !important}#progSeg button{flex:1 1 0 !important;white-space:nowrap !important}.prog-mode:has([data-m="tab2"]){flex-direction:column !important;align-items:stretch !important;gap:10px !important}.prog-mode:has([data-m="tab2"]) .pm-seg{width:100% !important;display:flex !important}.prog-mode:has([data-m="tab2"]) .pm-seg button{flex:1 1 0 !important;white-space:nowrap !important}</style>
 <style id="beta2Design">
 /* ===== Bêta 2 du Workout : copie exacte du Bêta 1 (il hérite de toutes ses règles body.beta).
    Les personnalisations du Bêta 2 s'écrivent ici, sous body.beta2. ===== */
@@ -3515,6 +3516,7 @@ html.mt-beta.mt-b2 body #mealForm .mf-ue2{ background:#fff; margin:0 !important;
   <div class="prog-overlay" id="progOverlay" onclick="if(event.target===this) closeProg()">
     <div class="prog-card">
       <div class="prog-head"><span>Progression</span><button class="prog-x" onclick="closeProg()" aria-label="Fermer">✕</button></div>
+      <div class="prog-mode"><b>Programme</b><div class="pm-seg" id="progSeg"><button type="button" data-p="1" onclick="setProgNo(1)">Programme 1</button><button type="button" data-p="2" onclick="setProgNo(2)">Programme 2</button></div></div>
       <div class="prog-mode"><b>Affichage des exos</b><div class="pm-seg"><button type="button" data-m="normal" onclick="setWMode('normal')">Normal</button><button type="button" data-m="tab" onclick="setWMode('tab')">Bêta</button><button type="button" data-m="tab2" onclick="setWMode('tab2')">Bêta 2</button></div></div>
       <div class="prog-mode"><b>Navigation Workout / Meal</b><div class="pm-seg" id="navModeSeg"><button type="button" data-n="btn" onclick="setNavMode('btn')">Bouton</button><button type="button" data-n="slide" onclick="setNavMode('slide')">Slide</button></div></div>
       <div class="prog-mode"><b>Après la pause : exo suivant</b><div class="pm-seg" id="autoNextSeg"><button type="button" data-a="on" onclick="setAutoNext('on')">Oui</button><button type="button" data-a="off" onclick="setAutoNext('off')">Non</button></div></div>
@@ -4765,7 +4767,17 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
     try{ localStorage.removeItem(PLAN_KEY); }catch(e){}
     planRefresh();
   }
-  function openProg(sec){ renderRests(); const ov=document.getElementById('progOverlay'); ov.classList.add('show'); setTimeout(()=>{ const t=null; /* toujours en haut de la page */ if(t){ t.scrollIntoView({block:'start'}); } else { ov.scrollTop=0; const c=ov.querySelector('.prog-card'); if(c) c.scrollTop=0; } },0); }
+  // ---------- programmes 1 et 2 : chacun garde son planning, ses séries / répétitions, ses temps de repos, ses charges et ses liens vidéo ----------
+const PROGS_KEY='bb9-progs', PROG_KEYS=['bb9-plan','bb9-sets','bb9-reps','bb9-rest','bb9-weights','bb9-vidlinks'];
+function progSnap(){ const o={}; PROG_KEYS.forEach(k=>{ const v=localStorage.getItem(k); if(v!=null) o[k]=v; }); return o; }
+function progsGet(){ let P=null; try{ P=JSON.parse(localStorage.getItem(PROGS_KEY)||'null'); }catch(e){}
+  if(!P||!P.p){ const cur=progSnap(); P={a:1,p:{'1':cur,'2':JSON.parse(JSON.stringify(cur))}}; try{ localStorage.setItem(PROGS_KEY,JSON.stringify(P)); }catch(e){} }   // 1re fois : Programme 2 = copie du programme actuel
+  return P; }
+function progSeg(){ const P=progsGet(); document.querySelectorAll('#progSeg [data-p]').forEach(b=>b.classList.toggle('on',+b.dataset.p===+P.a)); }
+function setProgNo(n){ const P=progsGet(); if(+P.a===+n) return; P.p[String(P.a)]=progSnap(); const T=P.p[String(n)]||{};
+  PROG_KEYS.forEach(k=>{ try{ if(T[k]!=null) localStorage.setItem(k,T[k]); else localStorage.removeItem(k); }catch(e){} });
+  P.a=+n; try{ localStorage.setItem(PROGS_KEY,JSON.stringify(P)); }catch(e){} progSeg(); setTimeout(()=>location.reload(),150); }
+function openProg(sec){ renderRests(); progSeg(); const ov=document.getElementById('progOverlay'); ov.classList.add('show'); setTimeout(()=>{ const t=null; /* toujours en haut de la page */ if(t){ t.scrollIntoView({block:'start'}); } else { ov.scrollTop=0; const c=ov.querySelector('.prog-card'); if(c) c.scrollTop=0; } },0); }
   function closeProg(){ document.getElementById('progOverlay').classList.remove('show'); }
 </script>
 
@@ -4965,7 +4977,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 22/11 · 15 h 15</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 22/11 · 20 h 40</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>

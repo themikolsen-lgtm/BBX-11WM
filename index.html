@@ -3760,6 +3760,9 @@ const EX_ELEVB = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
   }catch(e){}
   try{ const P=JSON.parse(localStorage.getItem('bb9-progs')||'null'); if(P&&P.p&&!P.v4){ if(P.p['1']) delete P.p['1']['bb9-custom']; P.p['2']=P.p['2']||{}; if(!P.p['2']['bb9-custom']) P.p['2']['bb9-custom']=JSON.stringify(PROG2_DEF); P.v4=1; localStorage.setItem('bb9-progs',JSON.stringify(P)); }
     localStorage.removeItem('bb9-custom'); }catch(e){}
+  /* 23/11 : Programme 1 remis comme il y a deux semaines (programme d'origine, sans les retouches du 17 et du 21/11) */
+  try{ const P=JSON.parse(localStorage.getItem('bb9-progs')||'null'); if(P&&P.p&&!P.v5){ P.p['1']={}; P.v5=1; localStorage.setItem('bb9-progs',JSON.stringify(P));
+      if(+P.a!==2){ ['bb9-plan','bb9-sets','bb9-reps','bb9-rest','bb9-weights'].forEach(k=>localStorage.setItem(k,'{}')); planPrefs={}; setsPrefs={}; repsPrefs={}; } } }catch(e){}
   const EXIMG={EX_SHO:EX_SHO,EX8:EX8,EX_ELEVB:EX_ELEVB,EX_INCH:EX_INCH,EX10:EX10,EX_ROWH:EX_ROWH,EX11:EX11,EX_BIC:EX_BIC,EX_MAR:EX_MAR,EX3:EX3,EX_DEV:EX_DEV,EX6:EX6,EX9:EX9};
   function applyCustom(){ let C=null; try{ const P=JSON.parse(localStorage.getItem('bb9-progs')||'null'); if(P&&P.p&&+P.a===2) C=JSON.parse((P.p['2']||{})['bb9-custom']||'null')||PROG2_DEF; }catch(e){} if(!C) return;
     DAYS.forEach(d=>{ const c=C[d.key]; if(!c) return;
@@ -4995,7 +4998,7 @@ document.addEventListener('click', function(e){
     <input type="file" id="bkFile" accept=".json,application/json,text/plain" hidden>
     <div class="cm-d" id="mbkMsg"></div></div>
   </details>
-  <div class="cf-ver"><span id="appVer">Version du 23/11 · 16 h 40</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
+  <div class="cf-ver"><span id="appVer">Version du 23/11 · 16 h 50</span><button type="button" onclick="try{location.replace(location.pathname+'?v='+Date.now())}catch(e){location.reload()}">Mettre à jour l’app</button></div>
   <div class="cf-clr"><button type="button" onclick="BBXClear()">🧹 Vider le cache</button><small>Tes données, tes copies de secours, ta connexion et ta sauvegarde en ligne sont conservées.</small></div>
 </div>
 <script>
